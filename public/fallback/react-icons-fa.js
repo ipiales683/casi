@@ -9,6 +9,28 @@
   // Crear un objeto global para react-icons/fa
   window.ReactIconsFa = window.ReactIconsFa || {};
   
+  // Función para crear componentes de iconos
+  function createIconComponent(name, path) {
+    return function(props) {
+      return {
+        $$typeof: Symbol.for('react.element'),
+        type: 'svg',
+        props: {
+          ...props,
+          viewBox: '0 0 512 512',
+          fill: 'currentColor',
+          children: {
+            $$typeof: Symbol.for('react.element'),
+            type: 'path',
+            props: {
+              d: path
+            }
+          }
+        }
+      };
+    };
+  }
+  
   // Implementación mínima de íconos comunes
   const icons = {
     FaUser: createIconComponent('user', 'M256 288c79.5 0 144-64.5 144-144S335.5 0 256 0 112 64.5 112 144s64.5 144 144 144zm128 32h-55.1c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16H128C57.3 320 0 377.3 0 448v16c0 26.5 21.5 48 48 48h416c26.5 0 48-21.5 48-48v-16c0-70.7-57.3-128-128-128z'),
@@ -17,11 +39,12 @@
   };
 
   // Hacer disponible globalmente
-  window.ReactIcons.fa = FaIcons;
+  window.ReactIcons = window.ReactIcons || {};
+  window.ReactIcons.fa = icons;
 
   // Exportar todos los iconos individualmente para compatibilidad con imports nombrados
-  Object.keys(FaIcons).forEach(key => {
-    exports[key] = FaIcons[key];
+  Object.keys(icons).forEach(key => {
+    exports[key] = icons[key];
   });
 
   // Notificar que el módulo ha sido cargado
@@ -31,13 +54,13 @@
   // Parchear el sistema de imports dinámicos
   if (window.__importMapOverride && window.__importMapOverride.addOverride) {
     window.__importMapOverride.addOverride('react-icons/fa', {
-      exports: FaIcons
+      exports: icons
     });
   }
 
   // Compatibilidad con sistemas que utilizan default export
-  exports.default = FaIcons;
-})));
+  exports.default = icons;
+})();
 
 // Definir módulo en formato antiguo para compatibilidad
 if (typeof window !== 'undefined') {

@@ -163,7 +163,6 @@
 
     // Añadir al documento
     document.head.appendChild(fallbackScript);
-    });
   }
 
   // Cargar todas las bibliotecas críticas en orden

@@ -1,306 +1,23 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <!-- Sistema de respaldo global - Absolutamente prioritario -->
-  <script src="/fallback.js"></script>
-  
-  <!-- Correcciu00f3n de errores DOM - Antes que cualquier manipulaciu00f3n del DOM -->
-  <script src="/dom-error-fix.js"></script>
-  
-  <!-- Sistema de gestión de favicon - Debe ir primero para capturar errores de recursos -->
-  <script src="/favicon-handler.js"></script>
-  
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Abg. Wilson Alexander Ipiales Guerron - Asesoría Legal Profesional</title>
   <meta name="description" content="Asesoría legal profesional en derecho penal, civil, tránsito, comercial y aduanas. Protegiendo sus derechos con experiencia y dedicación en Ibarra, Ecuador.">
-
-  <!-- CONFIGURACIÓN ESPECÍFICA PARA CLOUDFLARE WORKERS -->
-  <script src="/workers-config.js"></script>
   
-  <!-- SISTEMA DE PRODUCCIÓN PARA CLOUDFLARE -->
-  <script src="/cloudflare-production.js"></script>
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="apple-touch-icon" href="/favicon.svg">
+  <link rel="manifest" href="/manifest.json">
   
-  <!-- PROTECCIÓN CONTRA RENDERIZADOS MÚLTIPLES DE REACT -->
-  <script src="/react-renderguard.js"></script>
-
-  <!-- SISTEMA DE INICIALIZACIÓN TEMPRANA - ANTES QUE CUALQUIER OTRO SCRIPT -->
-  <script src="/early-init.js"></script>
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   
-  <!-- SISTEMA DE CORRECCIÓN COMPLETO Y UNIFICADO - MÁXIMA PRIORIDAD -->
-  <script src="/unified-fix.js"></script>
-
-  <!-- BIBLIOTECAS LOCALES: respaldo inmediato -->
-  <script src="/fallback/react.production.min.js"></script>
-  <script src="/fallback/react-dom.production.min.js"></script>
-  <script src="/fallback/react-router-dom.js"></script>
-  <script src="/fallback/axios.min.js"></script>
-  <script src="/fallback/headlessui.js"></script>
-  <script src="/fallback/heroicons.js"></script>
-  <script src="/fallback/react-icons.js"></script>
-
-  <!-- SISTEMA DE CARGA DIRECTA -->
-  <script src="/direct-load.js"></script>
-
-  <!-- SISTEMA UNIFICADO DE COMPONENTES UI -->
-  <script src="/ui-components-bundle.js"></script>
-  
-  <!-- NUEVO CORRECTOR DE MÓDULOS VITE -->
-  <script src="/vite-module-fix.js"></script>
-  
-  <!-- COMPONENTES SIMULADOS -->
-  <script src="/component-shims.js"></script>
-  
-  <!-- Sistema offline completo -->
-  <script src="/offline-bundle-fixed.js"></script>
-  
-  <!-- Implementación local de módulos problemáticos -->
-  <script src="/mock-modules.js"></script>
-  
-  <!-- Carga prioritaria de módulos y sistema de corrección -->
-  <script src="/module-fix.js"></script>
-  
-  <!-- Sistema de emergencia y recuperación -->
-  <script src="/emergency-fix.js"></script>
-  
-  <!-- Sistema Bundle Unificado - contiene todas las soluciones integradas -->
-  <script src="/system-bundle.js"></script>
-  <!-- Parche específico para Vite y React -->
-  <script src="/vite-patch.js"></script>
-  
-  <!-- Estilos de carga y fallback -->
-  <style>
-    .loading-shim {
-      padding: 1rem;
-      margin: 0.5rem 0;
-      background-color: #f0f9ff;
-      border-left: 4px solid #3b82f6;
-      color: #1e40af;
-      font-family: system-ui, sans-serif;
-    }
-    
-    #root:empty::after {
-      content: 'Cargando aplicación...';
-      display: block;
-      text-align: center;
-      padding: 2rem;
-      font-family: system-ui, sans-serif;
-      font-size: 1.25rem;
-      color: #1e40af;
-    }
-  </style>
-  
-  <!-- Variables globales de entorno para compatibilidad con Cloudflare Workers v2.0 -->
-  <script>
-    // Configuración global - Estrictamente válida y sin errores
-    window.__ENV__ = {
-      // Marcador de versión para rastreo
-      VERSION: '2.1.0',
-      PROD: true,
-      DEV: false,
-      
-      // Configuración de Supabase - Valores garantizados
-      VITE_SUPABASE_URL: 'https://phzldiaohelbyobhjrnc.supabase.co',
-      VITE_SUPABASE_KEY: 'sbp_db5898ecc094d37ec87562399efe3833e63ab20f',
-      VITE_SUPABASE_CLIENT_INSTANCE_ID: Date.now().toString(36), // ID único
-      
-      // Configuración de APIs y servicios
-      VITE_EMAIL_SERVICE_ID: 'default_service',
-      VITE_EMAIL_TEMPLATE_ID: 'default_template',
-      VITE_EMAIL_USER_ID: 'default_user',
-      VITE_RECAPTCHA_SITE_KEY: '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI',
-      VITE_TURNSTILE_SITE_KEY: '0x4AAAAAAABY3h5dF4SWQyP',
-      VITE_API_URL: '/api',
-      
-      // Configuración de Google APIs con valores predeterminados funcionales
-      VITE_GOOGLE_GENERATIVE_API_KEY: 'AIzaSyB9ENQXVErbIQ166m7dGwndOB6hlFj9k5I',
-      VITE_GOOGLE_API_KEY_ALTERNATIVE: 'AIzaSyBCKTfeo2P92rCk_mhrz7J73pNY4zDMBh0',
-      VITE_GOOGLE_CLIENT_ID: '387170916829-t6dp4kb7cp663ihq98as0jjju9n0ljbm.apps.googleusercontent.com',
-      VITE_GOOGLE_SERVICE_ACCOUNT: 'pruebagoogle@gen-lang-client-0663345747.iam.gserviceaccount.com',
-      
-      // Configuración anti-GoTrueClient duplicado
-      DISABLE_MULTIPLE_INSTANCES: true,
-      AUTH_STORAGE_KEY: 'supabase_auth_' + Math.random().toString(36).substring(2),
-      DISABLE_AUTH_DETECTION_IN_URL: true,
-      
-      // Flags de estado
-      CONFIG_LOADED: true,
-      CONFIG_SOURCE: 'hardcoded',
-      CONFIG_TIMESTAMP: new Date().toISOString()
-    };
-    
-    // Sistema optimizado y robusto de configuración v3.0
-    // Diseñado para máxima compatibilidad con Cloudflare Workers
-    (function() {
-      // Inicialización segura y única
-      if (window.__CONFIG_INITIALIZED__) return;
-      window.__CONFIG_INITIALIZED__ = true;
-      
-      // Control de estado compartido
-      const configState = {
-        loaded: false,
-        retryCount: 0,        
-        maxRetries: 1,        // Reducido para minimizar errores en consola
-        configCache: null,
-        pending: false,
-        startTime: Date.now(),
-        errors: []
-      };
-      
-      // Rutas alternativas para intentar cargar la configuración
-      // Esto soluciona el problema de 404 en Cloudflare Workers
-      const CONFIG_ENDPOINTS = [
-        '/api/config',         // Endpoint principal
-        '/api/config/',        // Con slash final
-        '/config',             // Sin /api/
-        '/config.js',          // Acceso directo al archivo js
-        '/api/config.js'       // Combinación alternativa
-      ];
-      
-      // Carga de configuración con múltiples reintentos y endpoints
-      function loadConfigSecure() {
-        if (configState.loaded || configState.pending) return Promise.resolve(window.__ENV__);
-        
-        // Marcar como pendiente para evitar múltiples solicitudes
-        configState.pending = true;
-        
-        // Si ya tenemos caché, usarla para reintentos
-        if (configState.configCache && configState.retryCount > 0) {
-          console.log('Usando configuración en caché');
-          configState.pending = false;
-          return Promise.resolve(configState.configCache);
-        }
-        
-        // Cancelación automática para evitar esperas infinitas
-        const timeoutMs = 3000;
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
-        
-        // Seleccionar el endpoint a probar en este intento
-        const endpointIndex = Math.min(configState.retryCount, CONFIG_ENDPOINTS.length - 1);
-        const endpoint = CONFIG_ENDPOINTS[endpointIndex];
-        
-        return new Promise((resolve) => {
-          console.log(`Intentando cargar configuración desde: ${endpoint}`);
-          
-          fetch(endpoint, {
-            method: 'GET',
-            cache: 'no-store',
-            signal: controller.signal,
-            headers: { 
-              'X-Client-Version': window.__ENV__.VERSION,
-              'Accept': 'application/json',
-              'Cache-Control': 'no-cache' 
-            }
-          })
-          .then(response => {
-            clearTimeout(timeoutId);
-            if (!response.ok) throw new Error(`Error ${response.status}`);
-            return response.json();
-          })
-          .then(config => {
-            console.log('Configuración remota cargada correctamente');
-            
-            // Guardar en caché
-            configState.configCache = config;
-            
-            // Actualizar configuración global
-            Object.keys(config).forEach(key => {
-              window.__ENV__[key] = config[key];
-            });
-            
-            // Marcar como configuración cargada exitosamente
-            window.__ENV__.CONFIG_SOURCE = 'api';
-            window.__CONFIG_LOADED__ = true;
-            configState.loaded = true;
-            configState.pending = false;
-            
-            resolve(config);
-          })
-          .catch(error => {
-            clearTimeout(timeoutId);
-            const errorMsg = error.name === 'AbortError' ? 'Timeout' : error.message;
-            configState.errors.push({ endpoint, error: errorMsg });
-            
-            console.warn(`Configuración fallida (${configState.retryCount+1}/${configState.maxRetries+CONFIG_ENDPOINTS.length}): ${errorMsg}`);
-            
-            configState.retryCount++;
-            configState.pending = false;
-            
-            // Si aún hay endpoints por probar, intentarlo
-            if (configState.retryCount < CONFIG_ENDPOINTS.length) {
-              // Esperar un momento antes de intentar el siguiente endpoint
-              setTimeout(() => {
-                resolve(loadConfigSecure());
-              }, 300);
-            } 
-            // Si ya probamos todos los endpoints pero aún tenemos intentos disponibles
-            else if (configState.retryCount < CONFIG_ENDPOINTS.length + configState.maxRetries) {
-              // Intentar el primer endpoint nuevamente después de un retraso
-              setTimeout(() => {
-                resolve(loadConfigSecure());
-              }, 800);
-            }
-            // Si agotamos todos los intentos, usar configuración local
-            else {
-              console.log('Usando configuración local predeterminada');
-              window.__ENV__.CONFIG_SOURCE = 'fallback';
-              window.__ENV__.CONFIG_ERRORS = configState.errors;
-              window.__CONFIG_LOADED__ = true;
-              configState.loaded = true;
-              resolve(window.__ENV__);
-            }
-          });
-        });
-      }
-      
-      // Iniciar carga de configuración inmediatamente
-      loadConfigSecure().then(() => {
-        const loadTime = Date.now() - configState.startTime;
-        console.log(`Configuración finalizada en ${loadTime}ms, fuente: ${window.__ENV__.CONFIG_SOURCE}`);
-      });
-    })();
-  </script>
-  
-  <!-- Sistema de diagnóstico y recuperación -->  
-  <script>
-    // Solución inmediata para favicon - evita errores 404
-    const faviconBase64 = 'AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA/4QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEREQAAAAAAEAAAEAAAAAEAAAABAAAAEAAAAAAQAAAQAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAERAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
-    
-    const link = document.createElement('link');
-    link.rel = 'icon';
-    link.type = 'image/x-icon';
-    link.href = 'data:image/x-icon;base64,' + faviconBase64;
-    document.head.appendChild(link);
-    
-    // Interceptar y corregir solicitudes de favicon
-    const originalFetch = window.fetch;
-    window.fetch = function(resource, init) {
-      if (typeof resource === 'string' && resource.includes('favicon')) {
-        console.log('[DiagnosticSystem] Interceptando solicitud de favicon');
-        return Promise.resolve(new Response(new Blob(), {status: 200}));
-      }
-      return originalFetch.apply(this, arguments);
-    };
-    
-    // Detector de error 1042
-    window.addEventListener('error', function(e) {
-      if (e.message && (e.message.includes('1042') || e.message.includes('network'))) {
-        console.warn('[DiagnosticSystem] Error 1042 detectado, iniciando recuperación...');
-        if (!window.location.href.includes('recovered=true')) {
-          window.location.href = '/?recovered=true&from=1042&t=' + Date.now();
-        }
-      }
-    });
-  </script>
-  
-  <!-- Sistema avanzado de diagnóstico -->
-  <script type="module">
-    import { initDiagnosticSystem } from '/src/diagnostic/diagnostic.js';
-    document.addEventListener('DOMContentLoaded', () => {
-      initDiagnosticSystem();
-    });
-  </script>
+  <!-- Meta tags -->
   <meta name="keywords" content="abogado, derecho penal, derecho civil, derecho de tránsito, derecho comercial, aduanas, asesoría legal, Ibarra, Ecuador">
   <meta name="author" content="Abg. Wilson Alexander Ipiales Guerron">
   
@@ -318,365 +35,202 @@
   <meta property="twitter:description" content="Asesoría legal profesional en derecho penal, civil, tránsito, comercial y aduanas. Protegiendo sus derechos con experiencia y dedicación.">
   <meta property="twitter:image" content="/images/og-image.jpg">
   
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  
-  <!-- Favicons -->
-  <link rel="icon" type="image/svg+xml" href="/icons/favicon-backup.svg">
-  <link rel="icon" type="image/x-icon" href="/favicon.ico">
-  <link rel="apple-touch-icon" href="/icons/favicon-backup.svg">
-  <link rel="manifest" href="/manifest.json">
-  
-  <!-- Favicon inline de respaldo (Base64) -->
+  <!-- Configuración global -->
   <script>
-    // Favicon en base64 como respaldo absoluto
-    const faviconBase64 = 'AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEC7u7uB+7u7gfu7u4H7u7uB+7u7gfu7u4H7u7uB+7u7gfu7u4H7u7uB+7u7gfu7u4H7u7uB+7u7gfu7u4H7u7uB+7u7lLu7u5N7u7uTe7u7k3u7u5N7u7uTe7u7k3u7u5N7u7uTe7u7k3u7u5N7u7uTe7u7k3u7u5N7u7uTe7u7k3u7u7T7u7u0O7u7tDu7u7Q7u7u0O7u7tDu7u7Q7u7u0O7u7tDu7u7Q7u7u0O7u7tDu7u7Q7u7u0O7u7tDu7u7Q7u7u/+7u7v/u7u7/7u7u/+7u7v/u7u7/7u7u/+7u7v/u7u7/7u7u/+7u7v/u7u7/7u7u/+7u7v/u7u7/7u7u/+7u7v/u7u7/7u7u/+7u7v/u7u7/7u7u/+7u7v/u7u7/7u7u/+7u7v/u7u7/7u7u/+7u7v/u7u7/7u7u/+7u7v/u7u7/7u7u/+7u7v/u7u7/7u7u/+7u7v/u7u7/7u7u/+7u7v/u7u7/7u7u/+7u7v/u7u7/7u7u/+7u7v/u7u7/7u7u/+7u7v/u7u7/7u7u/+7u7v/u7u7/7u7u/+7u7v/u7u7/7u7u/+7u7v/u7u7/7u7u0e7u7s/u7u7P7u7uz+7u7s/u7u7P7u7uz+7u7s/u7u7P7u7uz+7u7s/u7u7P7u7uz+7u7s/u7u7P7u7u0e7u7k/u7u5M7u7uTO7u7kzu7u5M7u7uTO7u7kzu7u5M7u7uTO7u7kzu7u5M7u7uTO7u7kzu7u5M7u7uTO7u7k/u7u4G7u7uBu7u7gbu7u4G7u7uBu7u7gbu7u4G7u7uBu7u7gbu7u4G7u7uBu7u7gbu7u4G7u7uBu7u7gbu7u4GAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAA=';    
-    // Crear un elemento link para favicon en caso de error
-    const link = document.createElement('link');
-    link.rel = 'icon';
-    link.type = 'image/x-icon';
-    link.href = 'data:image/x-icon;base64,' + faviconBase64;
-    
-    // Detector de error de favicon
-    window.addEventListener('error', function(e) {
-      if (e.target && (e.target.tagName === 'LINK' || e.target.tagName === 'IMG') && 
-          (e.target.href && e.target.href.includes('favicon') || 
-           e.target.src && e.target.src.includes('favicon'))) {
-        console.warn('[FaviconFix] Error al cargar favicon, usando favicon de respaldo');
-        document.head.appendChild(link);
-      }
-    }, true);
+    // Configuración global simplificada
+    window.__ENV__ = {
+      VERSION: '2.0.0',
+      PROD: false,
+      DEV: true,
+      VITE_SUPABASE_URL: 'https://phzldiaohelbyobhjrnc.supabase.co',
+      VITE_SUPABASE_KEY: 'sbp_db5898ecc094d37ec87562399efe3833e63ab20f',
+      VITE_GEMINI_API_KEY: 'AIzaSyCAkIkgslyxArR_kg1kVRREzrjeGWavyyU',
+      VITE_API_URL: '/api',
+      CONFIG_LOADED: true,
+      CONFIG_SOURCE: 'local'
+    };
   </script>
   
-  <!-- Favicons optimizados para todos los dispositivos -->
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-  <link rel="icon" type="image/x-icon" href="/favicon.ico">
-  <link rel="apple-touch-icon" href="/favicon.svg">
-  <link rel="manifest" href="/manifest.json">
-  
-  <!-- Fallback de seguridad para favicon -->
-  <link rel="icon" type="image/svg+xml" href="/icons/favicon-backup.svg">
-</head>
-<body>
-  <!-- Recuperación en progreso para error 1042 -->
-  <div id="recovery-screen" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 9999; text-align: center; padding-top: 20vh;">
-    <h1 style="color: #3457dc;">Recuperando conexión</h1>
-    <p>Estamos restableciendo la conexión con nuestros servidores. Por favor, espera un momento...</p>
-    <div style="width: 80%; max-width: 300px; height: 10px; background: #f0f0f0; margin: 30px auto; border-radius: 5px; overflow: hidden;">
-      <div id="progress-bar" style="width: 0%; height: 100%; background: #3457dc; transition: width 0.5s;"></div>
-    </div>
-    <p id="recovery-message">Iniciando proceso de recuperación...</p>
-  </div>
-  
-  <script>
-    // Solución definitiva - Sistema integral de recuperación y corrección de errores
-    (function() {
-      // Registrar inicialización
-      console.log('Inicializando sistema de recuperación y prevención de errores...');
-      
-      // Parche para evitar errores de renderizado en React
-      window.React = window.React || {};
-      
-      // Configuraciones globales para evitar errores
-      window.REACT_APP_DISABLE_STRICT_MODE = true;
-      window.VITE_DISABLE_FAST_REFRESH = true;
-      
-      // Si estamos en la página de recuperación
-      if (window.location.search.includes('recovered=true')) {
-        // Verificar si estamos en un ciclo de recuperación
-        const recoveryAttempts = parseInt(localStorage.getItem('recoveryAttempts') || '0');
-        
-        if (recoveryAttempts > 3) {
-          // Demasiados intentos de recuperación - limpiar todo y forzar refresco limpio
-          console.log('Demasiados intentos de recuperación, realizando limpieza completa...');
-          localStorage.clear();
-          sessionStorage.clear();
-          // Limpiar todas las cookies
-          document.cookie.split(';').forEach(cookie => {
-            const name = cookie.split('=')[0].trim();
-            document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
-          });
-          
-          // Redireccionar sin parámetros
-          window.location.replace('/');
-          return;
-        }
-        
-        // Registrar intento de recuperación
-        localStorage.setItem('recoveryAttempts', (recoveryAttempts + 1).toString());
-        
-        // Mostrar pantalla de recuperación
-        document.getElementById('recovery-screen').style.display = 'block';
-        
-        // Simular progreso
-        let progress = 0;
-        const interval = setInterval(() => {
-          progress += 5;
-          document.getElementById('progress-bar').style.width = progress + '%';
-          
-          if (progress === 30) {
-            document.getElementById('recovery-message').textContent = 'Limpiando caché y tokens corruptos...';
-          } else if (progress === 50) {
-            document.getElementById('recovery-message').textContent = 'Eliminando datos de navegación...';
-            // Limpiar localStorage y sessionStorage
-            try {
-              localStorage.removeItem('supabase.auth.token');
-              localStorage.removeItem('authSession');
-              localStorage.removeItem('authUser');
-              sessionStorage.clear();
-            } catch (e) {}
-          } else if (progress === 75) {
-            document.getElementById('recovery-message').textContent = 'Restaurando conexión segura...';
-          } else if (progress === 90) {
-            document.getElementById('recovery-message').textContent = 'Completado. Redirigiendo...';
-          } else if (progress >= 100) {
-            clearInterval(interval);
-            // Redireccionar a la página principal sin parámetros usando replace
-            // para evitar que quede en el historial
-            localStorage.setItem('recoverySuccessful', 'true');
-            localStorage.setItem('recoveryAttempts', '0'); // Resetear contador
-            window.location.replace('/');
-          }
-        }, 80); // Más rápido para evitar tiempos de espera largos
-      } else if (localStorage.getItem('recoverySuccessful') === 'true') {
-        // Acabamos de completar una recuperación exitosa
-        localStorage.removeItem('recoverySuccessful');
-        // Mostrar mensaje temporal de éxito
-        setTimeout(() => {
-          const successMsg = document.createElement('div');
-          successMsg.style.position = 'fixed';
-          successMsg.style.top = '20px';
-          successMsg.style.left = '50%';
-          successMsg.style.transform = 'translateX(-50%)';
-          successMsg.style.backgroundColor = '#4caf50';
-          successMsg.style.color = 'white';
-          successMsg.style.padding = '10px 20px';
-          successMsg.style.borderRadius = '4px';
-          successMsg.style.boxShadow = '0 2px 4px rgba(0,0,0,0.2)';
-          successMsg.style.zIndex = '9999';
-          successMsg.style.transition = 'opacity 0.5s';
-          successMsg.textContent = 'Recuperación completada con éxito';
-          document.body.appendChild(successMsg);
-          
-          // Ocultar después de 3 segundos
-          setTimeout(() => {
-            successMsg.style.opacity = '0';
-            setTimeout(() => successMsg.remove(), 500);
-          }, 3000);
-        }, 1000);
-      }
-    })();
-  </script>
-  
-  <!-- Sistema de carga optimizado con pre-renderizado y recuperación automática v2.1 -->
+  <!-- Estilos de carga -->
   <style>
-    @keyframes pulse {
-      0% { transform: scale(1); opacity: 0.8; }
-      50% { transform: scale(1.05); opacity: 1; }
-      100% { transform: scale(1); opacity: 0.8; }
+    #loading-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      color: white;
+      font-family: 'Inter', sans-serif;
     }
-    @keyframes slide {
+    
+    .loading-logo {
+      width: 80px;
+      height: 80px;
+      margin-bottom: 20px;
+      animation: pulse 2s infinite;
+    }
+    
+    .loading-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+    
+    .loading-subtitle {
+      font-size: 1.1rem;
+      margin-bottom: 30px;
+      opacity: 0.9;
+      text-align: center;
+    }
+    
+    .loading-bar {
+      width: 300px;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 3px;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .loading-progress {
+      height: 100%;
+      background: white;
+      border-radius: 3px;
+      width: 0%;
+      transition: width 0.3s ease;
+      position: relative;
+    }
+    
+    .loading-progress::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      animation: shimmer 1.5s infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 0.8; }
+      50% { transform: scale(1.05); opacity: 1; }
+    }
+    
+    @keyframes shimmer {
       0% { transform: translateX(-100%); }
       100% { transform: translateX(100%); }
     }
-    .shimmer {
-      background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.8) 50%, rgba(255,255,255,0) 100%);
-      animation: slide 1.5s infinite;
+    
+    #root {
+      min-height: 100vh;
     }
-    #fallback-content {
-      display: none; /* Inicialmente oculto */
-      opacity: 0;
-      transition: opacity 0.5s ease-in-out;
+    
+    /* Variables CSS para temas */
+    :root {
+      --primary-color: #3b82f6;
+      --secondary-color: #1e40af;
+      --accent-color: #f59e0b;
+      --background-light: #ffffff;
+      --background-dark: #1f2937;
+      --text-light: #1f2937;
+      --text-dark: #f9fafb;
+      --border-light: #e5e7eb;
+      --border-dark: #374151;
+    }
+    
+    /* Tema oscuro */
+    [data-theme="dark"] {
+      --primary-color: #60a5fa;
+      --secondary-color: #3b82f6;
+      --accent-color: #fbbf24;
+      --background: var(--background-dark);
+      --text: var(--text-dark);
+      --border: var(--border-dark);
+    }
+    
+    /* Tema claro */
+    [data-theme="light"] {
+      --background: var(--background-light);
+      --text: var(--text-light);
+      --border: var(--border-light);
     }
   </style>
-  
-  <!-- Contenedor principal que siempre está visible mientras se carga la app -->
-  <div id="initial-loader" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; width: 100%; position: fixed; top: 0; left: 0; background-color: white; z-index: 1000;">
-    <img src="/favicon.svg" alt="Logo" style="width: 80px; height: 80px; margin-bottom: 20px; animation: pulse 1.5s infinite;">
-    <h2 style="color: #3457dc; margin-bottom: 10px;">Abogado Wilson</h2>
-    <p id="loader-message" style="color: #666; margin-bottom: 30px;">Cargando servicios legales...</p>
-    <div style="width: 240px; height: 4px; background-color: #f0f0f0; border-radius: 2px; overflow: hidden; position: relative;">
-      <div id="progress-bar" style="width: 0%; height: 100%; background-color: #3457dc; border-radius: 2px; transition: width 0.3s ease-in-out;"></div>
-      <div class="shimmer" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></div>
+</head>
+<body>
+  <!-- Pantalla de carga -->
+  <div id="loading-screen">
+    <div class="loading-logo">
+      <svg viewBox="0 0 100 100" fill="currentColor">
+        <circle cx="50" cy="50" r="40" stroke="currentColor" stroke-width="8" fill="none"/>
+        <path d="M30 50 L45 65 L70 35" stroke="currentColor" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
     </div>
-    
-    <!-- Contenido de fallback visible si la app no carga -->
-    <div id="fallback-content" style="margin-top: 40px; text-align: center; max-width: 90%; width: 500px;">
-      <h3 style="color: #3457dc; margin-bottom: 20px;">Estamos teniendo dificultades técnicas</h3>
-      <p style="margin-bottom: 20px;">Por favor, intente recargar la página o contacte al Abg. Wilson Ipiales.</p>
-      <div style="margin-bottom: 15px;">
-        <p><strong>Contacto directo:</strong> <a href="https://wa.me/593988352269" style="color: #3457dc; text-decoration: none;">+593988352269 (WhatsApp)</a></p>
-      </div>
-      <button id="retry-button" style="background-color: #3457dc; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-weight: bold;">Reintentar</button>
+    <h1 class="loading-title">Abogado Wilson</h1>
+    <p class="loading-subtitle">Cargando servicios legales profesionales...</p>
+    <div class="loading-bar">
+      <div class="loading-progress" id="loading-progress"></div>
     </div>
   </div>
   
-  <!-- Contenedor para la aplicación React -->
+  <!-- Contenedor principal de React -->
   <div id="root"></div>
   
-  <!-- Sistema optimizado de carga y recuperación -->
+  <!-- Script de carga -->
   <script>
-    (function() {
-      // Variables globales para seguimiento
-      window.__APP_STATE__ = {
-        loadStartTime: Date.now(),
-        loadingStage: 'initial',
-        progressValue: 0,
-        errorCount: 0,
-        retryCount: 0
-      };
-      
-      // Elementos DOM
-      const progressBar = document.getElementById('progress-bar');
-      const loader = document.getElementById('initial-loader');
-      const message = document.getElementById('loader-message');
-      const fallbackContent = document.getElementById('fallback-content');
-      const retryButton = document.getElementById('retry-button');
-      
-      // Mensajes de carga personalizados
-      const loadingMessages = [
-        'Cargando servicios legales...',
-        'Preparando asesoría jurídica...',
-        'Optimizando experiencia de usuario...',
-        'Casi listo...',
-        'Finalizando...',
-      ];
-      
-      // Sistema de progreso inteligente
-      let currentMessage = 0;
-      let progress = 0;
-      
-      function updateProgress(increment, stage) {
-        progress = Math.min(progress + increment, 95); // Nunca llegar al 100% hasta carga completa
-        progressBar.style.width = `${progress}%`;
-        window.__APP_STATE__.progressValue = progress;
-        
-        if (stage && stage !== window.__APP_STATE__.loadingStage) {
-          window.__APP_STATE__.loadingStage = stage;
-          message.textContent = loadingMessages[Math.min(currentMessage, loadingMessages.length - 1)];
-          currentMessage++;
-        }
-      }
-      
-      // Iniciar actualización periódica de progreso
-      const progressInterval = setInterval(() => {
-        // Incremento aleatorio pero ponderado según progreso actual
-        const increment = Math.max(0.5, Math.random() * (10 - progress/10));
-        updateProgress(increment);
-      }, 400);
-      
-      // Actualizar mensajes de forma periódica
-      const messageInterval = setInterval(() => {
-        if (currentMessage < loadingMessages.length) {
-          message.textContent = loadingMessages[currentMessage];
-          currentMessage++;
-        }
-      }, 3000);
-      
-      // Evento de carga completa
-      window.addEventListener('load', () => {
-        updateProgress(100, 'complete');
+    // Sistema de carga simplificado
+    let progress = 0;
+    const progressBar = document.getElementById('loading-progress');
+    const loadingScreen = document.getElementById('loading-screen');
+    
+    // Simular progreso de carga
+    const progressInterval = setInterval(() => {
+      progress += Math.random() * 15;
+      if (progress > 90) progress = 90;
+      progressBar.style.width = progress + '%';
+    }, 200);
+    
+    // Verificar cuando la aplicación React esté lista
+    const checkAppReady = () => {
+      const root = document.getElementById('root');
+      if (root.children.length > 0) {
+        // La aplicación se ha cargado
+        clearInterval(progressInterval);
         progressBar.style.width = '100%';
         
-        // Verificar si la aplicación se cargó exitosamente
         setTimeout(() => {
-          const root = document.getElementById('root');
-          if (root.childNodes.length > 0) {
-            // La aplicación se ha cargado correctamente
-            clearInterval(progressInterval);
-            clearInterval(messageInterval);
-            
-            loader.style.opacity = '0';
-            loader.style.transition = 'opacity 0.6s ease-in-out';
-            
-            setTimeout(() => {
-              loader.style.display = 'none';
-            }, 600);
-          }
-        }, 1000);
-      });
-      
-      // Sistema de recuperación avanzado
-      function activateRecoveryMode(errorReason) {
-        window.__APP_STATE__.errorCount++;
-        console.warn(`Activando modo de recuperación. Razón: ${errorReason}`);
-        
-        // Cambiar estilo del progressBar para indicar error
-        progressBar.style.backgroundColor = '#dc3545';
-        message.textContent = 'Error al cargar. Preparando recuperación...'; 
-        message.style.color = '#dc3545';
-        
-        // Si es el primer error, intentar recuperación automática
-        if (window.__APP_STATE__.errorCount <= 1) {
+          loadingScreen.style.opacity = '0';
+          loadingScreen.style.transition = 'opacity 0.5s ease-out';
           setTimeout(() => {
-            console.log('Intentando recuperación automática...');
-            window.location.reload();
-          }, 3000);
-        } else {
-          // Mostrar contenido de fallback con botón para reintentar
-          fallbackContent.style.display = 'block';
-          setTimeout(() => {
-            fallbackContent.style.opacity = '1';
-          }, 100);
-          
-          // Configurar botón de reintento
-          retryButton.addEventListener('click', () => {
-            window.location.reload();
-          });
-        }
-      }
-      
-      // Detector de timeout (15 segundos sin cargar la aplicación)
-      setTimeout(() => {
-        const root = document.getElementById('root');
-        if (!root.hasChildNodes() && loader.style.display !== 'none') {
-          activateRecoveryMode('timeout');
-        }
-      }, 15000);
-      
-      // Detector de errores global
-      window.addEventListener('error', function(e) {
-        if (e.message && (e.message.includes('TypeError') || e.message.includes('network') || 
-            e.message.includes('undefined') || e.message.includes('null'))) {
-          activateRecoveryMode(`JS error: ${e.message.substring(0, 50)}...`);
-        }
-      });
-    })();
-  </script>
-  
-  <!-- Sistema de recuperación y corrección de errores críticos -->
-  <script src="/fix-root.js"></script>
-
-  <!-- Scripts de configuraciu00f3n estu00e1tica y sistema anti-fallos -->
-  <script src="/static/config.js"></script>
-  <script src="/static/dependencies-fallback.js"></script>
-  
-  <!-- Fix avanzado para WebSocket y carga de dependencias -->
-  <script src="/vite-fix.js"></script>
-  
-  <!-- Aplicación independiente como respaldo -->
-  <script src="/standalone-app.js"></script>
-  
-  <!-- Script principal de la aplicaciu00f3n -->
-  <script type="module" src="/src/main.jsx"></script>
-  
-  <!-- Sistema de recuperaciu00f3n automu00e1tica -->
-  <script>
-    // Verificar carga completa de la aplicaciu00f3n
-    setTimeout(() => {
-      const appLoaded = document.getElementById('root').childNodes.length > 0;
-      if (!appLoaded) {
-        console.warn('Detectada carga incompleta de la aplicaciu00f3n, activando recuperaciu00f3n...');
-        // Guardar estado actual
-        sessionStorage.setItem('recovery_attempt', 'true');
-        // Recargar la pu00e1gina
-        window.location.reload();
+            loadingScreen.style.display = 'none';
+          }, 500);
+        }, 500);
       } else {
-        console.log('Aplicaciu00f3n cargada correctamente');
+        // Verificar de nuevo en 100ms
+        setTimeout(checkAppReady, 100);
       }
-    }, 10000); // Verificar despuu00e9s de 10 segundos
+    };
+    
+    // Iniciar verificación después de 1 segundo
+    setTimeout(checkAppReady, 1000);
+    
+    // Timeout de seguridad (10 segundos)
+    setTimeout(() => {
+      if (loadingScreen.style.display !== 'none') {
+        console.warn('Tiempo de carga excedido, forzando carga de aplicación');
+        loadingScreen.style.display = 'none';
+      }
+    }, 10000);
   </script>
+  
+  <!-- Script principal de la aplicación -->
+  <script type="module" src="/src/main.jsx"></script>
 </body>
 </html>
