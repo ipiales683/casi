@@ -1,6 +1,14 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { authService } from '../services/apiService';
 
+// Definir roles del sistema
+export const ROLES = {
+  VISITOR: 'visitor',
+  CLIENT: 'client',
+  ADMIN: 'admin',
+  AFFILIATE: 'affiliate'
+};
+
 // Crear el contexto
 const AuthContext = createContext();
 
@@ -13,6 +21,7 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [authReady, setAuthReady] = useState(false);
   const [error, setError] = useState(null);
+  const [permissions, setPermissions] = useState([]);
 
   // Verificar autenticación al cargar
   useEffect(() => {
@@ -35,9 +44,11 @@ export const AuthProvider = ({ children }) => {
           // Si hay error, probablemente el token no es válido
           localStorage.removeItem('authToken');
           setUser(null);
+          setPermissions([]);
         } else if (data && data.user) {
           console.log('Usuario autenticado:', data.user);
           setUser(data.user);
+          setPermissions(data.user.permissions || []);
         }
       } catch (err) {
         console.error('Error al verificar autenticación:', err);
@@ -54,6 +65,7 @@ export const AuthProvider = ({ children }) => {
   // Función para iniciar sesión
   const login = async (email, password) => {
     setLoading(true);
+    setError(null);
     try {
       const { data, error } = await authService.login(email, password);
       
@@ -62,6 +74,8 @@ export const AuthProvider = ({ children }) => {
       }
       
       setUser(data.user);
+      setPermissions(data.user.permissions || []);
+      localStorage.setItem('authToken', data.token);
       return { success: true, data };
     } catch (err) {
       setError(err.message);
@@ -74,6 +88,7 @@ export const AuthProvider = ({ children }) => {
   // Función para registrar un nuevo usuario
   const register = async (userData) => {
     setLoading(true);
+    setError(null);
     try {
       const { data, error } = await authService.register(userData);
       
@@ -83,6 +98,8 @@ export const AuthProvider = ({ children }) => {
       
       if (data.user) {
         setUser(data.user);
+        setPermissions(data.user.permissions || []);
+        localStorage.setItem('authToken', data.token);
       }
       
       return { success: true, data };
@@ -105,6 +122,8 @@ export const AuthProvider = ({ children }) => {
       }
       
       setUser(null);
+      setPermissions([]);
+      localStorage.removeItem('authToken');
       return { success: true };
     } catch (err) {
       setError(err.message);
@@ -122,6 +141,63 @@ export const AuthProvider = ({ children }) => {
     }));
   };
 
+  // Función para verificar si el usuario tiene un rol específico
+  const hasRole = (role) => {
+    if (!user) return false;
+    return user.role === role || user.roles?.includes(role);
+  };
+
+  // Función para verificar si el usuario tiene un permiso específico
+  const hasPermission = (permission) => {
+    if (!user) return false;
+    return permissions.includes(permission) || user.permissions?.includes(permission);
+  };
+
+  // Función para verificar si el usuario es administrador
+  const isAdmin = () => hasRole(ROLES.ADMIN);
+
+  // Función para verificar si el usuario es cliente
+  const isClient = () => hasRole(ROLES.CLIENT);
+
+  // Función para verificar si el usuario es afiliado
+  const isAffiliate = () => hasRole(ROLES.AFFILIATE);
+
+  // Función para verificar si el usuario está autenticado
+  const isAuthenticated = () => !!user;
+
+  // Función para obtener el rol principal del usuario
+  const getUserRole = () => {
+    if (!user) return ROLES.VISITOR;
+    return user.role || user.roles?.[0] || ROLES.CLIENT;
+  };
+
+  // Función para obtener el nombre para mostrar
+  const getDisplayName = () => {
+    if (!user) return 'Visitante';
+    return user.displayName || user.name || user.email || 'Usuario';
+  };
+
+  // Función para obtener la imagen del usuario
+  const getUserAvatar = () => {
+    if (!user?.avatar) return null;
+    return user.avatar;
+  };
+
+  // Función para refrescar los datos del usuario
+  const refreshUser = async () => {
+    if (!user) return;
+    
+    try {
+      const { data, error } = await authService.getUser();
+      if (!error && data?.user) {
+        setUser(data.user);
+        setPermissions(data.user.permissions || []);
+      }
+    } catch (err) {
+      console.error('Error al refrescar usuario:', err);
+    }
+  };
+
   // Valores a proporcionar en el contexto
   const value = {
     user,
@@ -129,10 +205,22 @@ export const AuthProvider = ({ children }) => {
     loading,
     error,
     authReady,
+    permissions,
     login,
     register,
     logout,
-    updateUser
+    updateUser,
+    hasRole,
+    hasPermission,
+    isAdmin,
+    isClient,
+    isAffiliate,
+    isAuthenticated,
+    getUserRole,
+    getDisplayName,
+    getUserAvatar,
+    refreshUser,
+    ROLES
   };
 
   return (

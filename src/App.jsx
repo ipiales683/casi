@@ -1,19 +1,71 @@
 import React, { useState, useEffect } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider } from './context/ThemeContext';
+import { AuthProvider } from './context/AuthContext';
+import { CartProvider } from './context/CartContext';
+import { ModuleProvider } from './context/ModuleContext';
+import { Toaster } from 'react-hot-toast';
+
+// Middleware de autenticación
+import { 
+  ProtectedRoute, 
+  AdminRoute, 
+  ClientRoute, 
+  VisitorOnlyRoute 
+} from './middleware/roleMiddleware.jsx';
+
+// Componentes de navegación
 import Navbar from './components/Navigation/Navbar';
 import Footer from './components/Footer/Footer';
+import LoadingSpinner from './components/Common/LoadingSpinner';
+
+// Páginas públicas (visitantes)
 import HomePage from './components/Home/HomePage';
-import AdminDashboard from './components/Admin/AdminDashboard';
-import PaymentSystem from './components/Payment/PaymentSystem';
-import CourseSystem from './components/Courses/CourseSystem';
-import AIConsultationSystem from './components/Consultation/AIConsultationSystem';
-import Blog from './components/Blog/Blog';
 import Contact from './components/Contact/Contact';
+import Blog from './components/Blog/Blog';
+import BlogArticle from './components/Blog/BlogArticle';
+import Services from './components/Services/ServicesPage';
+import AboutPage from './components/About/AboutPage';
+import PrivacyPolicy from './components/PrivacyPolicy';
+import TerminosCondiciones from './components/TerminosCondiciones';
+import Seguridad from './components/Seguridad';
+import Ebooks from './components/Ebooks/EbookStore';
+import CourseCatalog from './components/Courses/CourseSystem';
+import CourseDetail from './pages/CourseDetailPage';
+
+// Páginas de autenticación
 import Login from './components/Auth/Login';
 import Register from './components/Auth/Register';
-import Dashboard from './components/Dashboard/Dashboard';
-import LoadingSpinner from './components/Common/LoadingSpinner';
+import ForgotPassword from './components/Auth/ForgotPassword';
+import AuthCallback from './components/Auth/AuthCallback';
+
+// Páginas de cliente
+import ClientDashboard from './components/Dashboard/ClientDashboard';
+import UserProfile from './components/Dashboard/UserProfile';
+import DashboardHome from './components/Dashboard/DashboardHome';
+import DashboardLayout from './components/Dashboard/DashboardLayout';
+import UserCourses from './components/Dashboard/UserCourses';
+import PurchaseHistory from './components/Dashboard/PurchaseHistory';
+import DashboardPage from './components/Dashboard/DashboardPage';
+
+// Páginas de administrador
+import AdminDashboard from './components/Admin/AdminDashboard';
+import DataExporter from './components/Admin/DataExporter';
+import WhatsAppManager from './components/Admin/WhatsAppManager';
+
+// Páginas de funcionalidad
+import PaymentSystem from './components/Payment/PaymentSystem';
+import CheckoutPage from './pages/CheckoutPage';
+import ThankYouPage from './components/Payment/ThankYouPage';
+import AIConsultationSystem from './components/Consultation/AIConsultationSystem';
+import AppointmentScheduler from './components/Appointment/AppointmentScheduler';
+import AffiliateRegister from './components/Affiliates/AffiliateRegister';
+import AffiliateOverview from './components/Affiliates/AffiliateOverview';
+
+// Páginas de error
+import NotFoundPage from './components/Common/NotFoundPage';
+import UnauthorizedPage from './components/Common/UnauthorizedPage';
+import ServerErrorPage from './components/Common/ServerErrorPage';
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -32,63 +84,197 @@ function App() {
   }
 
   return (
+    <AuthProvider>
+      <CartProvider>
+        <ModuleProvider>
     <ThemeProvider>
-      <div className="App min-h-screen bg-background text-text">
+            <div className="App min-h-screen bg-background-primary text-text-primary">
         <Navbar />
         <main className="flex-1">
           <Routes>
+                  {/* Rutas públicas (visitantes) */}
             <Route path="/" element={<HomePage />} />
-            <Route path="/admin" element={<AdminDashboard />} />
+                  <Route path="/servicios" element={<Services />} />
+                  <Route path="/sobre-nosotros" element={<AboutPage />} />
+                  <Route path="/contacto" element={<Contact />} />
+                  <Route path="/blog" element={<Blog />} />
+                  <Route path="/blog/:slug" element={<BlogArticle />} />
+                  <Route path="/ebooks" element={<Ebooks />} />
+                  <Route path="/cursos" element={<CourseCatalog />} />
+                  <Route path="/cursos/:slug" element={<CourseDetail />} />
+                  <Route path="/politicas-privacidad" element={<PrivacyPolicy />} />
+                  <Route path="/terminos-condiciones" element={<TerminosCondiciones />} />
+                  <Route path="/seguridad" element={<Seguridad />} />
+                  
+                  {/* Rutas de autenticación (solo visitantes) */}
+                  <Route path="/login" element={
+                    <VisitorOnlyRoute>
+                      <Login />
+                    </VisitorOnlyRoute>
+                  } />
+                  <Route path="/register" element={
+                    <VisitorOnlyRoute>
+                      <Register />
+                    </VisitorOnlyRoute>
+                  } />
+                  <Route path="/forgot-password" element={
+                    <VisitorOnlyRoute>
+                      <ForgotPassword />
+                    </VisitorOnlyRoute>
+                  } />
+                  <Route path="/auth/callback" element={<AuthCallback />} />
+                  
+                  {/* Rutas de cliente (requieren autenticación) */}
+                  <Route path="/dashboard" element={
+                    <ClientRoute>
+                      <ClientDashboard />
+                    </ClientRoute>
+                  } />
+                  <Route path="/dashboard/perfil" element={
+                    <ClientRoute>
+                      <UserProfile />
+                    </ClientRoute>
+                  } />
+                  <Route path="/dashboard/citas" element={
+                    <ClientRoute>
+                      <DashboardHome />
+                    </ClientRoute>
+                  } />
+                  <Route path="/dashboard/consultas" element={
+                    <ClientRoute>
+                      <DashboardLayout />
+                    </ClientRoute>
+                  } />
+                  <Route path="/dashboard/mis-cursos" element={
+                    <ClientRoute>
+                      <UserCourses />
+                    </ClientRoute>
+                  } />
+                  <Route path="/dashboard/mis-ebooks" element={
+                    <ClientRoute>
+                      <PurchaseHistory />
+                    </ClientRoute>
+                  } />
+                  <Route path="/dashboard/tokens" element={
+                    <ClientRoute>
+                      <DashboardPage />
+                    </ClientRoute>
+                  } />
+                  <Route path="/dashboard/referidos" element={
+                    <ClientRoute>
+                      <DashboardHome />
+                    </ClientRoute>
+                  } />
+                  
+                  {/* Rutas de administrador */}
+                  <Route path="/admin" element={
+                    <AdminRoute>
+                      <AdminDashboard />
+                    </AdminRoute>
+                  } />
+                  <Route path="/admin/usuarios" element={
+                    <AdminRoute>
+                      <DataExporter />
+                    </AdminRoute>
+                  } />
+                  <Route path="/admin/productos" element={
+                    <AdminRoute>
+                      <AdminDashboard />
+                    </AdminRoute>
+                  } />
+                  <Route path="/admin/cursos" element={
+                    <AdminRoute>
+                      <AdminDashboard />
+                    </AdminRoute>
+                  } />
+                  <Route path="/admin/blog" element={
+                    <AdminRoute>
+                      <AdminDashboard />
+                    </AdminRoute>
+                  } />
+                  <Route path="/admin/citas" element={
+                    <AdminRoute>
+                      <AdminDashboard />
+                    </AdminRoute>
+                  } />
+                  <Route path="/admin/afiliados" element={
+                    <AdminRoute>
+                      <AdminDashboard />
+                    </AdminRoute>
+                  } />
+                  <Route path="/admin/configuracion" element={
+                    <AdminRoute>
+                      <AdminDashboard />
+                    </AdminRoute>
+                  } />
+                  <Route path="/admin/analiticas" element={
+                    <AdminRoute>
+                      <AdminDashboard />
+                    </AdminRoute>
+                  } />
+                  
+                  {/* Rutas de funcionalidad */}
+                  <Route path="/consulta-ia" element={<AIConsultationSystem />} />
+                  <Route path="/agendar-cita" element={<AppointmentScheduler />} />
+                  <Route path="/afiliados/registro" element={<AffiliateRegister />} />
+                  <Route path="/afiliados/dashboard" element={
+                    <ProtectedRoute requiredRole="affiliate">
+                      <AffiliateOverview />
+                    </ProtectedRoute>
+                  } />
+                  
+                  {/* Rutas de pagos */}
             <Route path="/payment" element={<PaymentSystem />} />
-            <Route path="/consulta-ia" element={<AIConsultationSystem />} />
-            <Route path="/cursos" element={<CourseSystem />} />
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/contacto" element={<Contact />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/cliente" element={<Dashboard />} />
-            
-            {/* Rutas adicionales */}
-            <Route path="/servicios" element={<HomePage />} />
-            <Route path="/consultas" element={<HomePage />} />
-            <Route path="/foro" element={<HomePage />} />
-            <Route path="/comunidad" element={<HomePage />} />
-            <Route path="/politicas" element={<HomePage />} />
-            <Route path="/terminos" element={<HomePage />} />
-            <Route path="/privacidad" element={<HomePage />} />
-            <Route path="/seguridad" element={<HomePage />} />
-            
-            {/* Página 404 */}
+                  <Route path="/checkout" element={<CheckoutPage />} />
+                  <Route path="/payment/success" element={<ThankYouPage />} />
+                  <Route path="/payment/failed" element={<ThankYouPage />} />
+                  
+                  {/* Rutas de error */}
+                  <Route path="/unauthorized" element={<UnauthorizedPage />} />
+                  <Route path="/server-error" element={<ServerErrorPage />} />
+                  <Route path="/404" element={<NotFoundPage />} />
+                  
+                  {/* Redirecciones y rutas legacy */}
+                  <Route path="/cliente" element={<Navigate to="/dashboard" replace />} />
+                  <Route path="/admin-dashboard" element={<Navigate to="/admin" replace />} />
+                  <Route path="/user" element={<Navigate to="/dashboard" replace />} />
+                  
+                  {/* Página 404 para rutas no encontradas */}
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </main>
         <Footer />
+              
+              {/* Toast notifications */}
+              <Toaster
+                position="top-right"
+                toastOptions={{
+                  duration: 4000,
+                  style: {
+                    background: '#363636',
+                    color: '#fff',
+                  },
+                  success: {
+                    duration: 3000,
+                    iconTheme: {
+                      primary: '#22c55e',
+                      secondary: '#fff',
+                    },
+                  },
+                  error: {
+                    duration: 5000,
+                    iconTheme: {
+                      primary: '#ef4444',
+                      secondary: '#fff',
+                    },
+                  },
+                }}
+              />
       </div>
     </ThemeProvider>
-  );
-}
-
-// Componente de página no encontrada
-function NotFoundPage() {
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
-      <div className="text-center">
-        <h1 className="text-6xl font-bold text-blue-600 dark:text-blue-400 mb-4">404</h1>
-        <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
-          Página no encontrada
-        </h2>
-        <p className="text-gray-600 dark:text-gray-400 mb-8">
-          La página que buscas no existe o ha sido movida.
-        </p>
-        <button
-          onClick={() => window.history.back()}
-          className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200"
-        >
-          Volver atrás
-        </button>
-      </div>
-    </div>
+        </ModuleProvider>
+      </CartProvider>
+    </AuthProvider>
   );
 }
 

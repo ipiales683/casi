@@ -12,14 +12,14 @@ const config = {
   geminiApiKey: 'AIzaSyCAkIkgslyxArR_kg1kVRREzrjeGWavyyU',
   
   // Configuración de Supabase
-  supabaseUrl: import.meta.env.VITE_SUPABASE_URL || 'https://phzldiaohelbyobhjrnc.supabase.co',
-  supabaseKey: import.meta.env.VITE_SUPABASE_ANON_KEY || 'sbp_db5898ecc094d37ec87562399efe3833e63ab20f',
+  supabaseUrl: import.meta.env.VITE_SUPABASE_URL || 'https://axueygnrasjvrobaszka.supabase.co',
+  supabaseKey: import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4dWV5Z25yYXNqdnJvYmFzemthIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUyODU5NDIsImV4cCI6MjA3MDg2MTk0Mn0.3DtOPYpas6zSFXaLTljjcDY-qWkQbjapIo8J7b8wTmI',
   
   // Configuración de PayPal
   paypalClientId: import.meta.env.VITE_PAYPAL_CLIENT_ID || 'test',
   
   // Configuración de WhatsApp
-  whatsappNumber: '+593991234567',
+  whatsappNumber: '+59398835269',
   
   // Configuración de tema
   defaultTheme: 'light',
@@ -66,12 +66,28 @@ const config = {
   backupInterval: 24 * 60 * 60 * 1000, // 24 horas
 };
 
+// Configuración específica de Supabase para supabaseService.js
+export const supabaseConfig = {
+  url: config.supabaseUrl,
+  key: config.supabaseKey,
+  serviceKey: import.meta.env.SUPABASE_SERVICE_ROLE_KEY || 'sbp_db5898ecc094d37ec87562399efe3833e63ab20f'
+};
+
+// Función getBaseUrl que necesita supabaseService.js
+export const getBaseUrl = () => {
+  return config.baseUrl;
+};
+
+// Función isProduction que necesita supabaseService.js
+export const isProduction = () => {
+  return config.isProduction;
+};
+
 export default config;
 
 // Exportar configuraciones específicas
 export const {
   isDevelopment,
-  isProduction,
   baseUrl,
   apiUrl,
   geminiApiKey,

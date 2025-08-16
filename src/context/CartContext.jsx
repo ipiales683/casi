@@ -1,355 +1,270 @@
-import React, { createContext, useContext, useReducer, useEffect, useState } from 'react';
+import React, { createContext, useState, useContext, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
-import coursesService from '../services/coursesService';
-import { useAuth } from './AuthContext';
 
-// Definir el contexto
+// Crear el contexto
 const CartContext = createContext();
 
-// Acciones para el reducer
-export const CART_ACTIONS = {
-  ADD_TO_CART: 'ADD_TO_CART',
-  REMOVE_FROM_CART: 'REMOVE_FROM_CART',
-  UPDATE_QUANTITY: 'UPDATE_QUANTITY',
-  CLEAR_CART: 'CLEAR_CART',
-  SET_CART: 'SET_CART',
-};
-
-// Estado inicial
-const initialState = {
-  items: [],
-  total: 0
-};
-
-// Función para calcular el total
-const calculateTotal = (items) => {
-  return items.reduce((total, item) => total + (item.price * (item.quantity || 1)), 0);
-};
-
-// Reducer para manejar las acciones del carrito
-const cartReducer = (state, action) => {
-  switch (action.type) {
-    case CART_ACTIONS.ADD_TO_CART: {
-      // Verificar si el item ya está en el carrito
-      const existingItemIndex = state.items.findIndex(item => 
-        item.id === action.payload.id && item.type === action.payload.type
-      );
-      
-      let newItems;
-      
-      if (existingItemIndex >= 0) {
-        // Si el item ya existe, incrementar la cantidad (excepto para cursos y ebooks)
-        if (action.payload.type === 'course' || action.payload.type === 'ebook') {
-          // Para cursos y ebooks, mostrar un mensaje y no duplicar
-          toast.error('Este item ya está en tu carrito');
-          return state;
-        }
-        
-        newItems = [...state.items];
-        newItems[existingItemIndex] = {
-          ...newItems[existingItemIndex],
-          quantity: (newItems[existingItemIndex].quantity || 1) + (action.payload.quantity || 1)
-        };
-      } else {
-        // Si el item no existe, agregarlo al carrito
-        newItems = [...state.items, { ...action.payload, quantity: action.payload.quantity || 1 }];
-      }
-      
-      const newTotal = calculateTotal(newItems);
-      
-      // Guardar el carrito en localStorage
-      localStorage.setItem('cart', JSON.stringify({
-        items: newItems,
-        total: newTotal
-      }));
-      
-      return {
-        items: newItems,
-        total: newTotal
-      };
-    }
-    
-    case CART_ACTIONS.REMOVE_FROM_CART: {
-      const newItems = state.items.filter(item => 
-        !(item.id === action.payload.id && item.type === action.payload.type)
-      );
-      
-      const newTotal = calculateTotal(newItems);
-      
-      // Guardar el carrito actualizado en localStorage
-      localStorage.setItem('cart', JSON.stringify({
-        items: newItems,
-        total: newTotal
-      }));
-      
-      return {
-        items: newItems,
-        total: newTotal
-      };
-    }
-    
-    case CART_ACTIONS.UPDATE_QUANTITY: {
-      const { id, type, quantity } = action.payload;
-      
-      if (quantity <= 0) {
-        // Si la cantidad es 0 o menor, eliminar el item
-        return cartReducer(state, { 
-          type: CART_ACTIONS.REMOVE_FROM_CART, 
-          payload: { id, type } 
-        });
-      }
-      
-      const newItems = state.items.map(item => {
-        if (item.id === id && item.type === type) {
-          return { ...item, quantity };
-        }
-        return item;
-      });
-      
-      const newTotal = calculateTotal(newItems);
-      
-      // Guardar el carrito actualizado en localStorage
-      localStorage.setItem('cart', JSON.stringify({
-        items: newItems,
-        total: newTotal
-      }));
-      
-      return {
-        items: newItems,
-        total: newTotal
-      };
-    }
-    
-    case CART_ACTIONS.CLEAR_CART: {
-      // Limpiar el carrito en localStorage
-      localStorage.removeItem('cart');
-      
-      return initialState;
-    }
-    
-    case CART_ACTIONS.SET_CART: {
-      const { items } = action.payload;
-      const total = calculateTotal(items);
-      
-      return {
-        items,
-        total
-      };
-    }
-    
-    default:
-      return state;
-  }
-};
+// Hook personalizado para usar el contexto
+export const useCart = () => useContext(CartContext);
 
 // Proveedor del contexto
 export const CartProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(cartReducer, initialState);
-  const [isCartVisible, setIsCartVisible] = useState(false);
-  const { user, hasUserPurchasedCourse } = useAuth();
-  
-  // Cargar el carrito desde localStorage al iniciar
+  const [cart, setCart] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [coupon, setCoupon] = useState(null);
+  const [shipping, setShipping] = useState({
+    method: 'standard',
+    cost: 0,
+    address: null
+  });
+
+  // Cargar carrito desde localStorage al inicializar
   useEffect(() => {
     const savedCart = localStorage.getItem('cart');
-    
     if (savedCart) {
       try {
-        const parsedCart = JSON.parse(savedCart);
-        
-        // Validar que el carrito almacenado tenga la estructura correcta
-        if (parsedCart && Array.isArray(parsedCart.items)) {
-          dispatch({ 
-            type: CART_ACTIONS.SET_CART, 
-            payload: { items: parsedCart.items } 
-          });
-        }
+        setCart(JSON.parse(savedCart));
       } catch (error) {
-        console.error('Error al cargar el carrito desde localStorage:', error);
+        console.error('Error al cargar carrito:', error);
         localStorage.removeItem('cart');
       }
     }
   }, []);
-  
-  // Verificar en cada renderizado si el usuario ya ha comprado alguno de los cursos en el carrito
+
+  // Guardar carrito en localStorage cuando cambie
   useEffect(() => {
-    if (user && state.items.length > 0) {
-      // Filtrar cursos que el usuario ya haya comprado
-      const updatedItems = state.items.filter(item => {
-        if (item.type === 'course') {
-          // Si el usuario ya compró el curso, eliminarlo del carrito
-          if (hasUserPurchasedCourse(item.id)) {
-            toast.info(`"${item.title}" ya está en tu biblioteca, se ha eliminado del carrito.`);
-            return false;
-          }
-        }
-        return true;
-      });
+    localStorage.setItem('cart', JSON.stringify(cart));
+  }, [cart]);
+
+  // Agregar producto al carrito
+  const addToCart = (product, quantity = 1) => {
+    setCart(prevCart => {
+      const existingItem = prevCart.find(item => item.id === product.id);
       
-      // Actualizar el carrito si se eliminaron items
-      if (updatedItems.length !== state.items.length) {
-        dispatch({ 
-          type: CART_ACTIONS.SET_CART, 
-          payload: { items: updatedItems } 
-        });
+      if (existingItem) {
+        // Si el producto ya existe, aumentar cantidad
+        const updatedCart = prevCart.map(item =>
+          item.id === product.id
+            ? { ...item, quantity: item.quantity + quantity }
+            : item
+        );
+        
+        toast.success(`Cantidad actualizada: ${product.name}`);
+        return updatedCart;
+      } else {
+        // Si es un producto nuevo, agregarlo
+        const newItem = {
+          ...product,
+          quantity,
+          addedAt: new Date().toISOString()
+        };
+        
+        toast.success(`${product.name} agregado al carrito`);
+        return [...prevCart, newItem];
       }
-    }
-  }, [user, state.items, hasUserPurchasedCourse]);
-  
-  // Actualizar total cuando cambian los items
-  useEffect(() => {
-    if (state.total !== calculateTotal(state.items)) {
-      const newTotal = calculateTotal(state.items);
-      
-      // Guardar el carrito actualizado en localStorage
-      localStorage.setItem('cart', JSON.stringify({
-        items: state.items,
-        total: newTotal
-      }));
-    }
-  }, [state.items, state.total]);
-  
-  // Función para agregar un curso al carrito
-  const addCourseToCart = async (courseId) => {
-    if (!user) {
-      toast.error('Debes iniciar sesión para agregar cursos al carrito');
-      return { success: false };
-    }
-    
-    try {
-      const { success, error, alreadyPurchased, item } = await coursesService.addCourseToCart(courseId, user.id);
-      
-      if (alreadyPurchased) {
-        toast.info('Ya has comprado este curso. Puedes acceder a él desde tu biblioteca.');
-        return { success: false };
-      }
-      
-      if (error) {
-        toast.error(error.message || 'Error al agregar el curso al carrito');
-        return { success: false };
-      }
-      
-      if (success && item) {
-        dispatch({ type: CART_ACTIONS.ADD_TO_CART, payload: item });
-        setIsCartVisible(true);
-        toast.success(`"${item.title}" agregado al carrito`);
-        return { success: true };
-      }
-    } catch (error) {
-      console.error('Error al agregar curso al carrito:', error);
-      toast.error('Ocurrió un error al agregar el curso al carrito');
-      return { success: false };
-    }
-  };
-  
-  // Función para agregar un item genérico al carrito
-  const addToCart = (item) => {
-    dispatch({ type: CART_ACTIONS.ADD_TO_CART, payload: item });
-    setIsCartVisible(true);
-    toast.success(`"${item.title}" agregado al carrito`);
-  };
-  
-  // Función para actualizar la cantidad de un item
-  const updateQuantity = (id, type, quantity) => {
-    dispatch({ 
-      type: CART_ACTIONS.UPDATE_QUANTITY, 
-      payload: { id, type, quantity: parseInt(quantity, 10) } 
     });
   };
-  
-  // Función para eliminar un item del carrito
-  const removeFromCart = (id, type) => {
-    const itemToRemove = state.items.find(item => item.id === id && item.type === type);
-    
-    if (itemToRemove) {
-      dispatch({ type: CART_ACTIONS.REMOVE_FROM_CART, payload: { id, type } });
-      toast.success(`"${itemToRemove.title}" eliminado del carrito`);
-    }
-  };
-  
-  // Función para limpiar el carrito
-  const clearCart = () => {
-    dispatch({ type: CART_ACTIONS.CLEAR_CART });
-  };
-  
-  // Función para procesar el pago
-  const checkout = async (paymentMethod) => {
-    if (!user) {
-      toast.error('Debes iniciar sesión para realizar el pago');
-      return { success: false };
-    }
-    
-    if (state.items.length === 0) {
-      toast.error('El carrito está vacío');
-      return { success: false };
-    }
-    
-    try {
-      // Aquí implementarías la lógica para procesar el pago según el método seleccionado
-      // (PayPal, transferencia bancaria, etc.)
+
+  // Remover producto del carrito
+  const removeFromCart = (productId) => {
+    setCart(prevCart => {
+      const product = prevCart.find(item => item.id === productId);
+      const updatedCart = prevCart.filter(item => item.id !== productId);
       
-      // Simulación de procesamiento de pago exitoso
-      const transactionDetails = {
-        method: paymentMethod,
-        amount: state.total,
-        timestamp: new Date().toISOString(),
-        invoiceUrl: `/dashboard/compras`
-      };
-      
-      // Procesar cada item según su tipo
-      for (const item of state.items) {
-        if (item.type === 'course') {
-          const { success, error, purchaseId } = await coursesService.purchaseCourse(
-            item.id, 
-            user.id, 
-            transactionDetails
-          );
-          
-          if (!success) {
-            console.error(`Error al procesar la compra del curso ${item.id}:`, error);
-            // Seguir intentando con los demás items en lugar de abortar todo el proceso
-          }
-        }
-        // Implementar lógica para otros tipos de productos (ebooks, tokens, etc.)
+      if (product) {
+        toast.success(`${product.name} removido del carrito`);
       }
       
-      // Limpiar el carrito después de un pago exitoso
-      clearCart();
-      
-      return { 
-        success: true, 
-        message: 'Pago procesado correctamente', 
-        transactionId: `tr-${Date.now()}`
+      return updatedCart;
+    });
+  };
+
+  // Actualizar cantidad de un producto
+  const updateQuantity = (productId, quantity) => {
+    if (quantity <= 0) {
+      removeFromCart(productId);
+      return;
+    }
+
+    setCart(prevCart =>
+      prevCart.map(item =>
+        item.id === productId
+          ? { ...item, quantity }
+          : item
+      )
+    );
+  };
+
+  // Limpiar carrito
+  const clearCart = () => {
+    setCart([]);
+    setCoupon(null);
+    setShipping({
+      method: 'standard',
+      cost: 0,
+      address: null
+    });
+    toast.success('Carrito limpiado');
+  };
+
+  // Aplicar cupón
+  const applyCoupon = (couponCode) => {
+    setLoading(true);
+    
+    // Simular validación de cupón
+    setTimeout(() => {
+      const validCoupons = {
+        'WELCOME10': { discount: 10, type: 'percentage' },
+        'SAVE20': { discount: 20, type: 'percentage' },
+        'FREESHIP': { discount: 0, type: 'shipping', freeShipping: true }
       };
-    } catch (error) {
-      console.error('Error al procesar el pago:', error);
-      toast.error('Error al procesar el pago. Inténtalo de nuevo más tarde.');
-      return { success: false, error };
+
+      if (validCoupons[couponCode]) {
+        setCoupon({
+          code: couponCode,
+          ...validCoupons[couponCode]
+        });
+        toast.success(`Cupón ${couponCode} aplicado`);
+      } else {
+        toast.error('Cupón inválido');
+      }
+      setLoading(false);
+    }, 1000);
+  };
+
+  // Remover cupón
+  const removeCoupon = () => {
+    setCoupon(null);
+    toast.success('Cupón removido');
+  };
+
+  // Actualizar método de envío
+  const updateShipping = (method, cost = 0, address = null) => {
+    setShipping({ method, cost, address });
+  };
+
+  // Calcular subtotal
+  const getSubtotal = () => {
+    return cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+  };
+
+  // Calcular descuento del cupón
+  const getDiscount = () => {
+    if (!coupon) return 0;
+    
+    if (coupon.type === 'percentage') {
+      return (getSubtotal() * coupon.discount) / 100;
+    }
+    
+    return coupon.discount;
+  };
+
+  // Calcular costo de envío
+  const getShippingCost = () => {
+    if (coupon?.freeShipping) return 0;
+    return shipping.cost;
+  };
+
+  // Calcular total
+  const getTotal = () => {
+    const subtotal = getSubtotal();
+    const discount = getDiscount();
+    const shippingCost = getShippingCost();
+    
+    return subtotal - discount + shippingCost;
+  };
+
+  // Obtener número total de items
+  const getTotalItems = () => {
+    return cart.reduce((total, item) => total + item.quantity, 0);
+  };
+
+  // Verificar si el carrito está vacío
+  const isEmpty = () => cart.length === 0;
+
+  // Obtener productos por categoría
+  const getProductsByCategory = (category) => {
+    return cart.filter(item => item.category === category);
+  };
+
+  // Obtener productos digitales
+  const getDigitalProducts = () => {
+    return cart.filter(item => item.type === 'digital');
+  };
+
+  // Obtener productos físicos
+  const getPhysicalProducts = () => {
+    return cart.filter(item => item.type === 'physical');
+  };
+
+  // Obtener servicios
+  const getServices = () => {
+    return cart.filter(item => item.type === 'service');
+  };
+
+  // Verificar si un producto está en el carrito
+  const isInCart = (productId) => {
+    return cart.some(item => item.id === productId);
+  };
+
+  // Obtener cantidad de un producto específico
+  const getProductQuantity = (productId) => {
+    const item = cart.find(item => item.id === productId);
+    return item ? item.quantity : 0;
+  };
+
+  // Mover producto a lista de deseos (simulado)
+  const moveToWishlist = (productId) => {
+    const product = cart.find(item => item.id === productId);
+    if (product) {
+      removeFromCart(productId);
+      // Aquí se podría agregar a la lista de deseos
+      toast.success(`${product.name} movido a lista de deseos`);
     }
   };
-  
-  // Alternar la visibilidad del carrito
-  const toggleCartVisibility = () => {
-    setIsCartVisible(!isCartVisible);
+
+  // Calcular ahorro total
+  const getTotalSavings = () => {
+    const originalPrice = cart.reduce((total, item) => {
+      const originalPrice = item.originalPrice || item.price;
+      return total + (originalPrice * item.quantity);
+    }, 0);
+    
+    return originalPrice - getSubtotal();
   };
-  
+
   // Valores a proporcionar en el contexto
   const value = {
-    items: state.items,
-    total: state.total,
-    itemCount: state.items.reduce((count, item) => count + (item.quantity || 1), 0),
-    isCartVisible,
-    setIsCartVisible,
+    cart,
+    loading,
+    coupon,
+    shipping,
     addToCart,
-    addCourseToCart,
-    updateQuantity,
     removeFromCart,
+    updateQuantity,
     clearCart,
-    checkout,
-    toggleCartVisibility
+    applyCoupon,
+    removeCoupon,
+    updateShipping,
+    getSubtotal,
+    getDiscount,
+    getShippingCost,
+    getTotal,
+    getTotalItems,
+    isEmpty,
+    getProductsByCategory,
+    getDigitalProducts,
+    getPhysicalProducts,
+    getServices,
+    isInCart,
+    getProductQuantity,
+    moveToWishlist,
+    getTotalSavings
   };
-  
-  return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
-};
 
-// Hook personalizado para usar el carrito
-export const useCart = () => useContext(CartContext);
+  return (
+    <CartContext.Provider value={value}>
+      {children}
+    </CartContext.Provider>
+  );
+};

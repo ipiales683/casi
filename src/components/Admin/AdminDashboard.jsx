@@ -4,7 +4,7 @@ import {
   FaUsers, FaChartLine, FaFileAlt, FaCalendarAlt, FaShoppingCart, 
   FaBook, FaNewspaper, FaCog, FaSignOutAlt, FaPlus, FaEdit, FaTrash,
   FaEye, FaDownload, FaUpload, FaBell, FaEnvelope, FaWhatsapp,
-  FaCreditCard, FaPaypal, FaBitcoin, FaDollarSign, FaEuro
+  FaCreditCard, FaPaypal, FaBitcoin, FaDollarSign
 } from 'react-icons/fa';
 import { toast } from 'react-hot-toast';
 

@@ -3,7 +3,7 @@
  * Permite extraer información relevante de usuarios y formularios
  */
 
-import { supabaseClient } from './supabaseClient';
+import { supabase } from '../config/supabase.js';
 import { Client } from '@notionhq/client';
 import * as XLSX from 'xlsx';
 
@@ -168,7 +168,6 @@ export const exportService = {
    * @param options Opciones de filtrado
    */
   async fetchData(target: ExportTarget, options: ExportOptions) {
-    const { supabase } = supabaseClient();
     let query = supabase.from(target).select('*');
     
     // Aplicar filtros de fecha si existen

@@ -1,246 +1,272 @@
-# 🏛️ Abogado Wilson - Sistema Legal Completo
+# 🏛️ Sistema Abogado Wilson - CMS/ERP Profesional
 
-Un sistema web profesional y completo para bufete de abogados con todas las funcionalidades modernas necesarias para la gestión legal digital.
+Un sistema completo y profesional para gestión legal que combina las funcionalidades de un CMS avanzado, ERP, panel de control fácil de usar y constructor de sitios web con y sin IA.
 
 ## ✨ Características Principales
 
-### 🎨 **Diseño y Experiencia de Usuario**
-- **Tema Dinámico**: Cambio entre modo claro y oscuro
-- **Paleta de Colores Personalizable**: 5 esquemas de color (Azul, Verde, Púrpura, Rojo, Naranja)
-- **Diseño Responsivo**: Optimizado para todos los dispositivos
-- **Animaciones Suaves**: Transiciones y efectos visuales profesionales
-- **Interfaz Moderna**: UI/UX de última generación
+### 🎯 **Sistema de Usuarios y Roles**
+- **Visitantes**: Acceso limitado a contenido público
+- **Clientes**: Dashboard completo con historial de compras, consultas y citas
+- **Administradores**: Panel de control total del sistema
+- **Afiliados**: Programa de referidos y comisiones
 
-### 👤 **Sistema de Usuarios**
-- **Registro y Autenticación**: Sistema completo de usuarios
-- **Perfiles Personalizables**: Gestión de información personal
-- **Roles de Usuario**: Cliente, Administrador, Abogado
-- **Dashboard Personalizado**: Panel específico por tipo de usuario
+### 🏗️ **Constructor de Sitios Web**
+- Constructor visual drag & drop profesional
+- Plantillas predefinidas para diferentes tipos de sitios
+- Soporte para IA en la creación de contenido
+- Diseño responsivo y optimizado para SEO
 
-### 🏢 **Dashboard de Administración**
-- **Gestión de Usuarios**: CRUD completo de usuarios
-- **Gestión de Productos**: Servicios y productos legales
-- **Gestión de Cursos**: Sistema de cursos online
-- **Gestión de Blog**: Publicación y edición de artículos
-- **Gestión de Citas**: Calendario y agenda
-- **Configuración del Sistema**: Ajustes generales y de pago
-- **Estadísticas en Tiempo Real**: Métricas y reportes
-
-### 💳 **Sistema de Pagos Completo**
-- **PayPal**: Integración directa
-- **Tarjetas de Crédito/Débito**: Procesamiento seguro
-- **Criptomonedas**: Bitcoin, Ethereum, USDT
-- **Transferencias Bancarias**: Con comprobante de pago
-- **Múltiples Monedas**: Soporte para USD, EUR, etc.
+### 📚 **Gestión de Contenido (CMS)**
+- Blog completo con editor enriquecido
+- Sistema de categorías y etiquetas
+- Gestión de páginas estáticas
+- Biblioteca de medios integrada
 
 ### 🎓 **Sistema de Cursos**
-- **Reproductor de Video Avanzado**: Controles completos
-- **Seguimiento de Progreso**: Progreso por lección y curso
-- **Certificados**: Generación automática de certificados
-- **Categorías**: Penal, Civil, Laboral, Tránsito, etc.
-- **Niveles**: Básico, Intermedio, Avanzado
+- Cursos online con lecciones y materiales
+- Seguimiento de progreso del estudiante
+- Certificados digitales
+- Sistema de evaluaciones
 
-### 🤖 **Consultas con IA (Gemini)**
-- **API de Google Gemini**: Respuestas inteligentes
-- **Categorías Especializadas**: Por área de derecho
-- **Plantillas de Consultas**: Consultas comunes predefinidas
-- **Historial de Consultas**: Guardado automático
-- **Exportación**: Descarga de conversaciones
-- **Grabación de Voz**: Entrada por voz (próximamente)
+### 💰 **E-Commerce y Pagos**
+- Catálogo de productos digitales y físicos
+- Múltiples pasarelas de pago (PayPal, Stripe, Mercado Pago)
+- Sistema de tokens para consultas
+- Carrito de compras avanzado
 
-### 📚 **Gestión de Contenido**
-- **Blog Profesional**: Artículos legales
-- **E-books**: Descargas protegidas
-- **Noticias Jurídicas**: Actualizaciones legales
-- **Recursos Descargables**: Documentos y plantillas
+### 📅 **Calendarios y Agendamientos**
+- Sistema de citas y reservas
+- Calendario integrado
+- Recordatorios automáticos
+- Gestión de disponibilidad
 
-### 📅 **Sistema de Citas**
-- **Calendario Interactivo**: Programación de citas
-- **Notificaciones**: Recordatorios automáticos
-- **Gestión de Horarios**: Disponibilidad de abogados
-- **Confirmaciones**: Sistema de confirmación
+### 🤖 **Inteligencia Artificial**
+- Consultas legales asistidas por IA
+- Generación automática de contenido
+- Análisis de documentos legales
+- Chatbot inteligente
 
-### 👥 **Sistema de Afiliados**
-- **Programa de Referidos**: Comisiones por referencias
-- **Dashboard de Afiliados**: Seguimiento de ganancias
-- **Sistema de Comisiones**: Cálculo automático
-- **Reportes**: Estadísticas de afiliados
-
-### 💬 **Comunicación**
-- **Chat en Vivo**: Comunicación directa
-- **WhatsApp Integration**: Conexión directa
-- **Sistema de Mensajería**: Mensajes internos
-- **Notificaciones Push**: Alertas en tiempo real
-
-### 🔒 **Seguridad y Privacidad**
-- **Autenticación Segura**: JWT tokens
-- **Encriptación SSL**: 256 bits
-- **Protección de Datos**: GDPR compliant
-- **Backups Automáticos**: Respaldo de información
+### 📊 **Analíticas y Reportes**
+- Dashboard de estadísticas en tiempo real
+- Reportes de ventas y usuarios
+- Métricas de rendimiento
+- Exportación de datos
 
 ## 🚀 Tecnologías Utilizadas
 
 ### Frontend
-- **React 18**: Framework principal
-- **TypeScript**: Tipado estático
-- **Tailwind CSS**: Framework de estilos
-- **Framer Motion**: Animaciones
-- **React Router**: Navegación
-- **React Query**: Gestión de estado
-- **React Hot Toast**: Notificaciones
+- **React 18** - Biblioteca de interfaz de usuario
+- **TypeScript** - Tipado estático para mayor robustez
+- **Tailwind CSS** - Framework CSS utilitario
+- **Vite** - Herramienta de construcción rápida
+- **React Router** - Enrutamiento de la aplicación
 
 ### Backend
-- **Node.js**: Runtime de JavaScript
-- **Express.js**: Framework web
-- **Supabase**: Base de datos y autenticación
-- **Prisma**: ORM para base de datos
-- **Cloudflare Workers**: Edge computing
+- **Node.js** - Runtime de JavaScript
+- **Express** - Framework web
+- **Prisma** - ORM para base de datos
+- **Supabase** - Backend como servicio
 
-### APIs y Servicios
-- **Google Gemini AI**: Inteligencia artificial
-- **PayPal API**: Procesamiento de pagos
-- **WhatsApp Business API**: Mensajería
-- **Cloudflare**: CDN y hosting
+### Base de Datos
+- **PostgreSQL** - Base de datos relacional
+- **Redis** - Almacenamiento en caché
 
-## 📦 Instalación
+### Herramientas de Desarrollo
+- **ESLint** - Linter de código
+- **Prettier** - Formateador de código
+- **Vitest** - Framework de testing
+- **Wrangler** - Despliegue en Cloudflare Workers
 
-### Prerrequisitos
-- Node.js 18+
-- npm o yarn
-- Cuenta de Supabase
-- API Key de Google Gemini
+## 📋 Requisitos del Sistema
 
-### Pasos de Instalación
+### Requisitos Mínimos
+- **Node.js**: 18.0.0 o superior
+- **npm**: 8.0.0 o superior
+- **RAM**: 4GB mínimo
+- **Espacio en disco**: 2GB libre
 
-1. **Clonar el repositorio**
+### Requisitos Recomendados
+- **Node.js**: 20.0.0 o superior
+- **RAM**: 8GB o superior
+- **Espacio en disco**: 5GB libre
+- **Procesador**: Intel i5 o AMD equivalente
+
+## 🛠️ Instalación
+
+### 1. Clonar el Repositorio
 ```bash
 git clone https://github.com/tu-usuario/abogado-wilson.git
 cd abogado-wilson
 ```
 
-2. **Instalar dependencias**
+### 2. Instalar Dependencias
 ```bash
 npm install
 ```
 
-3. **Configurar variables de entorno**
+### 3. Configurar Variables de Entorno
 ```bash
 cp env.example .env
+# Editar .env con tus configuraciones
 ```
 
-Editar `.env` con tus credenciales:
-```env
-VITE_SUPABASE_URL=tu_url_de_supabase
-VITE_SUPABASE_ANON_KEY=tu_clave_anonima
-VITE_GEMINI_API_KEY=tu_api_key_de_gemini
-VITE_PAYPAL_CLIENT_ID=tu_client_id_de_paypal
-```
-
-4. **Configurar base de datos**
+### 4. Configurar Base de Datos
 ```bash
 npx prisma generate
 npx prisma db push
 ```
 
-5. **Ejecutar en desarrollo**
+### 5. Iniciar en Desarrollo
 ```bash
 npm run dev
 ```
 
-## 🏗️ Estructura del Proyecto
+El sistema estará disponible en: **http://localhost:5173**
+
+## 🚀 Despliegue
+
+### Despliegue Local
+```bash
+npm run build
+npm run preview
+```
+
+### Despliegue en Producción
+```bash
+npm run build
+npm run deploy
+```
+
+### Despliegue en Cloudflare Workers
+```bash
+npm run deploy:worker
+```
+
+## 📁 Estructura del Proyecto
 
 ```
-src/
-├── components/
-│   ├── Admin/           # Dashboard de administración
-│   ├── Auth/           # Componentes de autenticación
-│   ├── Blog/           # Sistema de blog
-│   ├── Chat/           # Sistema de chat
-│   ├── Common/         # Componentes comunes
-│   ├── Consultation/   # Sistema de consultas
-│   ├── Courses/        # Sistema de cursos
-│   ├── Dashboard/      # Dashboard de clientes
-│   ├── Navigation/     # Navegación
-│   └── Payment/        # Sistema de pagos
-├── context/            # Contextos de React
-├── services/           # Servicios y APIs
-├── utils/              # Utilidades
-└── types/              # Tipos de TypeScript
+abogado-wilson/
+├── src/
+│   ├── components/          # Componentes reutilizables
+│   │   ├── Admin/          # Componentes de administración
+│   │   ├── Auth/           # Componentes de autenticación
+│   │   ├── Dashboard/      # Componentes del dashboard
+│   │   ├── Common/         # Componentes comunes
+│   │   └── ...
+│   ├── context/            # Contextos de React
+│   ├── middleware/         # Middleware de autenticación
+│   ├── services/           # Servicios y APIs
+│   ├── utils/              # Utilidades y helpers
+│   └── types/              # Definiciones de TypeScript
+├── public/                 # Archivos estáticos
+├── prisma/                 # Esquemas de base de datos
+├── workers/                # Cloudflare Workers
+└── docs/                   # Documentación
 ```
 
 ## 🔧 Configuración
 
-### Configuración de Temas
-El sistema incluye un sistema de temas completo con:
-- Modo claro/oscuro
-- 5 paletas de colores
-- Transiciones suaves
-- Persistencia de preferencias
+### Variables de Entorno
+```env
+# Base de datos
+DATABASE_URL="postgresql://usuario:password@localhost:5432/abogado_wilson"
 
-### Configuración de Pagos
-Soporte para múltiples métodos de pago:
-- PayPal (sandbox y producción)
-- Stripe (tarjetas)
-- Criptomonedas
-- Transferencias bancarias
+# Supabase
+SUPABASE_URL="https://tu-proyecto.supabase.co"
+SUPABASE_ANON_KEY="tu-clave-anonima"
 
-### Configuración de IA
-Integración con Google Gemini para:
-- Consultas legales automatizadas
-- Respuestas especializadas
-- Análisis de documentos
-- Generación de contenido
+# JWT
+JWT_SECRET="tu-secreto-jwt"
 
-## 📱 Funcionalidades Móviles
-
-- **Diseño Responsivo**: Optimizado para móviles
-- **PWA Ready**: Instalable como app
-- **Offline Support**: Funcionalidad sin conexión
-- **Touch Gestures**: Gestos táctiles
-- **Push Notifications**: Notificaciones push
-
-## 🔄 Despliegue
-
-### Despliegue en Cloudflare Pages
-```bash
-npm run build
-wrangler pages deploy dist
+# Pagos
+PAYPAL_CLIENT_ID="tu-client-id"
+STRIPE_SECRET_KEY="tu-clave-secreta"
 ```
 
-### Despliegue en Vercel
-```bash
-npm run build
-vercel --prod
+### Configuración de Tailwind
+El sistema incluye una paleta de colores profesional y componentes predefinidos:
+
+```javascript
+// Colores principales
+primary: {
+  50: '#eff6ff',
+  500: '#3b82f6',
+  900: '#1e3a8a'
+}
+
+// Colores de estado
+success: { 500: '#22c55e' }
+warning: { 500: '#f59e0b' }
+error: { 500: '#ef4444' }
 ```
 
-### Despliegue en Netlify
+## 📱 Características del Dashboard
+
+### Dashboard de Cliente
+- Resumen de consultas y citas
+- Gestión de tokens y e-books
+- Historial de compras
+- Sistema de referidos
+- Notificaciones personalizadas
+
+### Dashboard de Administrador
+- Gestión completa de usuarios
+- Estadísticas de ventas y tráfico
+- Gestión de contenido y productos
+- Sistema de citas y calendarios
+- Reportes y analíticas
+
+## 🔐 Seguridad
+
+- **Autenticación JWT** con refresh tokens
+- **Autorización basada en roles** (RBAC)
+- **Validación de datos** en frontend y backend
+- **Protección CSRF** y XSS
+- **Rate limiting** para APIs
+- **Encriptación** de datos sensibles
+
+## 📊 Funcionalidades Avanzadas
+
+### Sistema de Notificaciones
+- Notificaciones push en tiempo real
+- Emails automáticos
+- SMS para recordatorios importantes
+- WhatsApp Business API
+
+### Integración con APIs Externas
+- Google Calendar para citas
+- Dropbox/Google Drive para documentos
+- Zapier para automatizaciones
+- Webhooks para integraciones personalizadas
+
+### Sistema de Backup
+- Backup automático de base de datos
+- Versionado de archivos
+- Recuperación ante desastres
+- Sincronización en la nube
+
+## 🧪 Testing
+
 ```bash
-npm run build
-netlify deploy --prod
+# Ejecutar tests unitarios
+npm run test
+
+# Ejecutar tests de integración
+npm run test:integration
+
+# Ejecutar tests E2E
+npm run test:e2e
+
+# Cobertura de código
+npm run test:coverage
 ```
 
-## 📊 Monitoreo y Analytics
+## 📈 Monitoreo y Logs
 
-- **Google Analytics**: Seguimiento de usuarios
-- **Error Tracking**: Captura de errores
-- **Performance Monitoring**: Monitoreo de rendimiento
-- **User Behavior**: Análisis de comportamiento
-
-## 🔒 Seguridad
-
-- **HTTPS**: Conexiones seguras
-- **CORS**: Configuración de seguridad
-- **Rate Limiting**: Limitación de requests
-- **Input Validation**: Validación de entradas
-- **SQL Injection Protection**: Protección contra inyección SQL
-
-## 📈 Escalabilidad
-
-- **CDN**: Distribución de contenido
-- **Caching**: Caché inteligente
-- **Database Optimization**: Optimización de base de datos
-- **Load Balancing**: Balanceo de carga
-- **Microservices Ready**: Preparado para microservicios
+- **Logs estructurados** con Winston
+- **Métricas de rendimiento** con Prometheus
+- **Alertas automáticas** para errores críticos
+- **Dashboard de monitoreo** en tiempo real
 
 ## 🤝 Contribución
 
@@ -252,26 +278,35 @@ netlify deploy --prod
 
 ## 📄 Licencia
 
-Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE.md](LICENSE.md) para detalles.
+Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más detalles.
 
-## 📞 Soporte
+## 🆘 Soporte
 
-- **Email**: contacto@abogadowilson.com
+### Canales de Soporte
+- **Email**: soporte@abogadowilson.com
 - **WhatsApp**: +593 98 883 5269
+- **Documentación**: [docs.abogadowilson.com](https://docs.abogadowilson.com)
+
+### Comunidad
+- **Discord**: [Unirse al servidor](https://discord.gg/abogadowilson)
+- **GitHub Issues**: [Reportar problemas](https://github.com/tu-usuario/abogado-wilson/issues)
+- **Wiki**: [Documentación de la comunidad](https://github.com/tu-usuario/abogado-wilson/wiki)
+
+## 🙏 Agradecimientos
+
+- **React Team** por el increíble framework
+- **Tailwind CSS** por el sistema de diseño
+- **Vite** por la herramienta de construcción
+- **Comunidad open source** por las librerías utilizadas
+
+## 📞 Contacto
+
+**Dr. Wilson Ipiales**
+- **Email**: contacto@abogadowilson.com
 - **Teléfono**: +593 98 883 5269
-
-## 🎯 Roadmap
-
-### Próximas Funcionalidades
-- [ ] App móvil nativa
-- [ ] Integración con más IAs
-- [ ] Sistema de videollamadas
-- [ ] Blockchain para contratos
-- [ ] Machine Learning para análisis de casos
-- [ ] Integración con sistemas judiciales
-- [ ] Sistema de facturación automática
-- [ ] CRM avanzado
+- **Sitio Web**: [abogadowilson.com](https://abogadowilson.com)
 
 ---
 
-**Desarrollado con ❤️ para el bufete de abogados Wilson Ipiales**
+⭐ **Si este proyecto te ha sido útil, por favor dale una estrella en GitHub!**
+"# Proyecto abg_nueva" 

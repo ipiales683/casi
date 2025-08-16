@@ -1,104 +1,70 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-import { resolve } from 'path';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import { resolve } from 'path'
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-export default defineConfig(({ mode }) => ({
+export default defineConfig({
   plugins: [react()],
-  base: './',
-  root: 'src',
-  publicDir: 'public',
+  
+  // Configuración del servidor de desarrollo
   server: {
     port: 5173,
-    strictPort: true,
-    host: 'localhost',
-    open: true,
+    host: '0.0.0.0', // Permite acceso desde cualquier IP
+    open: true, // Abre automáticamente el navegador
     cors: true,
-    fs: {
-      strict: false,
-      allow: ['..']
-    },
     hmr: {
-      overlay: true,
-      clientPort: 5173
+      overlay: true
     },
+    // Configuración para evitar problemas de CORS
     proxy: {
-      // Proxy para API en desarrollo local
       '/api': {
-        target: process.env.NODE_ENV === 'development' 
-          ? 'http://localhost:8787' 
-          : 'https://api.abogadowilson.com',
-        changeOrigin: true,
-        secure: false, // No validar certificados en desarrollo
-        ws: true,
-        rewrite: (path) => path.replace(/^\/api/, ''),
-        configure: (proxy, _options) => {
-          proxy.on('error', (err, _req, _res) => {
-            console.log('[Proxy Error]', err);
-          });
-          proxy.on('proxyReq', (proxyReq, req, _res) => {
-            console.log('[Proxy Request]', req.method, req.url);
-          });
-          proxy.on('proxyRes', (proxyRes, req, _res) => {
-            console.log('[Proxy Response]', proxyRes.statusCode, req.url);
-          });
-        },
-      },
-      // Proxy específico para WebSocket
-      '/ws': {
-        target: 'ws://localhost:8787',
-        ws: true,
+        target: 'http://localhost:3000',
         changeOrigin: true,
         secure: false
-      },
-    },
+      }
+    }
   },
+  
+  // Resolución de alias para importaciones más limpias
   resolve: {
     alias: {
       '@': resolve(__dirname, 'src'),
-      'components': resolve(__dirname, 'src/components'),
-      'pages': resolve(__dirname, 'src/pages'),
-      'context': resolve(__dirname, 'src/context'),
-      'utils': resolve(__dirname, 'src/utils'),
-      'services': resolve(__dirname, 'src/services'),
-      'assets': resolve(__dirname, 'src/assets'),
-      'hooks': resolve(__dirname, 'src/hooks')
-    },
-    extensions: ['.mjs', '.js', '.jsx', '.ts', '.tsx', '.json']
+      '@components': resolve(__dirname, 'src/components'),
+      '@pages': resolve(__dirname, 'src/pages'),
+      '@services': resolve(__dirname, 'src/services'),
+      '@utils': resolve(__dirname, 'src/utils'),
+      '@context': resolve(__dirname, 'src/context'),
+      '@assets': resolve(__dirname, 'src/assets'),
+      '@styles': resolve(__dirname, 'src/styles')
+    }
   },
+  
+  // Configuración de build
+  build: {
+    outDir: 'dist',
+    sourcemap: true,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+          router: ['react-router-dom']
+        }
+      }
+    }
+  },
+  
+  // Configuración de optimización
   optimizeDeps: {
     include: [
       'react',
       'react-dom',
       'react-router-dom',
-      'axios',
-      'react-icons',
       'react-hot-toast'
     ]
   },
-  esbuild: {
-    logOverride: { 'this-is-undefined-in-esm': 'silent' }
-  },
-  build: {
-    outDir: 'dist',
-    emptyOutDir: true,
-    sourcemap: true,
-    minify: mode === 'production',
-    chunkSizeWarningLimit: 1600,
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          react: ['react', 'react-dom', 'react-router-dom'],
-          vendor: ['axios', 'react-icons', 'react-hot-toast']
-        },
-        entryFileNames: 'assets/[name]-[hash].js',
-        chunkFileNames: 'assets/[name]-[hash].js',
-        assetFileNames: 'assets/[name]-[hash].[ext]'
-      }
-    }
+  
+  // Configuración de entorno
+  define: {
+    __DEV__: JSON.stringify(true),
+    __VERSION__: JSON.stringify('1.0.0')
   }
-}));
+})

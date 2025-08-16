@@ -1,104 +1,319 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { loadModuleWithFallback } from '../utils/connectionManager';
+import React, { createContext, useState, useContext, useEffect } from 'react';
 
 // Crear el contexto
 const ModuleContext = createContext();
 
-/**
- * Proveedor de contexto para carga de módulos con manejo de errores
- */
-export function ModuleProvider({ children }) {
-  // Estado para seguir los módulos cargados y los errores
-  const [loadedModules, setLoadedModules] = useState({});
-  const [moduleErrors, setModuleErrors] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
+// Hook personalizado para usar el contexto
+export const useModule = () => useContext(ModuleContext);
 
-  /**
-   * Cargar un módulo con sistema de fallback
-   * @param {string} path - Ruta al módulo
-   * @param {string} name - Nombre del módulo para rutas alternativas
-   */
-  const loadModule = async (path, name) => {
-    if (loadedModules[path]) {
-      return loadedModules[path];
+// Proveedor del contexto
+export const ModuleProvider = ({ children }) => {
+  const [modules, setModules] = useState({});
+  const [activeModules, setActiveModules] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  // Módulos disponibles del sistema
+  const availableModules = {
+    // Módulos básicos
+    auth: {
+      id: 'auth',
+      name: 'Autenticación',
+      description: 'Sistema de login, registro y gestión de usuarios',
+      version: '1.0.0',
+      required: true,
+      enabled: true
+    },
+    dashboard: {
+      id: 'dashboard',
+      name: 'Dashboard',
+      description: 'Panel de control para usuarios y administradores',
+      version: '1.0.0',
+      required: true,
+      enabled: true
+    },
+    blog: {
+      id: 'blog',
+      name: 'Blog',
+      description: 'Sistema de gestión de contenido y artículos',
+      version: '1.0.0',
+      required: false,
+      enabled: true
+    },
+    courses: {
+      id: 'courses',
+      name: 'Cursos',
+      description: 'Sistema de gestión de cursos online',
+      version: '1.0.0',
+      required: false,
+      enabled: true
+    },
+    ebooks: {
+      id: 'ebooks',
+      name: 'E-Books',
+      description: 'Gestión y venta de libros digitales',
+      version: '1.0.0',
+      required: false,
+      enabled: true
+    },
+    payments: {
+      id: 'payments',
+      name: 'Pagos',
+      description: 'Sistema de pagos y facturación',
+      version: '1.0.0',
+      required: false,
+      enabled: true
+    },
+    appointments: {
+      id: 'appointments',
+      name: 'Citas',
+      description: 'Sistema de agendamiento de citas',
+      version: '1.0.0',
+      required: false,
+      enabled: true
+    },
+    affiliates: {
+      id: 'affiliates',
+      name: 'Afiliados',
+      description: 'Programa de referidos y comisiones',
+      version: '1.0.0',
+      required: false,
+      enabled: true
+    },
+    ai: {
+      id: 'ai',
+      name: 'Inteligencia Artificial',
+      description: 'Consultas legales asistidas por IA',
+      version: '1.0.0',
+      required: false,
+      enabled: true
+    },
+    analytics: {
+      id: 'analytics',
+      name: 'Analíticas',
+      description: 'Estadísticas y reportes del sistema',
+      version: '1.0.0',
+      required: false,
+      enabled: true
+    },
+    notifications: {
+      id: 'notifications',
+      name: 'Notificaciones',
+      description: 'Sistema de notificaciones push y email',
+      version: '1.0.0',
+      required: false,
+      enabled: true
+    },
+    seo: {
+      id: 'seo',
+      name: 'SEO',
+      description: 'Optimización para motores de búsqueda',
+      version: '1.0.0',
+      required: false,
+      enabled: true
     }
+  };
 
-    setIsLoading(true);
+  // Inicializar módulos
+  useEffect(() => {
+    initializeModules();
+  }, []);
+
+  // Inicializar módulos del sistema
+  const initializeModules = () => {
+    setLoading(true);
+    
     try {
-      const module = await loadModuleWithFallback(path, name);
-      setLoadedModules(prev => ({
-        ...prev,
-        [path]: module
-      }));
+      // Cargar configuración de módulos desde localStorage
+      const savedModules = localStorage.getItem('systemModules');
+      let moduleConfig = {};
       
-      // Limpiar error si existía
-      if (moduleErrors[path]) {
-        setModuleErrors(prev => {
-          const newErrors = { ...prev };
-          delete newErrors[path];
-          return newErrors;
-        });
+      if (savedModules) {
+        moduleConfig = JSON.parse(savedModules);
+      } else {
+        // Configuración por defecto
+        moduleConfig = Object.keys(availableModules).reduce((acc, key) => {
+          acc[key] = availableModules[key];
+          return acc;
+        }, {});
+        
+        // Guardar configuración por defecto
+        localStorage.setItem('systemModules', JSON.stringify(moduleConfig));
       }
       
-      setIsLoading(false);
-      return module;
+      setModules(moduleConfig);
+      
+      // Establecer módulos activos
+      const active = Object.values(moduleConfig).filter(module => module.enabled);
+      setActiveModules(active);
+      
     } catch (error) {
-      console.error(`[ModuleContext] Error al cargar módulo ${path}:`, error);
-      setModuleErrors(prev => ({
-        ...prev,
-        [path]: error.message
-      }));
-      setIsLoading(false);
-      throw error;
+      console.error('Error al inicializar módulos:', error);
+      // Usar configuración por defecto en caso de error
+      setModules(availableModules);
+      setActiveModules(Object.values(availableModules).filter(module => module.enabled));
+    } finally {
+      setLoading(false);
     }
   };
 
-  /**
-   * Verifica si un módulo existe sin cargarlo completamente
-   * @param {string} path - Ruta al módulo
-   */
-  const checkModuleExists = async (path) => {
-    try {
-      await import(/* @vite-ignore */ path);
-      return true;
-    } catch (error) {
-      return false;
-    }
+  // Habilitar módulo
+  const enableModule = (moduleId) => {
+    setModules(prevModules => {
+      const updatedModules = {
+        ...prevModules,
+        [moduleId]: {
+          ...prevModules[moduleId],
+          enabled: true
+        }
+      };
+      
+      // Guardar en localStorage
+      localStorage.setItem('systemModules', JSON.stringify(updatedModules));
+      
+      // Actualizar módulos activos
+      const active = Object.values(updatedModules).filter(module => module.enabled);
+      setActiveModules(active);
+      
+      return updatedModules;
+    });
   };
 
-  /**
-   * Precarga módulos críticos al inicio
-   */
-  const preloadCriticalModules = async () => {
-    const criticalModules = [
-      { path: './components/ConsultasPenales', name: 'ConsultasPenales' },
-      { path: './components/ConsultasCiviles', name: 'ConsultasCiviles' },
-      { path: './components/ConsultasTransito', name: 'ConsultasTransito' },
-      { path: './components/Consultation/ConsultationHub', name: 'ConsultationHub' },
-      { path: './components/Auth/Register', name: 'Register' },
-      { path: './components/PrivacyPolicy', name: 'PrivacyPolicy' }
-    ];
+  // Deshabilitar módulo
+  const disableModule = (moduleId) => {
+    const module = modules[moduleId];
+    
+    if (module?.required) {
+      throw new Error(`No se puede deshabilitar el módulo ${module.name} ya que es requerido`);
+    }
+    
+    setModules(prevModules => {
+      const updatedModules = {
+        ...prevModules,
+        [moduleId]: {
+          ...prevModules[moduleId],
+          enabled: false
+        }
+      };
+      
+      // Guardar en localStorage
+      localStorage.setItem('systemModules', JSON.stringify(updatedModules));
+      
+      // Actualizar módulos activos
+      const active = Object.values(updatedModules).filter(module => module.enabled);
+      setActiveModules(active);
+      
+      return updatedModules;
+    });
+  };
 
-    setIsLoading(true);
-    for (const { path, name } of criticalModules) {
-      try {
-        await loadModule(path, name);
-        console.log(`[ModuleContext] Módulo ${name} precargado correctamente`);
-      } catch (error) {
-        console.warn(`[ModuleContext] Error al precargar ${name}:`, error.message);
+  // Verificar si un módulo está habilitado
+  const isModuleEnabled = (moduleId) => {
+    return modules[moduleId]?.enabled || false;
+  };
+
+  // Verificar si un módulo está disponible
+  const isModuleAvailable = (moduleId) => {
+    return !!modules[moduleId];
+  };
+
+  // Obtener información de un módulo
+  const getModuleInfo = (moduleId) => {
+    return modules[moduleId] || null;
+  };
+
+  // Obtener todos los módulos
+  const getAllModules = () => {
+    return Object.values(modules);
+  };
+
+  // Obtener módulos activos
+  const getActiveModules = () => {
+    return activeModules;
+  };
+
+  // Obtener módulos por categoría
+  const getModulesByCategory = (category) => {
+    return Object.values(modules).filter(module => module.category === category);
+  };
+
+  // Verificar dependencias de módulos
+  const checkModuleDependencies = (moduleId) => {
+    const module = modules[moduleId];
+    if (!module) return { valid: false, missing: [] };
+    
+    const dependencies = module.dependencies || [];
+    const missing = dependencies.filter(dep => !isModuleEnabled(dep));
+    
+    return {
+      valid: missing.length === 0,
+      missing
+    };
+  };
+
+  // Actualizar configuración de módulo
+  const updateModuleConfig = (moduleId, config) => {
+    setModules(prevModules => {
+      const updatedModules = {
+        ...prevModules,
+        [moduleId]: {
+          ...prevModules[moduleId],
+          ...config
+        }
+      };
+      
+      // Guardar en localStorage
+      localStorage.setItem('systemModules', JSON.stringify(updatedModules));
+      
+      // Actualizar módulos activos si es necesario
+      if (config.hasOwnProperty('enabled')) {
+        const active = Object.values(updatedModules).filter(module => module.enabled);
+        setActiveModules(active);
       }
-    }
-    setIsLoading(false);
+      
+      return updatedModules;
+    });
   };
 
-  // Valor del contexto
+  // Reinicializar módulos
+  const resetModules = () => {
+    localStorage.removeItem('systemModules');
+    initializeModules();
+  };
+
+  // Obtener estadísticas de módulos
+  const getModuleStats = () => {
+    const total = Object.keys(modules).length;
+    const enabled = activeModules.length;
+    const disabled = total - enabled;
+    const required = Object.values(modules).filter(module => module.required).length;
+    
+    return {
+      total,
+      enabled,
+      disabled,
+      required,
+      optional: total - required
+    };
+  };
+
+  // Valores a proporcionar en el contexto
   const value = {
-    loadModule,
-    checkModuleExists,
-    preloadCriticalModules,
-    loadedModules,
-    moduleErrors,
-    isLoading
+    modules,
+    activeModules,
+    loading,
+    availableModules,
+    enableModule,
+    disableModule,
+    isModuleEnabled,
+    isModuleAvailable,
+    getModuleInfo,
+    getAllModules,
+    getActiveModules,
+    getModulesByCategory,
+    checkModuleDependencies,
+    updateModuleConfig,
+    resetModules,
+    getModuleStats
   };
 
   return (
@@ -106,86 +321,4 @@ export function ModuleProvider({ children }) {
       {children}
     </ModuleContext.Provider>
   );
-}
-
-// Hook personalizado para usar el contexto
-export function useModules() {
-  const context = useContext(ModuleContext);
-  if (!context) {
-    throw new Error('useModules debe ser usado dentro de un ModuleProvider');
-  }
-  return context;
-}
-
-// Componente de alto orden para cargar un módulo automáticamente
-export function withModuleLoading(Component, modulePath, moduleName) {
-  return function WithModuleLoading(props) {
-    const { loadModule, loadedModules, moduleErrors, isLoading } = useModules();
-    const [module, setModule] = useState(null);
-    const [error, setError] = useState(null);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-      let isMounted = true;
-
-      const loadTheModule = async () => {
-        try {
-          const loadedModule = await loadModule(modulePath, moduleName);
-          if (isMounted) {
-            setModule(loadedModule);
-            setError(null);
-          }
-        } catch (err) {
-          if (isMounted) {
-            setError(err);
-          }
-        } finally {
-          if (isMounted) {
-            setLoading(false);
-          }
-        }
-      };
-
-      // Si ya está cargado, usarlo directamente
-      if (loadedModules[modulePath]) {
-        setModule(loadedModules[modulePath]);
-        setLoading(false);
-      } else {
-        loadTheModule();
-      }
-
-      return () => {
-        isMounted = false;
-      };
-    }, [modulePath, moduleName]);
-
-    if (loading || isLoading) {
-      return (
-        <div className="flex items-center justify-center p-6">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-          <p className="ml-3 text-blue-600">Cargando módulo...</p>
-        </div>
-      );
-    }
-
-    if (error || moduleErrors[modulePath]) {
-      return (
-        <div className="p-4 bg-red-50 border border-red-200 rounded-md text-red-600">
-          <h3 className="text-lg font-semibold mb-2">Error al cargar el módulo</h3>
-          <p>{error?.message || moduleErrors[modulePath] || 'Error desconocido'}</p>
-          <button 
-            className="mt-3 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-            onClick={() => loadModule(modulePath, moduleName)}
-          >
-            Reintentar
-          </button>
-        </div>
-      );
-    }
-
-    // Pasar el módulo como prop a la componente envuelta
-    return <Component {...props} module={module} />;
-  };
-}
-
-export default ModuleContext;
+};
