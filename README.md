@@ -1,314 +1,233 @@
-# 🏛️ Sistema Abogado Wilson - CMS/ERP Profesional
+# Sistema Legal Profesional - Portal Web Completo
 
-Un sistema completo y profesional para gestión legal que combina las funcionalidades de un CMS avanzado, ERP, panel de control fácil de usar y constructor de sitios web con y sin IA.
+## 🚀 Descripción
+
+Sistema web profesional completo para gestión legal, desarrollado con React, TypeScript y Tailwind CSS. Integra funcionalidades de consultas legales, cursos, e-commerce, gestión de clientes y dashboards administrativos.
 
 ## ✨ Características Principales
 
-### 🎯 **Sistema de Usuarios y Roles**
-- **Visitantes**: Acceso limitado a contenido público
-- **Clientes**: Dashboard completo con historial de compras, consultas y citas
-- **Administradores**: Panel de control total del sistema
-- **Afiliados**: Programa de referidos y comisiones
+### 🏠 Páginas Principales
+- **Homepage**: Landing page profesional con servicios destacados
+- **Servicios**: Catálogo completo de servicios legales
+- **Blog**: Sistema de blog con artículos legales
+- **Contacto**: Formulario de contacto y información
+- **Acerca de**: Información de la firma legal
+- **Políticas**: Términos de servicio y política de privacidad
 
-### 🏗️ **Constructor de Sitios Web**
-- Constructor visual drag & drop profesional
-- Plantillas predefinidas para diferentes tipos de sitios
-- Soporte para IA en la creación de contenido
-- Diseño responsivo y optimizado para SEO
+### 🛒 E-commerce Completo
+- **Catálogo de Productos**: Ebooks, masterclass y productos digitales
+- **Carrito de Compras**: Sistema funcional con persistencia local
+- **Checkout**: Proceso de pago integrado
+- **Mis Compras**: Historial de compras del usuario
+- **Descargas**: Acceso a productos digitales comprados
 
-### 📚 **Gestión de Contenido (CMS)**
-- Blog completo con editor enriquecido
-- Sistema de categorías y etiquetas
-- Gestión de páginas estáticas
-- Biblioteca de medios integrada
+### 📚 Sistema de Cursos
+- **Catálogo de Cursos**: Cursos de derecho civil, penal, comercial
+- **Progreso del Usuario**: Seguimiento del avance en cursos
+- **Lecciones**: Contenido estructurado por módulos
+- **Mis Cursos**: Dashboard personal de cursos inscritos
 
-### 🎓 **Sistema de Cursos**
-- Cursos online con lecciones y materiales
-- Seguimiento de progreso del estudiante
-- Certificados digitales
-- Sistema de evaluaciones
+### 📅 Sistema de Citas
+- **Calendario**: Programación de consultas legales
+- **Agendamiento**: Reserva de citas en línea
+- **Gestión de Citas**: Administración de horarios y disponibilidad
+- **Recordatorios**: Notificaciones de citas programadas
 
-### 💰 **E-Commerce y Pagos**
-- Catálogo de productos digitales y físicos
-- Múltiples pasarelas de pago (PayPal, Stripe, Mercado Pago)
-- Sistema de tokens para consultas
-- Carrito de compras avanzado
+### 👥 Gestión de Usuarios
+- **Registro/Login**: Sistema de autenticación completo
+- **Perfil de Usuario**: Gestión de información personal
+- **Dashboard Cliente**: Panel personal con resumen de actividad
+- **Dashboard Admin**: Panel administrativo completo
 
-### 📅 **Calendarios y Agendamientos**
-- Sistema de citas y reservas
-- Calendario integrado
-- Recordatorios automáticos
-- Gestión de disponibilidad
+### 📊 Dashboards Administrativos
+- **Vista General**: Estadísticas principales del sistema
+- **Gestión de Clientes**: Administración de base de clientes
+- **Ventas**: Análisis de ventas y productos
+- **Calendario**: Gestión de citas y consultas
+- **Productos**: Administración del catálogo
+- **Cursos**: Gestión de contenido educativo
+- **Blog**: Editor de contenido y artículos
+- **Configuración**: Ajustes del sistema
 
-### 🤖 **Inteligencia Artificial**
-- Consultas legales asistidas por IA
-- Generación automática de contenido
-- Análisis de documentos legales
-- Chatbot inteligente
+### 🔧 Funcionalidades Técnicas
+- **Responsive Design**: Optimizado para todos los dispositivos
+- **Tema Oscuro/Claro**: Sistema de temas personalizable
+- **Persistencia Local**: Datos guardados en localStorage
+- **Context API**: Gestión de estado global
+- **TypeScript**: Tipado estático para mayor robustez
+- **Tailwind CSS**: Framework de estilos moderno
 
-### 📊 **Analíticas y Reportes**
-- Dashboard de estadísticas en tiempo real
-- Reportes de ventas y usuarios
-- Métricas de rendimiento
-- Exportación de datos
-
-## 🚀 Tecnologías Utilizadas
+## 🛠️ Tecnologías Utilizadas
 
 ### Frontend
-- **React 18** - Biblioteca de interfaz de usuario
-- **TypeScript** - Tipado estático para mayor robustez
-- **Tailwind CSS** - Framework CSS utilitario
-- **Vite** - Herramienta de construcción rápida
-- **React Router** - Enrutamiento de la aplicación
+- **React 18.2.0**: Biblioteca de interfaz de usuario
+- **TypeScript 4.9.3**: Tipado estático
+- **Vite 4.1.0**: Build tool y servidor de desarrollo
+- **Tailwind CSS 3.2.7**: Framework de CSS utilitario
+- **React Router DOM 6.8.0**: Enrutamiento de la aplicación
 
-### Backend
-- **Node.js** - Runtime de JavaScript
-- **Express** - Framework web
-- **Prisma** - ORM para base de datos
-- **Supabase** - Backend como servicio
+### UI/UX
+- **Headless UI**: Componentes de interfaz accesibles
+- **Heroicons**: Iconografía moderna
+- **Lucide React**: Iconos adicionales
+- **Framer Motion**: Animaciones fluidas
+- **Recharts**: Gráficos y visualizaciones
 
-### Base de Datos
-- **PostgreSQL** - Base de datos relacional
-- **Redis** - Almacenamiento en caché
+### Estado y Formularios
+- **React Context API**: Gestión de estado global
+- **React Hook Form**: Manejo de formularios
+- **Zod**: Validación de esquemas
+- **React Hot Toast**: Notificaciones
 
-### Herramientas de Desarrollo
-- **ESLint** - Linter de código
-- **Prettier** - Formateador de código
-- **Vitest** - Framework de testing
-- **Wrangler** - Despliegue en Cloudflare Workers
+### Utilidades
+- **Axios**: Cliente HTTP
+- **Date-fns**: Manipulación de fechas
+- **Lodash**: Utilidades de JavaScript
+- **UUID**: Generación de identificadores únicos
 
-## 📋 Requisitos del Sistema
+## 🚀 Instalación y Uso
 
-### Requisitos Mínimos
-- **Node.js**: 18.0.0 o superior
-- **npm**: 8.0.0 o superior
-- **RAM**: 4GB mínimo
-- **Espacio en disco**: 2GB libre
+### Prerrequisitos
+- Node.js 16+ 
+- npm 8+
 
-### Requisitos Recomendados
-- **Node.js**: 20.0.0 o superior
-- **RAM**: 8GB o superior
-- **Espacio en disco**: 5GB libre
-- **Procesador**: Intel i5 o AMD equivalente
-
-## 🛠️ Instalación
-
-### 1. Clonar el Repositorio
+### Instalación
 ```bash
-git clone https://github.com/tu-usuario/abogado-wilson.git
-cd abogado-wilson
-```
+# Clonar el repositorio
+git clone <repository-url>
+cd sistema-legal-profesional
 
-### 2. Instalar Dependencias
-```bash
+# Instalar dependencias
 npm install
-```
 
-### 3. Configurar Variables de Entorno
-```bash
-cp env.example .env
-# Editar .env con tus configuraciones
-```
-
-### 4. Configurar Base de Datos
-```bash
-npx prisma generate
-npx prisma db push
-```
-
-### 5. Iniciar en Desarrollo
-```bash
+# Iniciar servidor de desarrollo
 npm run dev
 ```
 
-El sistema estará disponible en: **http://localhost:5173**
-
-## 🚀 Despliegue
-
-### Despliegue Local
+### Scripts Disponibles
 ```bash
-npm run build
-npm run preview
-```
-
-### Despliegue en Producción
-```bash
-npm run build
-npm run deploy
-```
-
-### Despliegue en Cloudflare Workers
-```bash
-npm run deploy:worker
+npm run dev          # Servidor de desarrollo
+npm run build        # Construir para producción
+npm run preview      # Vista previa de producción
+npm run start        # Servidor en puerto 3000
 ```
 
 ## 📁 Estructura del Proyecto
 
 ```
-abogado-wilson/
-├── src/
-│   ├── components/          # Componentes reutilizables
-│   │   ├── Admin/          # Componentes de administración
-│   │   ├── Auth/           # Componentes de autenticación
-│   │   ├── Dashboard/      # Componentes del dashboard
-│   │   ├── Common/         # Componentes comunes
-│   │   └── ...
-│   ├── context/            # Contextos de React
-│   ├── middleware/         # Middleware de autenticación
-│   ├── services/           # Servicios y APIs
-│   ├── utils/              # Utilidades y helpers
-│   └── types/              # Definiciones de TypeScript
-├── public/                 # Archivos estáticos
-├── prisma/                 # Esquemas de base de datos
-├── workers/                # Cloudflare Workers
-└── docs/                   # Documentación
+src/
+├── components/          # Componentes reutilizables
+│   ├── Dashboard/      # Dashboards administrativos
+│   ├── Cart/          # Componentes del carrito
+│   ├── Services/      # Componentes de servicios
+│   └── ui/            # Componentes de interfaz
+├── pages/              # Páginas de la aplicación
+├── context/            # Contextos de React
+├── data/               # Datos estáticos y mock
+├── services/           # Servicios y APIs
+├── types/              # Definiciones de TypeScript
+├── utils/              # Utilidades y helpers
+├── layouts/            # Layouts de la aplicación
+└── assets/             # Recursos estáticos
 ```
 
-## 🔧 Configuración
+## 🎯 Funcionalidades por Rol
 
-### Variables de Entorno
-```env
-# Base de datos
-DATABASE_URL="postgresql://usuario:password@localhost:5432/abogado_wilson"
+### 👤 Usuario Cliente
+- Registro y autenticación
+- Explorar servicios legales
+- Comprar productos digitales
+- Inscribirse en cursos
+- Agendar consultas
+- Acceder a dashboard personal
+- Descargar productos comprados
 
-# Supabase
-SUPABASE_URL="https://tu-proyecto.supabase.co"
-SUPABASE_ANON_KEY="tu-clave-anonima"
+### 👨‍💼 Administrador
+- Dashboard administrativo completo
+- Gestión de clientes
+- Administración de productos
+- Gestión de cursos
+- Análisis de ventas
+- Configuración del sistema
+- Gestión de citas
 
-# JWT
-JWT_SECRET="tu-secreto-jwt"
+## 🔐 Autenticación y Seguridad
 
-# Pagos
-PAYPAL_CLIENT_ID="tu-client-id"
-STRIPE_SECRET_KEY="tu-clave-secreta"
-```
+- Sistema de login/registro
+- Contextos de autenticación
+- Protección de rutas
+- Gestión de tokens
+- Sistema de créditos
+- Roles de usuario
 
-### Configuración de Tailwind
-El sistema incluye una paleta de colores profesional y componentes predefinidos:
+## 📱 Responsive Design
 
-```javascript
-// Colores principales
-primary: {
-  50: '#eff6ff',
-  500: '#3b82f6',
-  900: '#1e3a8a'
-}
+- Mobile-first approach
+- Breakpoints optimizados
+- Componentes adaptativos
+- Navegación móvil
+- Touch-friendly interfaces
 
-// Colores de estado
-success: { 500: '#22c55e' }
-warning: { 500: '#f59e0b' }
-error: { 500: '#ef4444' }
-```
+## 🌙 Temas y Personalización
 
-## 📱 Características del Dashboard
+- Tema claro/oscuro
+- Variables CSS personalizables
+- Componentes temáticos
+- Transiciones suaves
+- Accesibilidad mejorada
 
-### Dashboard de Cliente
-- Resumen de consultas y citas
-- Gestión de tokens y e-books
-- Historial de compras
-- Sistema de referidos
-- Notificaciones personalizadas
+## 🚀 Despliegue
 
-### Dashboard de Administrador
-- Gestión completa de usuarios
-- Estadísticas de ventas y tráfico
-- Gestión de contenido y productos
-- Sistema de citas y calendarios
-- Reportes y analíticas
-
-## 🔐 Seguridad
-
-- **Autenticación JWT** con refresh tokens
-- **Autorización basada en roles** (RBAC)
-- **Validación de datos** en frontend y backend
-- **Protección CSRF** y XSS
-- **Rate limiting** para APIs
-- **Encriptación** de datos sensibles
-
-## 📊 Funcionalidades Avanzadas
-
-### Sistema de Notificaciones
-- Notificaciones push en tiempo real
-- Emails automáticos
-- SMS para recordatorios importantes
-- WhatsApp Business API
-
-### Integración con APIs Externas
-- Google Calendar para citas
-- Dropbox/Google Drive para documentos
-- Zapier para automatizaciones
-- Webhooks para integraciones personalizadas
-
-### Sistema de Backup
-- Backup automático de base de datos
-- Versionado de archivos
-- Recuperación ante desastres
-- Sincronización en la nube
-
-## 🧪 Testing
-
+### Desarrollo Local
 ```bash
-# Ejecutar tests unitarios
-npm run test
-
-# Ejecutar tests de integración
-npm run test:integration
-
-# Ejecutar tests E2E
-npm run test:e2e
-
-# Cobertura de código
-npm run test:coverage
+npm run dev
+# Acceder a http://localhost:5173
 ```
 
-## 📈 Monitoreo y Logs
+### Producción
+```bash
+npm run build
+npm run preview
+```
 
-- **Logs estructurados** con Winston
-- **Métricas de rendimiento** con Prometheus
-- **Alertas automáticas** para errores críticos
-- **Dashboard de monitoreo** en tiempo real
+## 📊 Estado del Proyecto
+
+✅ **Completado:**
+- Estructura base del proyecto
+- Sistema de autenticación
+- Dashboards administrativos
+- Sistema de carrito de compras
+- Gestión de productos
+- Sistema de cursos
+- Calendario de citas
+- Blog y contenido
+- Responsive design
+
+🔄 **En Desarrollo:**
+- Integración con APIs reales
+- Sistema de pagos
+- Notificaciones push
+- Analytics avanzados
 
 ## 🤝 Contribución
 
 1. Fork el proyecto
-2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
-3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
-4. Push a la rama (`git push origin feature/AmazingFeature`)
+2. Crea una rama para tu feature
+3. Commit tus cambios
+4. Push a la rama
 5. Abre un Pull Request
 
 ## 📄 Licencia
 
 Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más detalles.
 
-## 🆘 Soporte
+## 📞 Soporte
 
-### Canales de Soporte
-- **Email**: soporte@abogadowilson.com
-- **WhatsApp**: +593 98 883 5269
-- **Documentación**: [docs.abogadowilson.com](https://docs.abogadowilson.com)
-
-### Comunidad
-- **Discord**: [Unirse al servidor](https://discord.gg/abogadowilson)
-- **GitHub Issues**: [Reportar problemas](https://github.com/tu-usuario/abogado-wilson/issues)
-- **Wiki**: [Documentación de la comunidad](https://github.com/tu-usuario/abogado-wilson/wiki)
-
-## 🙏 Agradecimientos
-
-- **React Team** por el increíble framework
-- **Tailwind CSS** por el sistema de diseño
-- **Vite** por la herramienta de construcción
-- **Comunidad open source** por las librerías utilizadas
-
-## 📞 Contacto
-
-**Dr. Wilson Ipiales**
-- **Email**: contacto@abogadowilson.com
-- **Teléfono**: +593 98 883 5269
-- **Sitio Web**: [abogadowilson.com](https://abogadowilson.com)
+Para soporte técnico o consultas:
+- Email: soporte@firmalegal.com
+- Teléfono: +593 XX XXX XXXX
+- Horario: Lunes a Viernes 9:00 - 18:00
 
 ---
 
-⭐ **Si este proyecto te ha sido útil, por favor dale una estrella en GitHub!**
-"# Proyecto abg_nueva" 
-"# Proyecto abg_nueva" 
-"# casi" 
+**Desarrollado con ❤️ por el equipo de desarrollo legal** 

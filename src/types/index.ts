@@ -1,193 +1,344 @@
-import { User } from '@supabase/supabase-js'
-import { KVNamespace } from '@cloudflare/workers-types'
+export type UserRole = 'admin' | 'client' | 'lawyer'
 
-// Define D1Database type locally since it's missing from the current version
-type D1Database = any
-import { PrismaClient } from '@prisma/client'
+export type Page = 
+  | 'dashboard' | 'crm' | 'users' | 'conversations' | 'calendar' | 'sales'
+  | 'automations' | 'chatbots' | 'publisher' | 'content-studio' | 'campaigns'
+  | 'sites' | 'forms' | 'media' | 'database' | 'products' | 'documents'
+  | 'analytics' | 'financials' | 'projects' | 'credits' | 'affiliates' | 'settings'
+  | 'form-editor' | 'form-submissions' | 'site-editor' | 'course-editor' | 'website-editor' | 'vrar'
 
-export interface AuthContextType {
-  user: User | null;
-  loading: boolean;
-  login: (credentials: LoginData) => Promise<void>;
-  logout: () => void;
+export type PublicRoute = 
+  | 'home' | 'plans' | 'login' | 'register' | 'contact' | 'services' | 'service-detail'
+  | 'blog' | 'blog-post' | 'checkout' | 'catalogo' | 'ebooks' | 'courses' | 'course-detail'
+  | 'forum' | 'games' | 'calendar' | 'consultas' | 'privacy-policy' | 'terms-of-service'
+
+export interface Branch {
+  id: string
+  name: string
 }
 
-export interface LoginData {
-  email: string;
-  password: string;
+export interface User {
+  id: string
+  email: string
+  name: string
+  role: UserRole
+  avatar?: string
+  branch?: string
+  phone?: string
+  address?: string
 }
 
-export interface ConsultaData {
-  nombre: string;
-  email: string;
-  asunto: string;
-  mensaje: string;
-}
-
-export interface ApiResponse<T = any> {
-  success: boolean;
-  data?: T;
-  error?: string;
-}
-
-export interface HealthCheck {
-  status: 'healthy' | 'unhealthy';
-  services: Record<string, boolean>;
-  timestamp: number;
-}
-
-export interface UserData {
-  email: string;
-  password?: string;
-  nombre: string;
-  telefono?: string;
-}
-
-export interface ServiceStatus {
-  supabase: boolean
-  prisma: boolean
-  turso: boolean
-  cloudflare: boolean
-  database: {
-    connected: boolean
-    latency: number
-    lastSync: number
-    replicationLag?: number
-    connectionPool: {
-      active: number
-      idle: number
-      waiting: number
-    }
+export interface CatalogItem {
+  id: string
+  type: 'product' | 'service' | 'course' | 'ebook' | 'masterclass' | 'consulta'
+  name: string
+  description: string
+  price: number
+  status: 'active' | 'inactive' | 'draft'
+  category: string
+  imageUrl?: string
+  slug?: string
+  shortDescription?: string
+  longDescription?: string
+  keyPoints?: string[]
+  stock?: number
+  duration?: string
+  durationText?: string
+  color?: string
+  isFeatured?: boolean
+  modules?: CourseModule[]
+  attention?: {
+    modalities: string[]
+    canSchedule: boolean
   }
 }
 
-export interface WorkerEnv {
-  DB: D1Database
-  ASSETS: KVNamespace
-  ENVIRONMENT: string
-  SUPABASE_URL: string
-  SUPABASE_KEY: string
-  JWT_SECRET: string
-  DATABASE_URL: string
-  TURSO_DB_URL: string
-  TURSO_DB_TOKEN: string
-  RATE_LIMIT_MAX: number
-  CACHE_TTL: number
-  MONITORING_KEY: string
+export interface Product {
+  id: string
+  name: string
+  description: string
+  price: number
+  status: 'active' | 'inactive'
+  category: string
+  imageUrl?: string
+  stock: number
 }
 
-export interface CacheConfig {
-  ttl: number
-  strategy: 'memory' | 'kv' | 'hybrid'
-  namespace: string
-  invalidationPatterns: string[]
+export interface Service {
+  id: string
+  name: string
+  description: string
+  price: number
+  status: 'active' | 'inactive'
+  category: string
+  imageUrl?: string
+  duration: string
+  color: string
 }
 
-export interface MonitoringMetrics {
-  requestCount: number
-  errorRate: number
-  averageLatency: number
-  cacheHitRate: number
-  serviceHealth: ServiceStatus
-  lastDeployment: number
+export interface Course {
+  id: string
+  title: string
+  description: string
+  price: number
+  imageUrl?: string
+  modules: CourseModule[]
 }
 
-export interface ApiErrorResponse {
-  error: string
-  details?: string
-  code: string
-  timestamp: number
-  service?: keyof ServiceStatus
-  retryable?: boolean
-  severity: 'low' | 'medium' | 'high' | 'critical'
-  suggestedAction?: string
+export interface CourseModule {
+  id: string
+  title: string
+  lessons: Lesson[]
 }
 
-export interface ServiceConfig {
-  supabase: {
-    url: string
-    key: string
-    options: {
-      autoRefreshToken: boolean
-      persistSession: boolean
-      detectSessionInUrl: boolean
-    }
-    rateLimit: {
-      points: number
-      duration: number
-    }
-    cache: CacheConfig
+export interface Lesson {
+  id: string
+  title: string
+  type: 'video' | 'text' | 'pdf' | 'quiz'
+  content: string
+  duration?: number
+}
+
+export interface LegalService {
+  id: string
+  title: string
+  slug: string
+  shortDescription: string
+  longDescription: string
+  keyPoints: string[]
+  price: number
+  category: string
+}
+
+export interface Appointment {
+  id: string
+  contactName: string
+  serviceId: string
+  dateTime: string
+  status: 'pending' | 'confirmed' | 'cancelled' | 'completed'
+  modality: 'virtual' | 'presencial' | 'chat' | 'correo'
+  notes?: string
+}
+
+export interface Client {
+  id: string
+  name: string
+  email: string
+  phone: string
+  address?: string
+  status: 'active' | 'inactive'
+  createdAt: string
+  cases: Case[]
+}
+
+export interface Case {
+  id: string
+  title: string
+  description: string
+  clientId: string
+  status: 'open' | 'closed' | 'pending'
+  priority: 'low' | 'medium' | 'high'
+  category: string
+  createdAt: string
+  updatedAt: string
+  documents: Document[]
+  appointments: Appointment[]
+}
+
+export interface Document {
+  id: string
+  title: string
+  type: string
+  url: string
+  caseId?: string
+  clientId?: string
+  uploadedAt: string
+  size: number
+  tags: string[]
+}
+
+export interface Conversation {
+  id: string
+  clientId: string
+  messages: Message[]
+  status: 'active' | 'closed'
+  createdAt: string
+  updatedAt: string
+}
+
+export interface Message {
+  id: string
+  senderId: string
+  content: string
+  timestamp: string
+  type: 'text' | 'file' | 'image'
+  attachments?: string[]
+}
+
+export interface Order {
+  id: string
+  clientId: string
+  items: OrderItem[]
+  total: number
+  status: 'pending' | 'paid' | 'cancelled'
+  paymentMethod: string
+  createdAt: string
+}
+
+export interface OrderItem {
+  id: string
+  itemId: string
+  itemType: string
+  itemName: string
+  quantity: number
+  price: number
+}
+
+export interface UserPurchase {
+  id: string
+  itemId: string
+  itemType: string
+  itemName: string
+  amount: number
+  purchaseDate: string
+  paymentMethod: string
+}
+
+export interface UserProgress {
+  userId: string
+  courseId: string
+  completedLessons: string[]
+  progress: number
+  lastAccessed: string
+}
+
+export interface Form {
+  id: string
+  title: string
+  description: string
+  fields: FormField[]
+  submissions: FormSubmission[]
+  createdAt: string
+  isActive: boolean
+}
+
+export interface FormField {
+  id: string
+  label: string
+  type: 'text' | 'email' | 'phone' | 'textarea' | 'select' | 'checkbox' | 'radio' | 'date'
+  required: boolean
+  options?: string[]
+  placeholder?: string
+}
+
+export interface FormSubmission {
+  id: string
+  formId: string
+  data: Record<string, any>
+  submittedAt: string
+  clientId?: string
+}
+
+export interface Site {
+  id: string
+  name: string
+  domain: string
+  template: string
+  content: any
+  isPublished: boolean
+  createdAt: string
+  updatedAt: string
+}
+
+export interface Campaign {
+  id: string
+  name: string
+  description: string
+  type: 'email' | 'sms' | 'social'
+  status: 'draft' | 'active' | 'paused' | 'completed'
+  targetAudience: string[]
+  content: any
+  scheduledAt?: string
+  createdAt: string
+}
+
+export interface Automation {
+  id: string
+  name: string
+  description: string
+  trigger: string
+  actions: AutomationAction[]
+  isActive: boolean
+  createdAt: string
+}
+
+export interface AutomationAction {
+  id: string
+  type: 'email' | 'sms' | 'notification' | 'task'
+  config: Record<string, any>
+}
+
+export interface Chatbot {
+  id: string
+  name: string
+  description: string
+  responses: ChatbotResponse[]
+  isActive: boolean
+  createdAt: string
+}
+
+export interface ChatbotResponse {
+  id: string
+  trigger: string
+  response: string
+  actions?: string[]
+}
+
+export interface Analytics {
+  totalClients: number
+  totalCases: number
+  totalRevenue: number
+  monthlyGrowth: number
+  topServices: Array<{ name: string; count: number }>
+  recentActivity: Array<{ type: string; description: string; timestamp: string }>
+}
+
+export interface Financials {
+  revenue: {
+    monthly: number
+    yearly: number
+    growth: number
   }
-  api: {
-    url: string
-    timeout: number
-    retryConfig: {
-      maxRetries: number
-      backoff: number
-    }
-    monitoring: {
-      enabled: boolean
-      metrics: string[]
-      alertThresholds: Record<string, number>
-    }
+  expenses: {
+    monthly: number
+    yearly: number
   }
-  cloudflare: {
-    accountId: string
-    apiToken: string
-    workerConfig: {
-      memory: number
-      timeout: number
-    }
-    security: {
-      wafEnabled: boolean
-      botProtection: boolean
-      tlsVersion: '1.2' | '1.3'
-    }
+  profit: {
+    monthly: number
+    yearly: number
+    margin: number
   }
-  database: {
-    prisma: ConnectionConfig & {
-      migration: {
-        auto: boolean
-        lockTimeout: number
-      }
-    }
-    turso: ConnectionConfig & {
-      readReplicas?: number
-    }
-  }
+  transactions: Transaction[]
 }
 
-export interface DatabaseClients {
-  prisma: PrismaClient
-  turso: D1Database
+export interface Transaction {
+  id: string
+  type: 'income' | 'expense'
+  amount: number
+  description: string
+  category: string
+  date: string
+  clientId?: string
 }
 
-export interface ConnectionConfig {
-  maxRetries: number
-  timeout: number
-  poolSize?: number
-  ssl: boolean
-}
-
-export interface ServiceValidation {
-  supabase: {
-    urlValid: boolean
-    keyValid: boolean
-    connection: boolean
-  }
-  prisma: {
-    schemaValid: boolean
-    connection: boolean
-    migrations: boolean
-  }
-  turso: {
-    urlValid: boolean
-    tokenValid: boolean
-    connection: boolean
-  }
-}
-
-export interface WorkerRequest extends Request {
-  env: WorkerEnv
-  ctx: ExecutionContext
+export interface Media {
+  id: string
+  name: string
+  type: 'image' | 'video' | 'document' | 'audio'
+  url: string
+  size: number
+  uploadedAt: string
+  tags: string[]
+  caseId?: string
+  clientId?: string
 }

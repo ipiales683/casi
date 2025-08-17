@@ -4,41 +4,24 @@ import { resolve } from 'path'
 
 export default defineConfig({
   plugins: [react()],
-  
-  // Configuración del servidor de desarrollo
-  server: {
-    port: 5173,
-    host: '0.0.0.0', // Permite acceso desde cualquier IP
-    open: true, // Abre automáticamente el navegador
-    cors: true,
-    hmr: {
-      overlay: true
-    },
-    // Configuración para evitar problemas de CORS
-    proxy: {
-      '/api': {
-        target: 'http://localhost:3000',
-        changeOrigin: true,
-        secure: false
-      }
-    }
-  },
-  
-  // Resolución de alias para importaciones más limpias
   resolve: {
     alias: {
       '@': resolve(__dirname, 'src'),
       '@components': resolve(__dirname, 'src/components'),
       '@pages': resolve(__dirname, 'src/pages'),
-      '@services': resolve(__dirname, 'src/services'),
+      '@hooks': resolve(__dirname, 'src/hooks'),
       '@utils': resolve(__dirname, 'src/utils'),
+      '@types': resolve(__dirname, 'src/types'),
       '@context': resolve(__dirname, 'src/context'),
+      '@services': resolve(__dirname, 'src/services'),
       '@assets': resolve(__dirname, 'src/assets'),
-      '@styles': resolve(__dirname, 'src/styles')
-    }
+    },
   },
-  
-  // Configuración de build
+  server: {
+    port: 5173,
+    host: true,
+    open: true,
+  },
   build: {
     outDir: 'dist',
     sourcemap: true,
@@ -46,25 +29,32 @@ export default defineConfig({
       output: {
         manualChunks: {
           vendor: ['react', 'react-dom'],
-          router: ['react-router-dom']
-        }
-      }
-    }
+          router: ['react-router-dom'],
+          ui: ['@headlessui/react', '@heroicons/react', 'lucide-react'],
+          charts: ['recharts'],
+          forms: ['react-hook-form', 'zod'],
+          utils: ['lodash', 'date-fns', 'uuid'],
+        },
+      },
+    },
   },
-  
-  // Configuración de optimización
   optimizeDeps: {
     include: [
       'react',
       'react-dom',
       'react-router-dom',
-      'react-hot-toast'
-    ]
+      '@headlessui/react',
+      '@heroicons/react',
+      'lucide-react',
+      'framer-motion',
+      'recharts',
+      'date-fns',
+      'react-hook-form',
+      'zod',
+      'axios',
+      'react-hot-toast',
+      'uuid',
+      'lodash',
+    ],
   },
-  
-  // Configuración de entorno
-  define: {
-    __DEV__: JSON.stringify(true),
-    __VERSION__: JSON.stringify('1.0.0')
-  }
 })

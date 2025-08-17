@@ -3,9 +3,26 @@
  * Permite extraer información relevante de usuarios y formularios
  */
 
-import { supabase } from '../config/supabase.js';
 import { Client } from '@notionhq/client';
 import * as XLSX from 'xlsx';
+
+// Cliente de Supabase simulado para desarrollo local
+const supabaseClient = {
+  from: (table: string) => ({
+    select: () => ({
+      then: async (callback: Function) => {
+        const mockData = {
+          users: [{ id: '1', email: 'test@example.com', role: 'client' }],
+          clients: [{ id: '1', name: 'Cliente Test', email: 'cliente@test.com' }],
+          cases: [{ id: '1', title: 'Caso Test', status: 'active' }],
+          appointments: [{ id: '1', date: '2024-01-01', status: 'confirmed' }]
+        };
+        const result = { data: mockData[table as keyof typeof mockData] || [], error: null };
+        return callback(result);
+      }
+    })
+  })
+};
 
 type ExportFormat = 'excel' | 'csv' | 'notion';
 type ExportTarget = 'clients' | 'leads' | 'appointments' | 'consultations' | 'transactions' | 'whatsapp_messages';
@@ -168,6 +185,7 @@ export const exportService = {
    * @param options Opciones de filtrado
    */
   async fetchData(target: ExportTarget, options: ExportOptions) {
+    const { supabase } = supabaseClient();
     let query = supabase.from(target).select('*');
     
     // Aplicar filtros de fecha si existen

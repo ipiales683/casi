@@ -26,3 +26,4 @@ lerna-debug.log*
 *.njsproj
 *.sln
 *.sw?
+abg-wilson-backup/\nabg-wilson-source/\nipiales-backup/\nsrc-ipiales/\nnode_modules/\n*.deb\n*.tar.gz\n.todo
