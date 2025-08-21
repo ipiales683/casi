@@ -1,3 +1,9 @@
+// Importar Prisma Client
+import { PrismaClient } from '@prisma/client';
+
+// Declarar una variable global para el cliente de Prisma
+let prisma;
+
 /**
  * Cloudflare Worker limpio y compatible para Abogado Wilson
  * Este archivo resuelve los problemas de sintaxis del worker original
@@ -16,7 +22,7 @@ function initEnv(env) {
   return {
     SUPABASE_URL: getEnvVariable(env, 'SUPABASE_URL', ''),
     SUPABASE_KEY: getEnvVariable(env, 'SUPABASE_KEY', ''),
-    ENVIRONMENT: getEnvVariable(env, 'ENVIRONMENT', 'production'),
+    ENVIRONMENT: getEnvVariable(env, 'ENVIRONMENT', 'development'), // Default to development for local
     API_ENABLED: getEnvVariable(env, 'API_ENABLED', 'true') === 'true',
     CORS_ORIGIN: getEnvVariable(env, 'CORS_ORIGIN', '*'),
     WHATSAPP_NUMBER: getEnvVariable(env, 'WHATSAPP_NUMBER', '+59398835269'),
@@ -30,9 +36,57 @@ const standardHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
   'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-  'Cache-Control': 'public, max-age=3600',
+  'Cache-Control': 'no-cache', // No cache for API
   'X-Content-Type-Options': 'nosniff'
 };
+
+// --- API ROUTER ---
+async function handleApiRequest(request, env) {
+    const url = new URL(request.url);
+    const path = url.pathname;
+
+    // Inicializar Prisma Client si aún no está inicializado
+    if (!prisma) {
+        prisma = new PrismaClient({
+            datasources: {
+                db: {
+                    // For local development, we point to the local SQLite file
+                    url: "file:./prisma/dev.db",
+                },
+            },
+        });
+    }
+
+    try {
+        if (path === '/api/appointments' && request.method === 'GET') {
+            const appointments = await prisma.appointment.findMany({
+                orderBy: {
+                    startTime: 'asc',
+                },
+                take: 10, // Limit to 10 upcoming appointments
+            });
+            return new Response(JSON.stringify(appointments), {
+                headers: { 'Content-Type': 'application/json', ...standardHeaders }
+            });
+        }
+
+        // --- Add other API routes here ---
+
+        // Fallback for unknown API routes
+        return new Response(JSON.stringify({ error: 'Not Found' }), {
+            status: 404,
+            headers: { 'Content-Type': 'application/json', ...standardHeaders }
+        });
+
+    } catch (error) {
+        console.error('API Error:', error);
+        return new Response(JSON.stringify({ error: 'Internal Server Error', details: error.message }), {
+            status: 500,
+            headers: { 'Content-Type': 'application/json', ...standardHeaders }
+        });
+    }
+}
+
 
 /**
  * Renderiza la página de mantenimiento en caso de problemas
@@ -114,11 +168,10 @@ async function handleStaticRequest(request, url) {
  */
 export default {
   async fetch(request, env, ctx) {
-    const standardHeaders = {
+    const corsHeaders = {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-      'Cache-Control': 'public, max-age=3600'
     };
     
     // Inicializar variables de entorno
@@ -138,15 +191,13 @@ export default {
       if (request.method === 'OPTIONS') {
         return new Response(null, {
           status: 204,
-          headers: standardHeaders
+          headers: corsHeaders
         });
       }
       
       // Manejar rutas de API
       if (url.pathname.startsWith('/api/')) {
-        return new Response(JSON.stringify({ status: "ok" }), {
-          headers: { 'Content-Type': 'application/json', ...standardHeaders }
-        });
+        return handleApiRequest(request, env);
       }
       
       // Manejar recursos estáticos y SPA
@@ -159,7 +210,7 @@ export default {
         status: 500,
         headers: {
           'Content-Type': 'text/plain',
-          ...standardHeaders
+          ...corsHeaders
         }
       });
     }
