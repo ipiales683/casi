@@ -6,6 +6,7 @@
  * Versión mejorada con soporte para autenticación social (Google, Facebook).
  */
 import { createClient } from '@supabase/supabase-js';
+import { globalConfig } from '../config/globalConfig';
 
 // Importar configuración centralizada
 import { supabaseConfig, getBaseUrl, isProduction } from '../config/appConfig';
@@ -21,10 +22,7 @@ let isInitializing = false;
 let initCallCount = 0;
 
 // Usar la configuración centralizada
-const supabaseUrl = supabaseConfig.url;
-const supabaseKey = (typeof process !== 'undefined' ? process.env?.VITE_SUPABASE_KEY : 
-                     (typeof window !== 'undefined' ? window.__ENV__?.VITE_SUPABASE_KEY : null)) || 
-                     supabaseConfig.key;
+const globalConfig = import.meta.env;
 
 // Determinar si estamos en un entorno con problemas CORS (Cloudflare Workers)
 const shouldUseProxyWorker = () => {
@@ -204,8 +202,7 @@ const createFallbackClient = () => {
  * Solución definitiva para el problema de "Multiple GoTrueClient instances"
  */
 export const getSupabaseClient = () => {
-  // Acceder a configuración global (si existe)
-  const globalConfig = typeof window !== 'undefined' ? window.__ENV__ : {};
+  // Usar la configuración global importada al inicio del archivo
   
   // Prevenir completamente múltiples instancias si la configuración global lo indica
   if (typeof window !== 'undefined' && window.GLOBAL_SUPABASE_CLIENT) {

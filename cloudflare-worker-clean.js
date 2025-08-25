@@ -168,51 +168,54 @@ async function handleStaticRequest(request, url) {
  */
 export default {
   async fetch(request, env, ctx) {
+    // Define CORS headers in one place
     const corsHeaders = {
-      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Origin': '*', // O un origen específico para más seguridad
       'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Client-Info',
+      'Access-Control-Max-Age': '86400', // Cache preflight requests for a day
     };
-    
-    // Inicializar variables de entorno
-    ENV = initEnv(env);
-    
-    try {
-      // Desactivar modo mantenimiento - Sitio listo para producción
-      const MAINTENANCE_MODE = false; // Cambiar a true solo cuando sea necesario
-      
-      if (MAINTENANCE_MODE) {
-        return renderMaintenancePage(env);
-      }
-      
-      const url = new URL(request.url);
-      
-      // Manejar solicitudes CORS OPTIONS
-      if (request.method === 'OPTIONS') {
-        return new Response(null, {
-          status: 204,
-          headers: corsHeaders
-        });
-      }
-      
-      // Manejar rutas de API
-      if (url.pathname.startsWith('/api/')) {
-        return handleApiRequest(request, env);
-      }
-      
-      // Manejar recursos estáticos y SPA
-      return handleStaticRequest(request, url);
-    } catch (error) {
-      console.error('Error en worker:', error);
-      
-      // Respuesta de emergencia en caso de error crítico
-      return new Response('Error interno del servidor', {
-        status: 500,
-        headers: {
-          'Content-Type': 'text/plain',
-          ...corsHeaders
-        }
+
+    // Handle CORS preflight requests (OPTIONS)
+    if (request.method === 'OPTIONS') {
+      return new Response(null, {
+        status: 204,
+        headers: corsHeaders,
       });
     }
-  }
+
+    let response;
+    try {
+      // Initialize environment variables
+      ENV = initEnv(env);
+
+      const url = new URL(request.url);
+
+      // Route API requests
+      if (url.pathname.startsWith('/api/')) {
+        response = await handleApiRequest(request, env);
+      } 
+      // Handle static assets using Cloudflare Pages default behavior
+      else {
+        response = await env.ASSETS.fetch(request);
+      }
+    } catch (error) {
+      console.error('Critical Worker Error:', error);
+      // Create a generic error response if something unexpected happens
+      response = new Response(JSON.stringify({ error: 'Internal Server Error' }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    // Clone the response to make it mutable
+    const mutableResponse = new Response(response.body, response);
+
+    // Apply CORS headers to every single response
+    Object.entries(corsHeaders).forEach(([key, value]) => {
+      mutableResponse.headers.set(key, value);
+    });
+
+    return mutableResponse;
+  },
 };

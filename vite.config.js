@@ -21,6 +21,13 @@ export default defineConfig({
     port: 5173,
     host: true,
     open: true,
+    watch: {
+      ignored: [
+        '**/admin/**',
+        '**/node_modules/**',
+        '**/.git/**',
+      ],
+    },
   },
   build: {
     outDir: 'dist',

@@ -5,6 +5,7 @@ import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import { ModuleProvider } from './context/ModuleContext';
 import { Toaster } from 'react-hot-toast';
+import HelmetWrapper from './components/HelmetWrapper';
 
 // Middleware de autenticación
 import { 
