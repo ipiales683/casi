@@ -27,3 +27,11 @@ lerna-debug.log*
 *.sln
 *.sw?
 abg-wilson-backup/\nabg-wilson-source/\nipiales-backup/\nsrc-ipiales/\nnode_modules/\n*.deb\n*.tar.gz\n.todo
+.clinerules/byterover-rules.md
+.kilocode/rules/byterover-rules.md
+.roo/rules/byterover-rules.md
+.windsurf/rules/byterover-rules.md
+.cursor/rules/byterover-rules.mdc
+.kiro/steering/byterover-rules.md
+.qoder/rules/byterover-rules.md
+.augment/rules/byterover-rules.md

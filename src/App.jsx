@@ -50,9 +50,18 @@ import PurchaseHistory from './components/Dashboard/PurchaseHistory';
 import DashboardPage from './components/Dashboard/DashboardPage';
 
 // Páginas de administrador
-import AdminDashboard from './components/Admin/AdminDashboard';
+import AdminDashboard from './components/Admin/AdminDashboardComplete';
 import DataExporter from './components/Admin/DataExporter';
 import WhatsAppManager from './components/Admin/WhatsAppManager';
+
+// Nuevos componentes integrados
+import UnifiedStore from './components/Store/UnifiedStore';
+import CheckoutSystem from './components/Checkout/CheckoutSystem';
+import AppointmentCalendar from './components/Calendar/AppointmentCalendar';
+import AIChatSystem from './components/Chat/AIChatSystem';
+import TriviaSystem from './components/Gamification/TriviaSystem';
+import DragDropEditor from './components/Editor/DragDropEditor';
+import PromotionsManager from './components/Promotions/PromotionsManager';
 
 // Páginas de funcionalidad
 import PaymentSystem from './components/Payment/PaymentSystem';
@@ -96,6 +105,11 @@ function App() {
                   {/* Rutas públicas (visitantes) */}
             <Route path="/" element={<HomePage />} />
                   <Route path="/servicios" element={<Services />} />
+                  <Route path="/servicios/penal" element={<Services category="penal" />} />
+                  <Route path="/servicios/civil" element={<Services category="civil" />} />
+                  <Route path="/servicios/comercial" element={<Services category="comercial" />} />
+                  <Route path="/servicios/transito" element={<Services category="transito" />} />
+                  <Route path="/servicios/aduanero" element={<Services category="aduanero" />} />
                   <Route path="/sobre-nosotros" element={<AboutPage />} />
                   <Route path="/contacto" element={<Contact />} />
                   <Route path="/blog" element={<Blog />} />
@@ -103,6 +117,9 @@ function App() {
                   <Route path="/ebooks" element={<Ebooks />} />
                   <Route path="/cursos" element={<CourseCatalog />} />
                   <Route path="/cursos/:slug" element={<CourseDetail />} />
+                  <Route path="/tienda" element={<UnifiedStore />} />
+                  <Route path="/calendario" element={<AppointmentCalendar />} />
+                  <Route path="/promociones" element={<PromotionsManager />} />
                   <Route path="/politicas-privacidad" element={<PrivacyPolicy />} />
                   <Route path="/terminos-condiciones" element={<TerminosCondiciones />} />
                   <Route path="/seguridad" element={<Seguridad />} />
@@ -226,7 +243,7 @@ function App() {
                   
                   {/* Rutas de pagos */}
             <Route path="/payment" element={<PaymentSystem />} />
-                  <Route path="/checkout" element={<CheckoutPage />} />
+                  <Route path="/checkout" element={<CheckoutSystem />} />
                   <Route path="/payment/success" element={<ThankYouPage />} />
                   <Route path="/payment/failed" element={<ThankYouPage />} />
                   
@@ -272,6 +289,9 @@ function App() {
                 }}
               />
       </div>
+      
+      {/* Chat AI Global */}
+      <AIChatSystem />
     </ThemeProvider>
         </ModuleProvider>
       </CartProvider>

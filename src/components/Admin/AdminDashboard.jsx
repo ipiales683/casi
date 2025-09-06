@@ -4,12 +4,21 @@ import {
   FaUsers, FaChartLine, FaFileAlt, FaCalendarAlt, FaShoppingCart, 
   FaBook, FaNewspaper, FaCog, FaSignOutAlt, FaPlus, FaEdit, FaTrash,
   FaEye, FaDownload, FaUpload, FaBell, FaEnvelope, FaWhatsapp,
-  FaCreditCard, FaPaypal, FaBitcoin, FaDollarSign
+  FaCreditCard, FaPaypal, FaBitcoin, FaDollarSign, FaGamepad,
+  FaGift, FaPercent, FaRocket, FaPalette, FaLayerGroup, FaMagic,
+  FaChartPie, FaDatabase, FaShieldAlt, FaUserGraduate, FaTrophy,
+  FaComments, FaBullhorn, FaTags, FaClock, FaCheckCircle
 } from 'react-icons/fa';
 import { toast } from 'react-hot-toast';
+import { motion, AnimatePresence } from 'framer-motion';
+import TriviaSystem from '../Gamification/TriviaSystem';
+import DragDropEditor from '../Editor/DragDropEditor';
+import PromotionsManager from '../Promotions/PromotionsManager';
+import LiveChat from '../Chat/LiveChat';
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('overview');
+  const [showChat, setShowChat] = useState(false);
   const [stats, setStats] = useState({
     totalUsers: 1250,
     totalRevenue: 45600,
@@ -18,7 +27,11 @@ const AdminDashboard = () => {
     totalProducts: 45,
     totalCourses: 12,
     totalEbooks: 28,
-    totalAffiliates: 67
+    totalAffiliates: 67,
+    activePromotions: 8,
+    completedGames: 342,
+    pagesCreated: 23,
+    totalMessages: 1567
   });
 
   const [recentActivities, setRecentActivities] = useState([
@@ -33,21 +46,111 @@ const AdminDashboard = () => {
     { title: 'Agregar Usuario', icon: FaUsers, action: () => setActiveTab('users'), color: 'bg-blue-500' },
     { title: 'Crear Producto', icon: FaShoppingCart, action: () => setActiveTab('products'), color: 'bg-green-500' },
     { title: 'Nuevo Curso', icon: FaBook, action: () => setActiveTab('courses'), color: 'bg-purple-500' },
-    { title: 'Publicar Blog', icon: FaFileAlt, action: () => setActiveTab('blog'), color: 'bg-orange-500' },
-    { title: 'Gestionar Citas', icon: FaCalendarAlt, action: () => setActiveTab('appointments'), color: 'bg-red-500' },
+    { title: 'Editor de Páginas', icon: FaPalette, action: () => setActiveTab('editor'), color: 'bg-pink-500' },
+    { title: 'Promociones', icon: FaGift, action: () => setActiveTab('promotions'), color: 'bg-yellow-500' },
+    { title: 'Gamificación', icon: FaGamepad, action: () => setActiveTab('gamification'), color: 'bg-indigo-500' },
+    { title: 'Chat en Vivo', icon: FaComments, action: () => setShowChat(true), color: 'bg-teal-500' },
     { title: 'Configuración', icon: FaCog, action: () => setActiveTab('settings'), color: 'bg-gray-500' }
   ]);
 
-  // Overview Tab
+  const [dashboardCards] = useState([
+    { title: 'Ventas del Mes', value: '$45,600', change: '+12%', icon: FaDollarSign, color: 'from-green-400 to-green-600' },
+    { title: 'Usuarios Activos', value: '1,250', change: '+8%', icon: FaUsers, color: 'from-blue-400 to-blue-600' },
+    { title: 'Cursos Completados', value: '342', change: '+15%', icon: FaUserGraduate, color: 'from-purple-400 to-purple-600' },
+    { title: 'Tasa de Conversión', value: '24.8%', change: '+3%', icon: FaChartPie, color: 'from-orange-400 to-orange-600' }
+  ]);
+
+  // Overview Tab con diseño mejorado
   const OverviewTab = () => (
-    <div className="space-y-6">
-      {/* Stats Cards */}
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="space-y-6"
+    >
+      {/* Cards con gradientes y efectos cristal */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-white rounded-xl shadow-md p-6">
+        {dashboardCards.map((card, index) => (
+          <motion.div
+            key={index}
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: index * 0.1 }}
+            whileHover={{ scale: 1.05 }}
+            className="relative overflow-hidden rounded-2xl shadow-xl"
+          >
+            <div className={`absolute inset-0 bg-gradient-to-br ${card.color} opacity-90`} />
+            <div className="relative bg-white/10 backdrop-blur-md p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-white/80 text-sm font-medium">{card.title}</p>
+                  <p className="text-3xl font-bold text-white mt-2">{card.value}</p>
+                  <p className="text-white/60 text-sm mt-2">
+                    <span className="text-green-300">{card.change}</span> vs mes anterior
+                  </p>
+                </div>
+                <card.icon className="text-white/30 text-5xl" />
+              </div>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Gráficos y estadísticas con efectos 3D */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <motion.div 
+          whileHover={{ y: -5 }}
+          className="bg-white rounded-2xl shadow-xl p-6 border border-gray-100"
+        >
+          <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center">
+            <FaChartLine className="mr-2 text-blue-500" />
+            Análisis de Rendimiento
+          </h3>
+          <div className="h-64 bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl flex items-center justify-center">
+            <p className="text-gray-500">Gráfico de rendimiento aquí</p>
+          </div>
+        </motion.div>
+
+        <motion.div 
+          whileHover={{ y: -5 }}
+          className="bg-white rounded-2xl shadow-xl p-6 border border-gray-100"
+        >
+          <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center">
+            <FaTrophy className="mr-2 text-yellow-500" />
+            Top Performers
+          </h3>
+          <div className="space-y-3">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                <div className="flex items-center">
+                  <div className="w-10 h-10 bg-gradient-to-br from-blue-400 to-purple-600 rounded-full flex items-center justify-center text-white font-bold">
+                    {i}
+                  </div>
+                  <div className="ml-3">
+                    <p className="font-medium">Usuario {i}</p>
+                    <p className="text-sm text-gray-500">Nivel Experto</p>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <p className="font-bold text-purple-600">{1000 - i * 100} pts</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Stats Cards originales mejorados */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <motion.div 
+          whileHover={{ scale: 1.05 }}
+          className="bg-gradient-to-br from-white to-gray-50 rounded-xl shadow-lg p-6 border border-gray-200"
+        >
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600">Total Usuarios</p>
-              <p className="text-3xl font-bold text-gray-900">{stats.totalUsers.toLocaleString()}</p>
+              <p className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                {stats.totalUsers.toLocaleString()}
+              </p>
             </div>
             <div className="p-3 bg-blue-100 rounded-full">
               <FaUsers className="text-blue-600 text-xl" />
@@ -592,103 +695,6 @@ const AdminDashboard = () => {
           {/* Sidebar */}
           <div className="md:col-span-1">
             <div className="bg-white rounded-xl shadow-md p-6 mb-6">
-              <div className="mb-6 text-center">
-                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <FaCog className="text-blue-600 text-2xl" />
-                </div>
-                <h3 className="font-bold text-lg">Panel Admin</h3>
-                <p className="text-sm text-gray-600">Dr. Wilson Ipiales</p>
-              </div>
-              
-              <ul className="space-y-2">
-                <li>
-                  <button 
-                    onClick={() => setActiveTab('overview')} 
-                    className={`w-full text-left py-2 px-4 rounded-lg transition-colors flex items-center ${
-                      activeTab === 'overview' ? 'bg-blue-100 text-blue-800' : 'hover:bg-gray-100'
-                    }`}
-                  >
-                    <FaChartLine className="mr-3" /> Resumen
-                  </button>
-                </li>
-                <li>
-                  <button 
-                    onClick={() => setActiveTab('users')} 
-                    className={`w-full text-left py-2 px-4 rounded-lg transition-colors flex items-center ${
-                      activeTab === 'users' ? 'bg-blue-100 text-blue-800' : 'hover:bg-gray-100'
-                    }`}
-                  >
-                    <FaUsers className="mr-3" /> Usuarios
-                  </button>
-                </li>
-                <li>
-                  <button 
-                    onClick={() => setActiveTab('products')} 
-                    className={`w-full text-left py-2 px-4 rounded-lg transition-colors flex items-center ${
-                      activeTab === 'products' ? 'bg-blue-100 text-blue-800' : 'hover:bg-gray-100'
-                    }`}
-                  >
-                    <FaShoppingCart className="mr-3" /> Productos
-                  </button>
-                </li>
-                <li>
-                  <button 
-                    onClick={() => setActiveTab('courses')} 
-                    className={`w-full text-left py-2 px-4 rounded-lg transition-colors flex items-center ${
-                      activeTab === 'courses' ? 'bg-blue-100 text-blue-800' : 'hover:bg-gray-100'
-                    }`}
-                  >
-                    <FaBook className="mr-3" /> Cursos
-                  </button>
-                </li>
-                <li>
-                  <button 
-                    onClick={() => setActiveTab('blog')} 
-                    className={`w-full text-left py-2 px-4 rounded-lg transition-colors flex items-center ${
-                      activeTab === 'blog' ? 'bg-blue-100 text-blue-800' : 'hover:bg-gray-100'
-                    }`}
-                  >
-                    <FaFileAlt className="mr-3" /> Blog
-                  </button>
-                </li>
-                <li>
-                  <button 
-                    onClick={() => setActiveTab('appointments')} 
-                    className={`w-full text-left py-2 px-4 rounded-lg transition-colors flex items-center ${
-                      activeTab === 'appointments' ? 'bg-blue-100 text-blue-800' : 'hover:bg-gray-100'
-                    }`}
-                  >
-                    <FaCalendarAlt className="mr-3" /> Citas
-                  </button>
-                </li>
-                <li>
-                  <button 
-                    onClick={() => setActiveTab('settings')} 
-                    className={`w-full text-left py-2 px-4 rounded-lg transition-colors flex items-center ${
-                      activeTab === 'settings' ? 'bg-blue-100 text-blue-800' : 'hover:bg-gray-100'
-                    }`}
-                  >
-                    <FaCog className="mr-3" /> Configuración
-                  </button>
-                </li>
-                <li>
-                  <Link to="/dashboard" className="w-full text-left py-2 px-4 rounded-lg transition-colors flex items-center text-red-600 hover:bg-red-50">
-                    <FaSignOutAlt className="mr-3" /> Salir
-                  </Link>
-                </li>
-              </ul>
-            </div>
-          </div>
-          
-          {/* Content Area */}
-          <div className="md:col-span-3">
-            {activeTab === 'overview' && <OverviewTab />}
-            {activeTab === 'users' && <UsersTab />}
-            {activeTab === 'products' && <ProductsTab />}
-            {activeTab === 'courses' && <CoursesTab />}
-            {activeTab === 'blog' && <BlogTab />}
-            {activeTab === 'appointments' && <AppointmentsTab />}
-            {activeTab === 'settings' && <SettingsTab />}
           </div>
         </div>
       </div>
