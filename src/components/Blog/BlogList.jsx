@@ -141,6 +141,12 @@ const BlogList = () => {
                     className="h-48 w-full object-cover"
                     src={article.image || '/images/blog/default.jpg'}
                     alt={article.title}
+                    loading="lazy"
+                    decoding="async"
+                    width="768"
+                    height="192"
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    onError={(e) => { e.currentTarget.src = '/images/blog/default.jpg'; }}
                   />
                 </div>
                 <div className="flex-1 bg-white p-6 flex flex-col justify-between">

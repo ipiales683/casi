@@ -423,6 +423,12 @@ const EbookStore = () => {
                         src={ebook.coverImage} 
                         alt={ebook.title}
                         className="w-full h-full object-cover" 
+                        loading="lazy"
+                        decoding="async"
+                        width="640"
+                        height="192"
+                        sizes="(max-width: 768px) 100vw, 33vw"
+                        onError={(e) => { e.currentTarget.src = '/images/ebooks/placeholder.jpg'; }}
                       />
                     ) : (
                       <div className="w-full h-full bg-gray-100 flex items-center justify-center">

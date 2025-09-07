@@ -37,7 +37,7 @@ const comunidadSubmenu = [
   { name: 'Programa de Referidos', href: '/referidos', current: false, icon: <FaHandshake className="text-green-500" /> },
   { name: 'Testimonios', href: '/testimonios', current: false, icon: <FaComments className="text-yellow-500" /> },
   { name: 'Foro Legal', href: '/foro', current: false, icon: <FaComments className="text-purple-500" /> },
-  { name: 'Blog Legal', href: '/blog-legal', current: false, icon: <FaBook className="text-purple-500" /> },
+  { name: 'Blog Legal', href: '/blog', current: false, icon: <FaBook className="text-purple-500" /> },
   { name: 'Newsletter', href: '/newsletter', current: false, icon: <FaEnvelope className="text-orange-500" /> },
   { name: 'E-Books', href: '/ebooks', current: false, icon: <FaBook className="text-indigo-500" /> },
 ];

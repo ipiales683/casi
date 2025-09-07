@@ -23,7 +23,6 @@ import LoadingSpinner from './components/Common/LoadingSpinner';
 // Páginas públicas (visitantes)
 import HomePage from './components/Home/HomePage';
 import Contact from './components/Contact/Contact';
-import Blog from './components/Blog/Blog';
 import BlogArticle from './components/Blog/BlogArticle';
 import ServicesOverview from './pages/ServicesOverview';
 import ServicioPenalPage from './pages/ServicioPenalPage';
@@ -149,13 +148,13 @@ function App() {
                   <Route path="/privacidad" element={<PrivacyPolicyPage />} />
                   <Route path="/terminos" element={<TermsConditionsPage />} />
                   <Route path="/foro" element={<ForumPage />} />
-                  <Route path="/blog-legal" element={<BlogPage />} />
+                  <Route path="/blog-legal" element={<Navigate to="/blog" replace />} />
                   <Route path="/noticias" element={<NewsPage />} />
                   <Route path="/noticias/:id" element={<NewsArticle />} />
                   <Route path="/newsletter" element={<NewsletterPage />} />
                   <Route path="/sobre-nosotros" element={<AboutPage />} />
                   <Route path="/contacto" element={<Contact />} />
-                  <Route path="/blog" element={<Blog />} />
+                  <Route path="/blog" element={<BlogPage />} />
                   <Route path="/blog/:articleId" element={<BlogArticle />} />
                   <Route path="/ebooks" element={<Ebooks />} />
                   <Route path="/cursos" element={<CourseCatalog />} />
