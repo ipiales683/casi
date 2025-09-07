@@ -31,10 +31,11 @@ import ServicioCivilPage from './pages/ServicioCivilPage';
 import ServicioComercialPage from './pages/ServicioComercialPage';
 import ServicioTransitoPage from './pages/ServicioTransitoPage';
 import ServicioAduaneroPage from './pages/ServicioAduaneroPage';
-import ServicioConstitucionalPage from './pages/ServicioConstitucionalPage';
-import ServicioLaboralPage from './pages/ServicioLaboralPage';
+import ServicioConstitucionalPage from './pages/ServicioConstitucionalPage.jsx';
+import ServicioLaboralPage from './pages/ServicioLaboralPage.jsx';
 import ConsultasCivilesPage from './pages/ConsultasCivilesPage';
 import ConsultasPenalesPage from './pages/ConsultasPenalesPage';
+import ConsultasPage from './pages/ConsultasPage.jsx';
 import ConsultaGeneral from './pages/ConsultaGeneral';
 import TestimoniosPage from './pages/TestimoniosPage';
 import AfiliadosPage from './pages/AfiliadosPage';
@@ -44,6 +45,8 @@ import TermsConditionsPage from './pages/TermsConditionsPage';
 import ForumPage from './pages/ForumPage';
 import BlogPage from './pages/BlogPage';
 import NewsletterPage from './pages/NewsletterPage';
+import NewsPage from './pages/NewsPage.jsx';
+import NewsArticle from './pages/NewsArticle.jsx';
 import UserDashboard from './pages/UserDashboard';
 import CalendarPage from './pages/CalendarPage';
 import ProductsPage from './pages/ProductsPage';
@@ -129,6 +132,7 @@ function App() {
             <Route path="/" element={<HomePage />} />
                   <Route path="/productos" element={<ProductsPage />} />
                   <Route path="/servicios" element={<ServicesOverview />} />
+                  <Route path="/consultas" element={<ConsultasPage />} />
                   <Route path="/servicios/penal" element={<ServicioPenalPage />} />
                   <Route path="/servicios/civil" element={<ServicioCivilPage />} />
                   <Route path="/servicios/comercial" element={<ServicioComercialPage />} />
@@ -146,6 +150,8 @@ function App() {
                   <Route path="/terminos" element={<TermsConditionsPage />} />
                   <Route path="/foro" element={<ForumPage />} />
                   <Route path="/blog-legal" element={<BlogPage />} />
+                  <Route path="/noticias" element={<NewsPage />} />
+                  <Route path="/noticias/:id" element={<NewsArticle />} />
                   <Route path="/newsletter" element={<NewsletterPage />} />
                   <Route path="/sobre-nosotros" element={<AboutPage />} />
                   <Route path="/contacto" element={<Contact />} />

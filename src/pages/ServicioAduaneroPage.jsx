@@ -18,9 +18,11 @@ import {
   ExclamationCircleIcon
 } from '@heroicons/react/24/outline';
 import { toast } from 'react-hot-toast';
+import { useCart } from '../context/CartContext';
 
 const ServicioAduaneroPage = () => {
   const navigate = useNavigate();
+  const { addToCart } = useCart();
   const [selectedService, setSelectedService] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
@@ -141,13 +143,22 @@ const ServicioAduaneroPage = () => {
     setShowModal(true);
   };
 
-  const handlePayment = (service) => {
-    navigate('/checkout', { 
-      state: { 
-        service: service,
-        type: 'servicio-aduanero' 
-      } 
+  const handleAddToCart = (service) => {
+    addToCart({
+      id: service.id,
+      name: service.title,
+      price: service.price,
+      type: 'service',
+      category: 'Derecho Aduanero',
+      description: service.description
     });
+    toast.success(`${service.title} agregado al carrito`);
+  };
+
+  const handlePayment = (service) => {
+    // Añadir al carrito y redirigir al checkout para un flujo consistente
+    handleAddToCart(service);
+    navigate('/checkout');
   };
 
   return (

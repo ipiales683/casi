@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
 export default function JudicialNews() {
   const [activeCategory, setActiveCategory] = useState('Todos');
@@ -136,13 +137,15 @@ export default function JudicialNews() {
         )}
 
         <div className="mt-12 text-center">
-          <motion.button
-            className="btn-primary"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Cargar Más Noticias
-          </motion.button>
+          <Link to="/noticias" className="inline-block">
+            <motion.span
+              className="btn-primary inline-block"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Ver todas las noticias
+            </motion.span>
+          </Link>
         </div>
 
         {/* Suscripción a Noticias */}

@@ -342,12 +342,6 @@ const CourseSystem = () => {
 
           <div className="flex space-x-2">
             <button
-              onClick={() => setSelectedCourse(course)}
-              className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
-            >
-              {progress > 0 ? 'Continuar' : 'Comenzar'}
-            </button>
-            <button 
               onClick={() => {
                 addToCart({
                   id: `course-${course.id}`,
@@ -359,10 +353,25 @@ const CourseSystem = () => {
                 toast.success('Curso agregado al carrito');
                 navigate('/checkout');
               }}
+              className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              Comprar
+            </button>
+            <button 
+              onClick={() => {
+                addToCart({
+                  id: `course-${course.id}`,
+                  name: course.title,
+                  price: course.price,
+                  type: 'course',
+                  category: course.category
+                });
+                toast.success('Curso agregado al carrito');
+              }}
               className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2"
             >
               <FaShoppingCart />
-              Comprar
+              Agregar al Carrito
             </button>
           </div>
         </div>

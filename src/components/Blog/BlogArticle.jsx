@@ -311,7 +311,7 @@ const BlogArticle = () => {
                   </div>
                   <div className="flex-1 bg-white p-5 flex flex-col justify-between">
                     <div className="flex-1">
-                      <Link to={`/blog/article/${related.id}`} className="block mt-1">
+                      <Link to={`/blog/${related.id}`} className="block mt-1">
                         <p className="text-lg font-semibold text-gray-900 hover:text-blue-700">{related.title}</p>
                         <p className="mt-3 text-sm text-gray-500 line-clamp-2">{related.excerpt}</p>
                       </Link>

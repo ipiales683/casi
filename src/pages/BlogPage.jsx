@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { 
   NewspaperIcon,
@@ -11,96 +12,74 @@ import {
   ArrowRightIcon
 } from '@heroicons/react/24/outline';
 
+import articlesData from '../components/Blog/articles.json';
+
 const BlogPage = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
 
-  const categories = [
-    { id: 'all', name: 'Todos los artículos', count: 42 },
-    { id: 'civil', name: 'Derecho Civil', count: 12 },
-    { id: 'penal', name: 'Derecho Penal', count: 8 },
-    { id: 'laboral', name: 'Derecho Laboral', count: 10 },
-    { id: 'comercial', name: 'Derecho Comercial', count: 7 },
-    { id: 'noticias', name: 'Noticias Legales', count: 5 }
-  ];
+  // Normalizar y ordenar artículos por fecha (desc)
+  const articles = useMemo(() => {
+    const sorted = [...articlesData].sort((a, b) => new Date(b.date) - new Date(a.date));
+    return sorted.map(a => ({
+      id: a.id,
+      title: a.title,
+      excerpt: a.excerpt,
+      author: a.author,
+      date: a.date,
+      readTime: `${a.readTime} min`,
+      views: a.views || Math.floor(Math.random() * 3000) + 500,
+      category: a.category,
+      image: a.image || '/images/blog/default-post.jpg'
+    }));
+  }, []);
 
-  const featuredPost = {
-    id: 1,
-    title: 'Nueva Reforma Laboral 2024: Todo lo que Necesitas Saber',
-    excerpt: 'Análisis completo de los cambios más importantes en la legislación laboral colombiana y cómo afectan a empleadores y trabajadores.',
-    author: 'Dr. Carlos Mendoza',
-    date: '2024-01-15',
-    readTime: '8 min',
-    views: 2847,
-    category: 'laboral',
-    image: '/images/blog/reforma-laboral.jpg',
-    featured: true
-  };
+  // Destacado: intenta usar Reforma Laboral (id 7); si no existe, usa el más reciente
+  const featuredPost = useMemo(() => {
+    const found = articles.find(a => a.id === 7);
+    return found || articles[0];
+  }, [articles]);
 
-  const blogPosts = [
-    {
-      id: 2,
-      title: 'Cómo Constituir una SAS: Guía Paso a Paso',
-      excerpt: 'Todo lo que necesitas saber para crear tu Sociedad por Acciones Simplificada de manera rápida y legal.',
-      author: 'Dra. María González',
-      date: '2024-01-12',
-      readTime: '6 min',
-      views: 1923,
-      category: 'comercial',
-      image: '/images/blog/constituir-sas.jpg'
-    },
-    {
-      id: 3,
-      title: 'Derechos del Consumidor en Compras Online',
-      excerpt: 'Conoce tus derechos al comprar por internet y cómo reclamar en caso de problemas con tu pedido.',
-      author: 'Dr. Roberto Silva',
-      date: '2024-01-10',
-      readTime: '5 min',
-      views: 1456,
-      category: 'civil',
-      image: '/images/blog/derechos-consumidor.jpg'
-    },
-    {
-      id: 4,
-      title: 'Proceso de Divorcio por Mutuo Acuerdo',
-      excerpt: 'Ventajas, requisitos y pasos para tramitar un divorcio de común acuerdo de manera rápida y económica.',
-      author: 'Dra. Ana Martínez',
-      date: '2024-01-08',
-      readTime: '7 min',
-      views: 2134,
-      category: 'civil',
-      image: '/images/blog/divorcio-mutuo.jpg'
-    },
-    {
-      id: 5,
-      title: 'Defensa Penal: Qué Hacer si te Acusan de un Delito',
-      excerpt: 'Pasos inmediatos y estrategias legales para defenderte eficazmente en un proceso penal.',
-      author: 'Dr. Luis Herrera',
-      date: '2024-01-05',
-      readTime: '9 min',
-      views: 1789,
-      category: 'penal',
-      image: '/images/blog/defensa-penal.jpg'
-    },
-    {
-      id: 6,
-      title: 'Liquidación de Prestaciones Sociales 2024',
-      excerpt: 'Cálculo actualizado de cesantías, primas y vacaciones según la nueva normativa laboral.',
-      author: 'Dra. Patricia López',
-      date: '2024-01-03',
-      readTime: '6 min',
-      views: 3021,
-      category: 'laboral',
-      image: '/images/blog/prestaciones-sociales.jpg'
-    }
-  ];
+  // Resto de posts excluyendo el destacado
+  const blogPosts = useMemo(() => {
+    return articles.filter(a => a.id !== featuredPost?.id);
+  }, [articles, featuredPost]);
 
-  const filteredPosts = blogPosts.filter(post => {
-    const matchesCategory = selectedCategory === 'all' || post.category === selectedCategory;
-    const matchesSearch = post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         post.excerpt.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchesCategory && matchesSearch;
-  });
+  // Cálculo dinámico de categorías con conteo
+  const categories = useMemo(() => {
+    const counts = blogPosts.reduce((acc, post) => {
+      acc[post.category] = (acc[post.category] || 0) + 1;
+      return acc;
+    }, {});
+    const list = [
+      { id: 'all', name: 'Todos los artículos', count: blogPosts.length + (featuredPost ? 1 : 0) }
+    ];
+    const mapping = {
+      civil: 'Derecho Civil',
+      penal: 'Derecho Penal',
+      laboral: 'Derecho Laboral',
+      comercial: 'Derecho Comercial',
+      noticias: 'Noticias Legales',
+      tecnologia: 'Tecnología Legal',
+      transito: 'Derecho de Tránsito',
+      familia: 'Derecho de Familia',
+      empresarial: 'Derecho Empresarial'
+    };
+    Object.keys(counts).forEach(key => {
+      list.push({ id: key, name: mapping[key] || key, count: counts[key] });
+    });
+    return list;
+  }, [blogPosts, featuredPost]);
+
+  const filteredPosts = useMemo(() => {
+    const matches = (post) => {
+      const categoryOk = selectedCategory === 'all' || post.category === selectedCategory;
+      const term = searchTerm.trim().toLowerCase();
+      const searchOk = !term || post.title.toLowerCase().includes(term) || post.excerpt.toLowerCase().includes(term) || post.author.toLowerCase().includes(term);
+      return categoryOk && searchOk;
+    };
+    return blogPosts.filter(matches);
+  }, [blogPosts, selectedCategory, searchTerm]);
 
   const getCategoryName = (categoryId) => {
     return categories.find(cat => cat.id === categoryId)?.name || categoryId;
@@ -181,14 +160,13 @@ const BlogPage = () => {
                     <UserIcon className="h-5 w-5 text-gray-400 mr-2" />
                     <span className="text-gray-600">{featuredPost.author}</span>
                   </div>
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
+                  <Link
+                    to={`/blog/${featuredPost.id}`}
                     className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-2 rounded-lg font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 flex items-center"
                   >
                     Leer más
                     <ArrowRightIcon className="h-4 w-4 ml-2" />
-                  </motion.button>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -259,21 +237,23 @@ const BlogPage = () => {
                   transition={{ delay: 0.1 * index }}
                   className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer group"
                 >
-                  <div className="relative h-48">
-                    <img
-                      src={post.image}
-                      alt={post.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                      onError={(e) => {
-                        e.target.src = '/images/blog/default-post.jpg';
-                      }}
-                    />
-                    <div className="absolute top-4 left-4">
-                      <span className="bg-blue-500 text-white px-2 py-1 rounded-full text-xs font-medium">
-                        {getCategoryName(post.category)}
-                      </span>
+                  <Link to={`/blog/${post.id}`} className="block">
+                    <div className="relative h-48">
+                      <img
+                        src={post.image}
+                        alt={post.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        onError={(e) => {
+                          e.target.src = '/images/blog/default-post.jpg';
+                        }}
+                      />
+                      <div className="absolute top-4 left-4">
+                        <span className="bg-blue-500 text-white px-2 py-1 rounded-full text-xs font-medium">
+                          {getCategoryName(post.category)}
+                        </span>
+                      </div>
                     </div>
-                  </div>
+                  </Link>
                   <div className="p-6">
                     <div className="flex items-center text-sm text-gray-500 mb-3">
                       <CalendarIcon className="h-4 w-4 mr-1" />
@@ -283,9 +263,11 @@ const BlogPage = () => {
                       <EyeIcon className="h-4 w-4 mr-1" />
                       <span>{post.views}</span>
                     </div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">
-                      {post.title}
-                    </h3>
+                    <Link to={`/blog/${post.id}`} className="block">
+                      <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">
+                        {post.title}
+                      </h3>
+                    </Link>
                     <p className="text-gray-600 mb-4 line-clamp-3">
                       {post.excerpt}
                     </p>
@@ -294,14 +276,13 @@ const BlogPage = () => {
                         <UserIcon className="h-4 w-4 text-gray-400 mr-2" />
                         <span className="text-sm text-gray-600">{post.author}</span>
                       </div>
-                      <motion.button
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
+                      <Link
+                        to={`/blog/${post.id}`}
                         className="text-blue-600 hover:text-blue-700 font-medium text-sm flex items-center"
                       >
                         Leer más
                         <ArrowRightIcon className="h-3 w-3 ml-1" />
-                      </motion.button>
+                      </Link>
                     </div>
                   </div>
                 </motion.article>

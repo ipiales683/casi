@@ -19,9 +19,11 @@ import {
   ChatBubbleLeftRightIcon
 } from '@heroicons/react/24/outline';
 import { toast } from 'react-hot-toast';
+import { useCart } from '../context/CartContext';
 
 const ServicioComercialPage = () => {
   const navigate = useNavigate();
+  const { addToCart } = useCart();
   const [selectedService, setSelectedService] = useState(null);
   const [showConsultation, setShowConsultation] = useState(false);
 
@@ -211,13 +213,24 @@ const ServicioComercialPage = () => {
     toast.success(`Seleccionaste: ${service.title}`);
   };
 
-  const handlePayment = (service) => {
-    navigate('/checkout', { 
-      state: { 
-        service: service,
-        type: 'servicio-comercial' 
-      } 
+  const handleAddToCart = (service) => {
+    // Para porcentajes (cobranzas), no agregamos precio fijo; se puede manejar como 0 y description específica
+    const price = typeof service.price === 'number' ? service.price : 0;
+    addToCart({
+      id: service.id,
+      name: service.title,
+      price,
+      type: 'service',
+      category: 'Derecho Comercial',
+      description: service.description
     });
+    toast.success(`${service.title} agregado al carrito`);
+  };
+
+  const handlePayment = (service) => {
+    // Asegurar ítem en carrito y llevar a checkout
+    handleAddToCart(service);
+    navigate('/checkout');
   };
 
   return (
