@@ -29,6 +29,23 @@ const ServicesPage = () => {
 
   const services = [
     {
+      id: 'constitucional',
+      title: 'Acciones Constitucionales',
+      description: 'Protección de derechos fundamentales mediante garantías constitucionales.',
+      details: [
+        'Acciones de protección',
+        'Habeas corpus',
+        'Habeas data',
+        'Acciones de acceso a la información',
+        'Medidas cautelares constitucionales'
+      ],
+      icon: <FaBalanceScale className="text-4xl mb-4 text-indigo-600" />,
+      color: 'indigo',
+      link: '/servicios/constitucional',
+      price: 'Desde $600 / Consulta',
+      tokens: 50
+    },
+    {
       id: 'penal',
       title: 'Derecho Penal',
       description: 'Defensa legal completa en procesos penales con estrategias personalizadas y efectivas.',

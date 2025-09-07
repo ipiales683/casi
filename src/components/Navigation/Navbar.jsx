@@ -47,6 +47,7 @@ const productosSubmenu = [
   { name: 'Todos los Productos', href: '/productos', current: false, icon: <FaStore className="text-blue-500" /> },
   { name: 'E-Books Legales', href: '/ebooks', current: false, icon: <FaBook className="text-green-500" /> },
   { name: 'Cursos Online', href: '/cursos', current: false, icon: <FaBook className="text-purple-500" /> },
+  { name: 'Planes de Suscripción', href: '/planes', current: false, icon: <FaShieldAlt className="text-indigo-500" /> },
   { name: 'Tienda Legal', href: '/tienda', current: false, icon: <FaStore className="text-orange-500" /> },
 ];
 

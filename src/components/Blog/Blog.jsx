@@ -1,36 +1,10 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import articlesData from './articles.json';
+import categoriesData from './categories.json';
 
 const Blog = () => {
-  const [articles] = useState([
-    {
-      id: 1,
-      title: 'Nuevas Reformas en Derecho Penal',
-      excerpt: 'Análisis de las últimas modificaciones al código penal ecuatoriano y su impacto en los procesos judiciales.',
-      category: 'Derecho Penal',
-      date: '2025-01-15',
-      readTime: '5 min',
-      image: '/images/blog/criminal-defense.jpg'
-    },
-    {
-      id: 2,
-      title: 'Guía Completa de Derecho Civil',
-      excerpt: 'Todo lo que necesitas saber sobre contratos, responsabilidad civil y resolución de conflictos.',
-      category: 'Derecho Civil',
-      date: '2025-01-10',
-      readTime: '8 min',
-      image: '/images/blog/business-legal.jpg'
-    },
-    {
-      id: 3,
-      title: 'Derecho de Tránsito: Lo que Debes Saber',
-      excerpt: 'Información esencial sobre multas, infracciones y procedimientos en casos de tránsito.',
-      category: 'Tránsito',
-      date: '2025-01-05',
-      readTime: '6 min',
-      image: '/images/blog/transito-law.jpg'
-    }
-  ]);
+  const [articles] = useState(articlesData);
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">

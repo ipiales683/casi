@@ -31,6 +31,8 @@ import ServicioCivilPage from './pages/ServicioCivilPage';
 import ServicioComercialPage from './pages/ServicioComercialPage';
 import ServicioTransitoPage from './pages/ServicioTransitoPage';
 import ServicioAduaneroPage from './pages/ServicioAduaneroPage';
+import ServicioConstitucionalPage from './pages/ServicioConstitucionalPage';
+import ServicioLaboralPage from './pages/ServicioLaboralPage';
 import ConsultasCivilesPage from './pages/ConsultasCivilesPage';
 import ConsultasPenalesPage from './pages/ConsultasPenalesPage';
 import ConsultaGeneral from './pages/ConsultaGeneral';
@@ -51,6 +53,7 @@ import TerminosCondiciones from './components/TerminosCondiciones';
 import Seguridad from './components/Seguridad';
 import Ebooks from './components/Ebooks/EbookStore';
 import CourseCatalog from './components/Courses/CourseSystem';
+import SubscriptionPlans from './components/Subscriptions/SubscriptionPlans';
 import CourseDetail from './pages/CourseDetailPage';
 
 // Páginas de autenticación
@@ -131,6 +134,8 @@ function App() {
                   <Route path="/servicios/comercial" element={<ServicioComercialPage />} />
                   <Route path="/servicios/transito" element={<ServicioTransitoPage />} />
                   <Route path="/servicios/aduanas" element={<ServicioAduaneroPage />} />
+                  <Route path="/servicios/constitucional" element={<ServicioConstitucionalPage />} />
+                  <Route path="/servicios/laboral" element={<ServicioLaboralPage />} />
                   <Route path="/consulta-general" element={<ConsultaGeneral />} />
                   <Route path="/consultas/civiles" element={<ConsultasCivilesPage />} />
                   <Route path="/consultas/penales" element={<ConsultasPenalesPage />} />
@@ -145,10 +150,11 @@ function App() {
                   <Route path="/sobre-nosotros" element={<AboutPage />} />
                   <Route path="/contacto" element={<Contact />} />
                   <Route path="/blog" element={<Blog />} />
-                  <Route path="/blog/:slug" element={<BlogArticle />} />
+                  <Route path="/blog/:articleId" element={<BlogArticle />} />
                   <Route path="/ebooks" element={<Ebooks />} />
                   <Route path="/cursos" element={<CourseCatalog />} />
                   <Route path="/cursos/:slug" element={<CourseDetail />} />
+                  <Route path="/planes" element={<SubscriptionPlans />} />
                   <Route path="/tienda" element={<UnifiedStore />} />
                   <Route path="/calendario" element={<CalendarPage />} />
                   <Route path="/promociones" element={<PromotionsManager />} />

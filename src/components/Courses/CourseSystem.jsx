@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FaPlay, FaPause, FaVolumeUp, FaVolumeMute, FaExpand, FaCheck, FaLock, FaClock, FaUser, FaStar, FaShoppingCart } from 'react-icons/fa';
 import { toast } from 'react-hot-toast';
 import { useCart } from '../../context/CartContext';
+import { useNavigate } from 'react-router-dom';
 
 const CourseSystem = () => {
   const [selectedCourse, setSelectedCourse] = useState(null);
@@ -10,6 +11,7 @@ const CourseSystem = () => {
   const [progress, setProgress] = useState({});
   const [userProgress, setUserProgress] = useState({});
   const { addToCart } = useCart();
+  const navigate = useNavigate();
 
   const courses = [
     {
@@ -348,13 +350,14 @@ const CourseSystem = () => {
             <button 
               onClick={() => {
                 addToCart({
-                  id: course.id,
+                  id: `course-${course.id}`,
                   name: course.title,
                   price: course.price,
                   type: 'course',
                   category: course.category
                 });
                 toast.success('Curso agregado al carrito');
+                navigate('/checkout');
               }}
               className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2"
             >

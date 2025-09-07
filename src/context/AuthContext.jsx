@@ -126,7 +126,19 @@ export const AuthProvider = ({ children }) => {
     register,
     logout,
     updateUser,
-    isAuthenticated: !!user
+    // API esperado por roleMiddleware
+    isAuthenticated: () => !!user,
+    hasRole: (role) => {
+      if (!user || !role) return false;
+      if (user.role === role) return true;
+      if (Array.isArray(user.roles)) return user.roles.includes(role);
+      return false;
+    },
+    hasPermission: (permission) => {
+      if (!user || !permission) return false;
+      if (Array.isArray(user.permissions)) return user.permissions.includes(permission);
+      return false;
+    }
   };
 
   return (

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
@@ -8,6 +8,7 @@ import { FaBook, FaLock, FaUnlock, FaDownload, FaCoins, FaSearch, FaFilter, FaSh
 const EbookStore = () => {
   const { user } = useAuth();
   const { addToCart } = useCart();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [ebooks, setEbooks] = useState([]);
   const [userEbooks, setUserEbooks] = useState([]);
@@ -247,11 +248,7 @@ const EbookStore = () => {
   };
 
   const handlePurchase = async (ebook, paymentMethod) => {
-    if (!user) {
-      toast.error('Debes iniciar sesión para comprar e-books');
-      return;
-    }
-    
+    // Permitir compra directa hacia checkout aunque no haya sesión (checkout validará)
     if (paymentMethod === 'tokens' && tokens < ebook.tokenPrice) {
       toast.error(`No tienes suficientes tokens. Necesitas ${ebook.tokenPrice} tokens.`);
       return;
@@ -261,7 +258,7 @@ const EbookStore = () => {
     if (paymentMethod === 'direct') {
       // Agregar al carrito y redirigir al checkout
       handleAddToCart(ebook);
-      window.location.href = '/checkout';
+      navigate('/checkout');
       return;
     }
     
@@ -500,7 +497,6 @@ const EbookStore = () => {
                                 <button
                                   onClick={() => handlePurchase(ebook, 'direct')}
                                   className="inline-flex items-center justify-center px-3 py-2 border border-transparent text-xs font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                                  disabled={!user}
                                 >
                                   Comprar Ya
                                 </button>

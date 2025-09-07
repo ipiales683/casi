@@ -11,6 +11,7 @@ import Testimonials from '../Testimonials';
 import JudicialNews from '../JudicialNews';
 import Newsletter from '../Newsletter/Newsletter';
 import ProcessSearch from '../ProcessSearch';
+import SubscriptionPlans from '../Subscriptions/SubscriptionPlans';
 import SocialMediaIntegration from '../Social/SocialMediaIntegration';
 import IntelligentChatbot from '../Chat/IntelligentChatbot';
 
@@ -52,6 +53,11 @@ const HomePage = () => {
       <Testimonials />
       <ProcessSearch />
       <JudicialNews />
+
+      {/* Planes de Suscripción en la página principal */}
+      <div className="mt-8">
+        <SubscriptionPlans />
+      </div>
       
       {/* Integración social completa */}
       <div className="container mx-auto px-4 py-8">
