@@ -392,6 +392,15 @@ export const supabaseService = {
 
 // Servicio mejorado para autenticación
 export const authService = {
+  // Alias para compatibilidad: algunos componentes llaman authService.checkConnection
+  // Delegamos a supabaseService.checkConnection para evitar errores
+  checkConnection: async () => {
+    try {
+      return await supabaseService.checkConnection();
+    } catch (e) {
+      return { connected: false, message: e?.message || 'Error al verificar conexión' };
+    }
+  },
   // Iniciar sesión con Google
   signInWithGoogle: async (redirectTo = window.location.origin) => {
     try {

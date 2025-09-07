@@ -15,6 +15,8 @@ import { handleLegalQueries } from './workers-site/api/legal-queries';
 import { handleProxyHandler } from './workers-site/api/proxy-handler';
 import { handleSearches } from './workers-site/api/searches';
 import { handleProductsRequest } from './workers-site/api/products';
+import { handleAuthRequest } from './workers-site/api/auth';
+import { handleEbooksRequest, handleTokensRequest } from './workers-site/api/ebooks';
 
 addEventListener('fetch', event => {
   event.respondWith(handleRequest(event.request));
@@ -60,13 +62,19 @@ async function handleRequest(request) {
           return handleChatRequest(request);
       } else if (path.startsWith('/api/products')) {
           return handleProductsRequest(request);
+      } else if (path.startsWith('/api/auth')) {
+          return handleAuthRequest(request);
+      } else if (path.startsWith('/api/ebooks')) {
+          return handleEbooksRequest(request);
+      } else if (path.startsWith('/api/tokens')) {
+          return handleTokensRequest(request);
       } else if (path.startsWith('/api/config')) {
           return handleConfigHandler(request);
       } else if (path.startsWith('/api/legal-queries')) {
           return handleLegalQueries(request);
       } else if (path.startsWith('/api/proxy')) {
           return handleProxyHandler(request);
-      } else if (path.startsWith('/api/searches')) {
+      } else if (path.startsWith('/api/searches') || path.startsWith('/api/data/searches')) {
           return handleSearches(request);
       }
 
