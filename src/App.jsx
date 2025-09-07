@@ -25,7 +25,26 @@ import HomePage from './components/Home/HomePage';
 import Contact from './components/Contact/Contact';
 import Blog from './components/Blog/Blog';
 import BlogArticle from './components/Blog/BlogArticle';
-import Services from './components/Services/ServicesPage';
+import ServicesOverview from './pages/ServicesOverview';
+import ServicioPenalPage from './pages/ServicioPenalPage';
+import ServicioCivilPage from './pages/ServicioCivilPage';
+import ServicioComercialPage from './pages/ServicioComercialPage';
+import ServicioTransitoPage from './pages/ServicioTransitoPage';
+import ServicioAduaneroPage from './pages/ServicioAduaneroPage';
+import ConsultasCivilesPage from './pages/ConsultasCivilesPage';
+import ConsultasPenalesPage from './pages/ConsultasPenalesPage';
+import ConsultaGeneral from './pages/ConsultaGeneral';
+import TestimoniosPage from './pages/TestimoniosPage';
+import AfiliadosPage from './pages/AfiliadosPage';
+import ReferidosPage from './pages/ReferidosPage';
+import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
+import TermsConditionsPage from './pages/TermsConditionsPage';
+import ForumPage from './pages/ForumPage';
+import BlogPage from './pages/BlogPage';
+import NewsletterPage from './pages/NewsletterPage';
+import UserDashboard from './pages/UserDashboard';
+import CalendarPage from './pages/CalendarPage';
+import ProductsPage from './pages/ProductsPage';
 import AboutPage from './components/About/AboutPage';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import TerminosCondiciones from './components/TerminosCondiciones';
@@ -62,6 +81,7 @@ import AIChatSystem from './components/Chat/AIChatSystem';
 import TriviaSystem from './components/Gamification/TriviaSystem';
 import DragDropEditor from './components/Editor/DragDropEditor';
 import PromotionsManager from './components/Promotions/PromotionsManager';
+import FloatingCart from './components/Cart/FloatingCart';
 
 // Páginas de funcionalidad
 import PaymentSystem from './components/Payment/PaymentSystem';
@@ -71,13 +91,6 @@ import AIConsultationSystem from './components/Consultation/AIConsultationSystem
 import AppointmentScheduler from './components/Appointment/AppointmentScheduler';
 import AffiliateRegister from './components/Affiliates/AffiliateRegister';
 import AffiliateOverview from './components/Affiliates/AffiliateOverview';
-
-// Páginas de servicios individuales
-import ServicioPenalPage from './pages/ServicioPenalPage';
-import ServicioCivilPage from './pages/ServicioCivilPage';
-import ServicioTransitoPage from './pages/ServicioTransitoPage';
-import ServicioComercialPage from './pages/ServicioComercialPage';
-import ServicioAduaneroPage from './pages/ServicioAduaneroPage';
 
 // Páginas de error
 import NotFoundPage from './components/Common/NotFoundPage';
@@ -111,12 +124,24 @@ function App() {
           <Routes>
                   {/* Rutas públicas (visitantes) */}
             <Route path="/" element={<HomePage />} />
-                  <Route path="/servicios" element={<Services />} />
+                  <Route path="/productos" element={<ProductsPage />} />
+                  <Route path="/servicios" element={<ServicesOverview />} />
                   <Route path="/servicios/penal" element={<ServicioPenalPage />} />
                   <Route path="/servicios/civil" element={<ServicioCivilPage />} />
                   <Route path="/servicios/comercial" element={<ServicioComercialPage />} />
                   <Route path="/servicios/transito" element={<ServicioTransitoPage />} />
-                  <Route path="/servicios/aduanero" element={<ServicioAduaneroPage />} />
+                  <Route path="/servicios/aduanas" element={<ServicioAduaneroPage />} />
+                  <Route path="/consulta-general" element={<ConsultaGeneral />} />
+                  <Route path="/consultas/civiles" element={<ConsultasCivilesPage />} />
+                  <Route path="/consultas/penales" element={<ConsultasPenalesPage />} />
+                  <Route path="/testimonios" element={<TestimoniosPage />} />
+                  <Route path="/afiliados" element={<AfiliadosPage />} />
+                  <Route path="/referidos" element={<ReferidosPage />} />
+                  <Route path="/privacidad" element={<PrivacyPolicyPage />} />
+                  <Route path="/terminos" element={<TermsConditionsPage />} />
+                  <Route path="/foro" element={<ForumPage />} />
+                  <Route path="/blog-legal" element={<BlogPage />} />
+                  <Route path="/newsletter" element={<NewsletterPage />} />
                   <Route path="/sobre-nosotros" element={<AboutPage />} />
                   <Route path="/contacto" element={<Contact />} />
                   <Route path="/blog" element={<Blog />} />
@@ -125,7 +150,7 @@ function App() {
                   <Route path="/cursos" element={<CourseCatalog />} />
                   <Route path="/cursos/:slug" element={<CourseDetail />} />
                   <Route path="/tienda" element={<UnifiedStore />} />
-                  <Route path="/calendario" element={<AppointmentCalendar />} />
+                  <Route path="/calendario" element={<CalendarPage />} />
                   <Route path="/promociones" element={<PromotionsManager />} />
                   <Route path="/politicas-privacidad" element={<PrivacyPolicy />} />
                   <Route path="/terminos-condiciones" element={<TerminosCondiciones />} />
@@ -251,6 +276,7 @@ function App() {
                   {/* Rutas de pagos */}
             <Route path="/payment" element={<PaymentSystem />} />
                   <Route path="/checkout" element={<CheckoutSystem />} />
+                  <Route path="/checkout-page" element={<CheckoutPage />} />
                   <Route path="/payment/success" element={<ThankYouPage />} />
                   <Route path="/payment/failed" element={<ThankYouPage />} />
                   
@@ -299,6 +325,9 @@ function App() {
       
       {/* Chat AI Global */}
       <AIChatSystem />
+      
+      {/* Carrito Flotante Global */}
+      <FloatingCart />
     </ThemeProvider>
         </ModuleProvider>
       </CartProvider>

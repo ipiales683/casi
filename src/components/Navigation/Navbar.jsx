@@ -1,16 +1,17 @@
 import { Fragment, useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Disclosure, Menu, Transition, Popover } from '@headlessui/react';
-import { Bars3Icon, XMarkIcon, ChevronDownIcon, UserIcon } from '@heroicons/react/24/outline';
-import { FaUsers, FaHandshake, FaComments, FaGavel, FaBook, FaShieldAlt, FaFileContract, FaFileAlt, FaUserTie, FaWhatsapp, FaPhone, FaEnvelope, FaUserPlus, FaSignInAlt, FaLock } from 'react-icons/fa';
+import { Bars3Icon, XMarkIcon, ChevronDownIcon, UserIcon, ShoppingCartIcon } from '@heroicons/react/24/outline';
+import { FaUsers, FaHandshake, FaComments, FaGavel, FaBook, FaShieldAlt, FaFileContract, FaFileAlt, FaUserTie, FaWhatsapp, FaPhone, FaEnvelope, FaUserPlus, FaSignInAlt, FaLock, FaShoppingCart, FaStore } from 'react-icons/fa';
 import { authService, dataService } from '../../services/apiService';
+import { useCart } from '../../context/CartContext';
 
 const mainNavigation = [
   { name: 'Inicio', href: '/', current: false },
-  { name: 'Servicios', href: '#', current: false, hasSubmenu: true, icon: <FaGavel className="text-blue-600" /> },
+  { name: 'Servicios', href: '/servicios', current: false, icon: <FaGavel className="text-blue-600" /> },
   { name: 'Consultas', href: '#', current: false, hasSubmenu: true, icon: <FaFileAlt className="text-blue-600" /> },
-  { name: 'Blog', href: '/blog', current: false, icon: <FaBook className="text-blue-600" /> },
-  { name: 'Foro', href: '/foro', current: false, icon: <FaComments className="text-blue-600" /> },
+  { name: 'Productos', href: '#', current: false, hasSubmenu: true, icon: <FaStore className="text-blue-600" /> },
+  { name: 'Calendario', href: '/calendario', current: false, icon: <FaBook className="text-blue-600" /> },
   { name: 'Comunidad', href: '#', current: false, hasSubmenu: true, icon: <FaUsers className="text-blue-600" /> },
   { name: 'Contacto', href: '/contacto', current: false, icon: <FaEnvelope className="text-blue-600" /> },
 ];
@@ -24,7 +25,7 @@ const serviceSubmenu = [
 ];
 
 const consultasSubmenu = [
-  { name: 'Consulta General', href: '/consultas', current: false, icon: <FaFileAlt className="text-blue-500" /> },
+  { name: 'Consulta General', href: '/consulta-general', current: false, icon: <FaFileAlt className="text-blue-500" /> },
   { name: 'Consultas Civiles', href: '/consultas/civiles', current: false, icon: <FaFileContract className="text-green-500" /> },
   { name: 'Consultas Penales', href: '/consultas/penales', current: false, icon: <FaGavel className="text-red-500" /> },
   { name: 'Consultas de Tránsito', href: '/consultas/transito', current: false, icon: <FaFileAlt className="text-yellow-500" /> },
@@ -35,11 +36,21 @@ const comunidadSubmenu = [
   { name: 'Programa de Afiliados', href: '/afiliados', current: false, icon: <FaUsers className="text-blue-500" /> },
   { name: 'Programa de Referidos', href: '/referidos', current: false, icon: <FaHandshake className="text-green-500" /> },
   { name: 'Testimonios', href: '/testimonios', current: false, icon: <FaComments className="text-yellow-500" /> },
-  { name: 'Noticias', href: '/noticias', current: false, icon: <FaBook className="text-purple-500" /> },
+  { name: 'Foro Legal', href: '/foro', current: false, icon: <FaComments className="text-purple-500" /> },
+  { name: 'Blog Legal', href: '/blog-legal', current: false, icon: <FaBook className="text-purple-500" /> },
+  { name: 'Newsletter', href: '/newsletter', current: false, icon: <FaEnvelope className="text-orange-500" /> },
   { name: 'E-Books', href: '/ebooks', current: false, icon: <FaBook className="text-indigo-500" /> },
 ];
 
-// Nuevo submenú para Políticas y Seguridad
+// Nuevo submenú para Productos
+const productosSubmenu = [
+  { name: 'Todos los Productos', href: '/productos', current: false, icon: <FaStore className="text-blue-500" /> },
+  { name: 'E-Books Legales', href: '/ebooks', current: false, icon: <FaBook className="text-green-500" /> },
+  { name: 'Cursos Online', href: '/cursos', current: false, icon: <FaBook className="text-purple-500" /> },
+  { name: 'Tienda Legal', href: '/tienda', current: false, icon: <FaStore className="text-orange-500" /> },
+];
+
+// Submenú para Políticas y Seguridad
 const policySubmenu = [
   { name: 'Política de Privacidad', href: '/privacidad', current: false, icon: <FaShieldAlt className="text-gray-500" /> },
   { name: 'Términos y Condiciones', href: '/terminos', current: false, icon: <FaFileContract className="text-gray-500" /> },
@@ -53,7 +64,9 @@ function classNames(...classes) {
 function Navbar() {
   const [session, setSession] = useState(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false);
   const location = useLocation();
+  const { items, total, removeFromCart } = useCart();
 
   useEffect(() => {
     // Establecer la sesión inicial
@@ -208,6 +221,111 @@ function Navbar() {
 
               {/* Right side buttons */}
               <div className="absolute inset-y-0 right-0 flex items-center space-x-1 sm:static sm:space-x-2">
+                {/* Cart Button Professional */}
+                <div className="relative">
+                  <button
+                    onClick={() => setIsCartOpen(!isCartOpen)}
+                    className="relative p-2.5 bg-gradient-to-r from-blue-50 to-purple-50 hover:from-blue-100 hover:to-purple-100 rounded-lg transition-all duration-200 group"
+                  >
+                    <ShoppingCartIcon className="h-6 w-6 text-gray-700 group-hover:text-blue-600 transition-colors" />
+                    {items && items.length > 0 && (
+                      <span className="absolute -top-2 -right-2 h-6 w-6 rounded-full bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs font-bold flex items-center justify-center shadow-lg animate-pulse">
+                        {items.length}
+                      </span>
+                    )}
+                  </button>
+                  
+                  {/* Cart Dropdown Professional */}
+                  {isCartOpen && (
+                    <div className="absolute right-0 mt-3 w-96 bg-white rounded-xl shadow-2xl z-50 border border-gray-100 overflow-hidden">
+                      <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-4">
+                        <h3 className="font-bold text-lg flex items-center">
+                          <ShoppingCartIcon className="h-5 w-5 mr-2" />
+                          Carrito de Compras
+                        </h3>
+                        <p className="text-xs text-blue-100 mt-1">{items?.length || 0} artículos</p>
+                      </div>
+                      <div className="p-4">
+                        {items && items.length > 0 ? (
+                          <>
+                            <div className="space-y-3 max-h-72 overflow-y-auto pr-2 custom-scrollbar">
+                              {items.map((item, index) => (
+                                <div key={index} className="flex items-center gap-3 p-3 bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg hover:shadow-md transition-all">
+                                  <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <ShoppingCartIcon className="h-6 w-6 text-blue-600" />
+                                  </div>
+                                  <div className="flex-1">
+                                    <p className="text-sm font-semibold text-gray-800 line-clamp-1">{item.name}</p>
+                                    <div className="flex items-center gap-2 mt-1">
+                                      <span className="text-xs text-gray-500">Cant: {item.quantity || 1}</span>
+                                      <span className="text-xs text-gray-400">•</span>
+                                      <span className="text-xs font-medium text-blue-600">${(item.price * (item.quantity || 1)).toFixed(2)}</span>
+                                    </div>
+                                  </div>
+                                  <button
+                                    onClick={() => removeFromCart(item.id, item.type)}
+                                    className="p-1.5 hover:bg-red-50 rounded-lg text-red-400 hover:text-red-600 transition-colors"
+                                  >
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                  </button>
+                                </div>
+                              ))}
+                            </div>
+                            <div className="mt-4 pt-4 border-t border-gray-200">
+                              <div className="space-y-2 mb-4">
+                                <div className="flex justify-between text-sm">
+                                  <span className="text-gray-600">Subtotal:</span>
+                                  <span className="font-medium">${total?.toFixed(2) || '0.00'}</span>
+                                </div>
+                                <div className="flex justify-between text-sm">
+                                  <span className="text-gray-600">IVA (12%):</span>
+                                  <span className="font-medium">${((total || 0) * 0.12).toFixed(2)}</span>
+                                </div>
+                                <div className="flex justify-between pt-2 border-t">
+                                  <span className="font-bold text-gray-800">Total:</span>
+                                  <span className="font-bold text-xl bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                                    ${((total || 0) * 1.12).toFixed(2)}
+                                  </span>
+                                </div>
+                              </div>
+                              <div className="space-y-2">
+                                <Link
+                                  to="/checkout"
+                                  onClick={() => setIsCartOpen(false)}
+                                  className="block w-full text-center px-4 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-lg hover:shadow-lg transform hover:scale-105 transition-all duration-200"
+                                >
+                                  Finalizar Compra
+                                </Link>
+                                <Link
+                                  to="/tienda"
+                                  onClick={() => setIsCartOpen(false)}
+                                  className="block w-full text-center px-4 py-2 bg-gray-100 text-gray-700 font-medium rounded-lg hover:bg-gray-200 transition-colors"
+                                >
+                                  Continuar Comprando
+                                </Link>
+                              </div>
+                            </div>
+                        </>
+                        ) : (
+                          <div className="text-center py-8">
+                            <ShoppingCartIcon className="h-16 w-16 text-gray-300 mx-auto mb-3" />
+                            <p className="text-gray-500 font-medium mb-4">Tu carrito está vacío</p>
+                            <Link
+                              to="/tienda"
+                              onClick={() => setIsCartOpen(false)}
+                              className="inline-block px-6 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-medium rounded-lg hover:shadow-lg transition-all"
+                            >
+                              Explorar Tienda
+                            </Link>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+                
                 {/* Auth buttons */}
                 {session ? (
                   <Menu as="div" className="relative ml-3">

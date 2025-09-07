@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { FaPlay, FaPause, FaVolumeUp, FaVolumeMute, FaExpand, FaCheck, FaLock, FaClock, FaUser, FaStar } from 'react-icons/fa';
+import { FaPlay, FaPause, FaVolumeUp, FaVolumeMute, FaExpand, FaCheck, FaLock, FaClock, FaUser, FaStar, FaShoppingCart } from 'react-icons/fa';
 import { toast } from 'react-hot-toast';
+import { useCart } from '../../context/CartContext';
 
 const CourseSystem = () => {
   const [selectedCourse, setSelectedCourse] = useState(null);
@@ -8,6 +9,7 @@ const CourseSystem = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState({});
   const [userProgress, setUserProgress] = useState({});
+  const { addToCart } = useCart();
 
   const courses = [
     {
@@ -313,7 +315,7 @@ const CourseSystem = () => {
             </div>
             <div className="flex items-center">
               <FaUser className="mr-1" />
-              {course.lessons} lecciones
+              {course.totalLessons} lecciones
             </div>
             <div className="flex items-center">
               <FaStar className="mr-1 text-yellow-400" />
@@ -343,8 +345,21 @@ const CourseSystem = () => {
             >
               {progress > 0 ? 'Continuar' : 'Comenzar'}
             </button>
-            <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-              Ver Detalles
+            <button 
+              onClick={() => {
+                addToCart({
+                  id: course.id,
+                  name: course.title,
+                  price: course.price,
+                  type: 'course',
+                  category: course.category
+                });
+                toast.success('Curso agregado al carrito');
+              }}
+              className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2"
+            >
+              <FaShoppingCart />
+              Comprar
             </button>
           </div>
         </div>

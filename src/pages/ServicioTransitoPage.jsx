@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import { useCart } from '../context/CartContext';
 import { 
   TruckIcon,
   ExclamationTriangleIcon,
@@ -14,14 +15,28 @@ import {
   UserGroupIcon,
   ScaleIcon,
   ChatBubbleLeftRightIcon,
-  StarIcon
+  StarIcon,
+  ShoppingCartIcon
 } from '@heroicons/react/24/outline';
 import { toast } from 'react-hot-toast';
 
 const ServicioTransitoPage = () => {
   const navigate = useNavigate();
+  const { addToCart } = useCart();
   const [selectedService, setSelectedService] = useState(null);
   const [showEmergency, setShowEmergency] = useState(false);
+
+  const handleAddToCart = (service) => {
+    addToCart({
+      id: service.id,
+      name: service.title,
+      price: service.price,
+      type: 'service',
+      category: 'Derecho de Tránsito',
+      description: service.description
+    });
+    toast.success(`${service.title} agregado al carrito`);
+  };
 
   const services = [
     {
@@ -434,17 +449,32 @@ const ServicioTransitoPage = () => {
                   )}
                 </ul>
                 
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handlePayment(service);
-                  }}
-                  className={`w-full py-3 rounded-lg font-semibold text-white bg-gradient-to-r ${service.color} hover:shadow-lg transition-all`}
-                >
-                  {service.emergency ? 'Solicitar Ahora' : 'Contratar Servicio'}
-                </motion.button>
+                <div className="flex gap-2">
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleAddToCart(service);
+                    }}
+                    className="flex-1 py-3 rounded-lg font-semibold text-gray-800 bg-gray-100 hover:bg-gray-200 transition-all flex items-center justify-center gap-2"
+                  >
+                    <ShoppingCartIcon className="h-5 w-5" />
+                    Agregar
+                  </motion.button>
+                  
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handlePayment(service);
+                    }}
+                    className={`flex-1 py-3 rounded-lg font-semibold text-white bg-gradient-to-r ${service.color} hover:shadow-lg transition-all`}
+                  >
+                    {service.emergency ? 'Solicitar' : 'Contratar'}
+                  </motion.button>
+                </div>
               </div>
             </motion.div>
           ))}

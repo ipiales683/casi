@@ -21,8 +21,8 @@ const initialState = {
   total: 0
 };
 
-// Función para calcular el total
-const calculateTotal = (items) => {
+// Función para calcular el subtotal
+const calculateSubtotal = (items) => {
   return items.reduce((total, item) => total + (item.price * (item.quantity || 1)), 0);
 };
 
@@ -55,7 +55,7 @@ const cartReducer = (state, action) => {
         newItems = [...state.items, { ...action.payload, quantity: action.payload.quantity || 1 }];
       }
       
-      const newTotal = calculateTotal(newItems);
+      const newTotal = calculateSubtotal(newItems);
       
       // Guardar el carrito en localStorage
       localStorage.setItem('cart', JSON.stringify({
@@ -74,7 +74,7 @@ const cartReducer = (state, action) => {
         !(item.id === action.payload.id && item.type === action.payload.type)
       );
       
-      const newTotal = calculateTotal(newItems);
+      const newTotal = calculateSubtotal(newItems);
       
       // Guardar el carrito actualizado en localStorage
       localStorage.setItem('cart', JSON.stringify({
@@ -106,7 +106,7 @@ const cartReducer = (state, action) => {
         return item;
       });
       
-      const newTotal = calculateTotal(newItems);
+      const newTotal = calculateSubtotal(newItems);
       
       // Guardar el carrito actualizado en localStorage
       localStorage.setItem('cart', JSON.stringify({
@@ -129,7 +129,7 @@ const cartReducer = (state, action) => {
     
     case CART_ACTIONS.SET_CART: {
       const { items } = action.payload;
-      const total = calculateTotal(items);
+      const total = calculateSubtotal(items);
       
       return {
         items,
@@ -197,9 +197,8 @@ export const CartProvider = ({ children }) => {
   
   // Actualizar total cuando cambian los items
   useEffect(() => {
-    if (state.total !== calculateTotal(state.items)) {
-      const newTotal = calculateTotal(state.items);
-      
+    const newTotal = calculateSubtotal(state.items);
+    if (state.total !== newTotal) {
       // Guardar el carrito actualizado en localStorage
       localStorage.setItem('cart', JSON.stringify({
         items: state.items,
@@ -354,4 +353,10 @@ export const CartProvider = ({ children }) => {
 };
 
 // Hook personalizado para usar el carrito
-export const useCart = () => useContext(CartContext);
+export const useCart = () => {
+  const context = useContext(CartContext);
+  if (!context) {
+    throw new Error('useCart must be used within a CartProvider');
+  }
+  return context;
+};

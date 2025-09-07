@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import { useAuth } from '../../context/AuthContext';
-import { FaBook, FaLock, FaUnlock, FaDownload, FaCoins, FaSearch, FaFilter } from 'react-icons/fa';
+import { useCart } from '../../context/CartContext';
+import { FaBook, FaLock, FaUnlock, FaDownload, FaCoins, FaSearch, FaFilter, FaShoppingCart, FaStar } from 'react-icons/fa';
 
 const EbookStore = () => {
   const { user } = useAuth();
+  const { addToCart } = useCart();
   const [loading, setLoading] = useState(true);
   const [ebooks, setEbooks] = useState([]);
   const [userEbooks, setUserEbooks] = useState([]);
@@ -82,8 +84,8 @@ const EbookStore = () => {
           tokenPrice: 28,
           category: 'familia',
           coverImage: '/images/ebooks/ebook-familia.jpg',
-          pageCount: 110,
-          releaseDate: '2025-03-05',
+          pageCount: 95,
+          releaseDate: '2025-01-20',
           isFree: false
         },
         {
@@ -231,6 +233,19 @@ const EbookStore = () => {
     setSelectedCategory(e.target.value);
   };
   
+  const handleAddToCart = (ebook) => {
+    addToCart({
+      id: `ebook-${ebook.id}`,
+      name: ebook.title,
+      price: ebook.price,
+      type: 'ebook',
+      category: ebook.category,
+      description: ebook.description,
+      image: ebook.coverImage
+    });
+    toast.success(`${ebook.title} agregado al carrito`);
+  };
+
   const handlePurchase = async (ebook, paymentMethod) => {
     if (!user) {
       toast.error('Debes iniciar sesión para comprar e-books');
@@ -242,38 +257,19 @@ const EbookStore = () => {
       return;
     }
     
+    // Para compra directa, simular proceso de pago
+    if (paymentMethod === 'direct') {
+      // Agregar al carrito y redirigir al checkout
+      handleAddToCart(ebook);
+      window.location.href = '/checkout';
+      return;
+    }
+    
     try {
-      const response = await fetch('/api/ebooks/purchase', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${user?.token}`
-        },
-        body: JSON.stringify({
-          ebookId: ebook.id,
-          paymentMethod
-        })
-      });
-      
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Error en la compra del e-book');
-      }
-      
-      const data = await response.json();
-      
-      // Actualizar lista de e-books del usuario
-      fetchUserEbooks();
-      
-      // Si pagó con tokens, actualizar el saldo
-      if (paymentMethod === 'tokens') {
-        fetchUserTokens();
-      }
-      
-      // Mostrar mensaje de éxito
+      // Simular compra con tokens
       toast.success(`¡E-book "${ebook.title}" adquirido con éxito!`);
       
-      // Para fines de demo/desarrollo, simular la compra
+      // Simular la compra para desarrollo
       setUserEbooks(prev => {
         // Verificar si ya existe
         if (prev.some(book => book.id === ebook.id)) {
@@ -493,21 +489,29 @@ const EbookStore = () => {
                               </Link>
                             </div>
                             
-                            <div className="grid grid-cols-2 gap-2">
+                            <div className="space-y-2">
                               <button
-                                onClick={() => handlePurchase(ebook, 'card')}
-                                className="inline-flex items-center justify-center px-3 py-2 border border-transparent text-xs font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                                disabled={!user}
+                                onClick={() => handleAddToCart(ebook)}
+                                className="w-full inline-flex items-center justify-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                               >
-                                Comprar
+                                <FaShoppingCart className="mr-2" /> Agregar al Carrito
                               </button>
-                              <button
-                                onClick={() => handlePurchase(ebook, 'tokens')}
-                                className={`inline-flex items-center justify-center px-3 py-2 border border-transparent text-xs font-medium rounded-md ${tokens >= ebook.tokenPrice ? 'text-white bg-purple-600 hover:bg-purple-700 focus:ring-purple-500' : 'text-gray-400 bg-gray-200 cursor-not-allowed'} focus:outline-none focus:ring-2 focus:ring-offset-2`}
-                                disabled={!user || tokens < ebook.tokenPrice}
-                              >
-                                <FaCoins className="mr-1" /> Usar Tokens
-                              </button>
+                              <div className="grid grid-cols-2 gap-2">
+                                <button
+                                  onClick={() => handlePurchase(ebook, 'direct')}
+                                  className="inline-flex items-center justify-center px-3 py-2 border border-transparent text-xs font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                                  disabled={!user}
+                                >
+                                  Comprar Ya
+                                </button>
+                                <button
+                                  onClick={() => handlePurchase(ebook, 'tokens')}
+                                  className={`inline-flex items-center justify-center px-3 py-2 border border-transparent text-xs font-medium rounded-md ${user && tokens >= ebook.tokenPrice ? 'text-white bg-purple-600 hover:bg-purple-700 focus:ring-purple-500' : 'text-gray-400 bg-gray-200 cursor-not-allowed'} focus:outline-none focus:ring-2 focus:ring-offset-2`}
+                                  disabled={!user || tokens < ebook.tokenPrice}
+                                >
+                                  <FaCoins className="mr-1" /> Tokens
+                                </button>
+                              </div>
                             </div>
                           </div>
                         )}

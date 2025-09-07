@@ -2,13 +2,29 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
-import { FaBalanceScale, FaGavel, FaCar, FaBuilding, FaShip, FaMoneyBillWave, FaUserTie } from 'react-icons/fa';
+import { useCart } from '../../context/CartContext';
+import { FaBalanceScale, FaGavel, FaCar, FaBuilding, FaShip, FaMoneyBillWave, FaUserTie, FaShoppingCart } from 'react-icons/fa';
 import { TypeAnimation } from 'react-type-animation';
+import { toast } from 'react-hot-toast';
 
 const ServicesPage = () => {
+  const { addToCart } = useCart();
+  
   const fadeIn = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0 }
+  };
+
+  const handleAddToCart = (service) => {
+    addToCart({
+      id: service.id,
+      name: service.title,
+      price: parseFloat(service.price.replace(/[^0-9.]/g, '')),
+      type: 'service',
+      category: service.title,
+      description: service.description
+    });
+    toast.success(`${service.title} agregado al carrito`);
   };
 
   const services = [
@@ -238,12 +254,19 @@ const ServicesPage = () => {
                     </div>
                   </div>
                   
-                  <div className="mt-6 text-center">
+                  <div className="mt-6 flex gap-2">
+                    <button
+                      onClick={() => handleAddToCart(service)}
+                      className="flex-1 inline-flex items-center justify-center px-3 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                    >
+                      <FaShoppingCart className="mr-2 h-4 w-4" />
+                      Agregar
+                    </button>
                     <Link 
                       to={service.link}
-                      className={`inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-${service.color}-600 hover:bg-${service.color}-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-${service.color}-500`}
+                      className={`flex-1 inline-flex items-center justify-center px-3 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-${service.color}-600 hover:bg-${service.color}-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-${service.color}-500`}
                     >
-                      Más información
+                      Ver más
                     </Link>
                   </div>
                 </div>

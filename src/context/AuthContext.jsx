@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
-import { authService } from '../services/apiService';
+import { toast } from 'react-hot-toast';
 
 // Crear el contexto
 const AuthContext = createContext();
@@ -12,36 +12,23 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [authReady, setAuthReady] = useState(false);
-  const [error, setError] = useState(null);
 
   // Verificar autenticación al cargar
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        // Verificar si hay un token en localStorage
+        // Verificar si hay datos de usuario en localStorage
+        const userData = localStorage.getItem('user');
         const token = localStorage.getItem('authToken');
         
-        if (!token) {
-          setLoading(false);
-          setAuthReady(true);
-          return;
-        }
-        
-        // Verificar si el token es válido obteniendo datos del usuario
-        const { data, error } = await authService.getUser();
-        
-        if (error) {
-          console.error('Error al verificar autenticación:', error);
-          // Si hay error, probablemente el token no es válido
-          localStorage.removeItem('authToken');
-          setUser(null);
-        } else if (data && data.user) {
-          console.log('Usuario autenticado:', data.user);
-          setUser(data.user);
+        if (userData && token) {
+          const parsedUser = JSON.parse(userData);
+          setUser(parsedUser);
         }
       } catch (err) {
         console.error('Error al verificar autenticación:', err);
-        setError(err.message);
+        localStorage.removeItem('user');
+        localStorage.removeItem('authToken');
       } finally {
         setLoading(false);
         setAuthReady(true);
@@ -53,107 +40,93 @@ export const AuthProvider = ({ children }) => {
 
   // Función para iniciar sesión
   const login = async (email, password) => {
-    setLoading(true);
     try {
-      const { data, error } = await authService.login(email, password);
+      setLoading(true);
       
-      if (error) {
-        throw new Error(error.message || 'Error al iniciar sesión');
-      }
+      // Simular autenticación exitosa
+      const mockUser = {
+        id: Date.now(),
+        email: email,
+        name: email.split('@')[0],
+        role: 'client',
+        avatar: '/images/avatar-default.jpg'
+      };
       
-      // Persistir token y usuario mínimos
-      try {
-        if (data?.token) localStorage.setItem('authToken', data.token);
-        if (data?.user) localStorage.setItem('user', JSON.stringify(data.user));
-      } catch (_) {}
-      setUser(data.user);
-      return { success: true, data };
-    } catch (err) {
-      setError(err.message);
-      return { success: false, error: err.message };
+      const mockToken = 'mock-jwt-token-' + Date.now();
+      
+      // Guardar en localStorage
+      localStorage.setItem('user', JSON.stringify(mockUser));
+      localStorage.setItem('authToken', mockToken);
+      
+      setUser(mockUser);
+      toast.success('¡Bienvenido! Sesión iniciada correctamente');
+      
+      return { success: true, user: mockUser };
+    } catch (error) {
+      console.error('Error en login:', error);
+      toast.error('Error al iniciar sesión');
+      return { success: false, error: error.message };
     } finally {
       setLoading(false);
     }
   };
 
-  // Función para registrar un nuevo usuario
+  // Función para registrarse
   const register = async (userData) => {
-    setLoading(true);
     try {
-      const { data, error } = await authService.register(userData);
+      setLoading(true);
       
-      if (error) {
-        throw new Error(error.message || 'Error al registrar usuario');
-      }
+      const newUser = {
+        id: Date.now(),
+        email: userData.email,
+        name: userData.name,
+        role: 'client',
+        avatar: '/images/avatar-default.jpg'
+      };
       
-      if (data.user) {
-        try {
-          if (data?.token) localStorage.setItem('authToken', data.token);
-          localStorage.setItem('user', JSON.stringify(data.user));
-        } catch (_) {}
-        setUser(data.user);
-      }
+      const mockToken = 'mock-jwt-token-' + Date.now();
       
-      return { success: true, data };
-    } catch (err) {
-      setError(err.message);
-      return { success: false, error: err.message };
+      localStorage.setItem('user', JSON.stringify(newUser));
+      localStorage.setItem('authToken', mockToken);
+      
+      setUser(newUser);
+      toast.success('¡Cuenta creada exitosamente!');
+      
+      return { success: true, user: newUser };
+    } catch (error) {
+      console.error('Error en registro:', error);
+      toast.error('Error al crear cuenta');
+      return { success: false, error: error.message };
     } finally {
       setLoading(false);
     }
   };
 
   // Función para cerrar sesión
-  const logout = async () => {
-    setLoading(true);
-    try {
-      const { error } = await authService.signOut();
-      
-      if (error) {
-        throw new Error(error.message || 'Error al cerrar sesión');
-      }
-      
-      try {
-        localStorage.removeItem('authToken');
-        localStorage.removeItem('user');
-      } catch (_) {}
-      setUser(null);
-      return { success: true };
-    } catch (err) {
-      setError(err.message);
-      return { success: false, error: err.message };
-    } finally {
-      setLoading(false);
-    }
+  const logout = () => {
+    localStorage.removeItem('user');
+    localStorage.removeItem('authToken');
+    setUser(null);
+    toast.success('Sesión cerrada correctamente');
   };
 
-  // Función para actualizar el usuario actual
-  const updateUser = (userData) => {
-    setUser(prevUser => ({
-      ...prevUser,
-      ...userData
-    }));
+  // Función para actualizar usuario
+  const updateUser = (updatedUser) => {
+    const newUserData = { ...user, ...updatedUser };
+    localStorage.setItem('user', JSON.stringify(newUserData));
+    setUser(newUserData);
+    toast.success('Perfil actualizado correctamente');
   };
 
-  // Valores a proporcionar en el contexto
   const value = {
     user,
-    setUser,
     loading,
-    error,
     authReady,
-    // Derivados útiles para UI y permisos
-    isAuthenticated: Boolean(user),
-    isAdmin: Array.isArray(user?.roles) ? user.roles.includes('admin') : false,
-    hasUserPurchasedCourse: (courseId) => {
-      if (!user) return false;
-      const purchases = user.purchases || [];
-      return Array.isArray(purchases) ? purchases.includes(courseId) : false;
-    },
     login,
     register,
     logout,
-    updateUser
+    updateUser,
+    isAuthenticated: !!user
   };
 
   return (

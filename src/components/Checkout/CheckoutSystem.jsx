@@ -14,7 +14,7 @@ import confetti from 'canvas-confetti';
 
 const CheckoutSystem = () => {
   const navigate = useNavigate();
-  const { cartItems, clearCart, getCartTotal } = useCart();
+  const { items: cartItems, clearCart, total } = useCart();
   const { user } = useAuth();
   
   const [currentStep, setCurrentStep] = useState(1);
@@ -67,7 +67,8 @@ const CheckoutSystem = () => {
   };
 
   const calculateSubtotal = () => {
-    return cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
+    if (!cartItems || cartItems.length === 0) return 0;
+    return cartItems.reduce((total, item) => total + (item.price * (item.quantity || 1)), 0);
   };
 
   const calculateTax = () => {
