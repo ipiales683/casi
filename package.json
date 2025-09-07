@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "vite build --emptyOutDir && cp _routes.json dist/",
     "preview": "vite preview",
-    "start:worker": "wrangler dev --port 3000",
+    "start:worker": "wrangler dev --port 8787",
     "deploy:worker": "wrangler deploy",
     "deploy": "wrangler deploy",
     "clean": "rimraf node_modules dist .turbo",
