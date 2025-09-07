@@ -14,7 +14,7 @@ import { handleConfigHandler } from './workers-site/api/config-handler';
 import { handleLegalQueries } from './workers-site/api/legal-queries';
 import { handleProxyHandler } from './workers-site/api/proxy-handler';
 import { handleSearches } from './workers-site/api/searches';
-
+import { handleProductsRequest } from './workers-site/api/products';
 
 addEventListener('fetch', event => {
   event.respondWith(handleRequest(event.request));
@@ -58,6 +58,8 @@ async function handleRequest(request) {
           return handleBlogRequest(request);
       } else if (path.startsWith('/api/chat')) {
           return handleChatRequest(request);
+      } else if (path.startsWith('/api/products')) {
+          return handleProductsRequest(request);
       } else if (path.startsWith('/api/config')) {
           return handleConfigHandler(request);
       } else if (path.startsWith('/api/legal-queries')) {

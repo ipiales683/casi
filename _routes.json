@@ -50,10 +50,7 @@
       "src": "/manifest.json",
       "dest": "/manifest.json"
     },
-    {
-      "src": "/api/.*",
-      "dest": "/index.html"
-    },
+    
     {
       "src": "/static/(.*)",
       "dest": "/static/$1"
