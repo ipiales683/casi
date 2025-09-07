@@ -162,7 +162,17 @@ function App() {
                       <Login />
                     </VisitorOnlyRoute>
                   } />
+                  <Route path="/inicio-sesion" element={
+                    <VisitorOnlyRoute>
+                      <Login />
+                    </VisitorOnlyRoute>
+                  } />
                   <Route path="/register" element={
+                    <VisitorOnlyRoute>
+                      <Register />
+                    </VisitorOnlyRoute>
+                  } />
+                  <Route path="/registro" element={
                     <VisitorOnlyRoute>
                       <Register />
                     </VisitorOnlyRoute>
