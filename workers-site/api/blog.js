@@ -286,3 +286,7 @@ Para más información o asesoría legal personalizada sobre cómo proceder en u
     });
   }
 }
+
+// Compatibilidad: permitir importar como handleBlogRequest
+// Esto evita errores de importación en cloudflare-final-worker.js
+export { handleBlogRequests as handleBlogRequest };
