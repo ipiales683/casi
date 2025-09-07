@@ -19,24 +19,31 @@ import ContactPage from './pages/ContactPage';
 import ServicesPage from './pages/ServicesPage';
 import PlansPage from './pages/PlansPage';
 import AboutPage from './pages/AboutPage';
+const ServicesLegalPage = lazy(() => import('./pages/ServicesLegalPage'));
+const ForumPage = lazy(() => import('./pages/ForumPage'));
 import BlogPage from './pages/BlogPage';
 import BlogPostPage from './pages/BlogPostPage';
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
 import TermsOfServicePage from './pages/TermsOfServicePage';
 
-// Dashboard Pages
-import DashboardPage from './pages/DashboardPage';
-import AdminDashboard from './components/Dashboard/AdminDashboard';
-import ClientDashboard from './components/Dashboard/ClientDashboard';
-import ClientsPage from './pages/ClientsPage';
-import CasesPage from './pages/CasesPage';
-import DocumentsPage from './pages/DocumentsPage';
-import CalendarPage from './pages/CalendarPage';
-import SettingsPage from './pages/SettingsPage';
-import ProfilePage from './pages/ProfilePage';
+// Consultation Pages
+const PenalConsultationPage = lazy(() => import('./pages/ConsultationTypes/PenalConsultationPage'));
+const CivilConsultationPage = lazy(() => import('./pages/ConsultationTypes/CivilConsultationPage'));
+const EmpresarialConsultationPage = lazy(() => import('./pages/ConsultationTypes/EmpresarialConsultationPage'));
+const QuickConsultationPage = lazy(() => import('./pages/ConsultationTypes/QuickConsultationPage'));
+const DigitalConsultationPage = lazy(() => import('./pages/ConsultationTypes/DigitalConsultationPage'));
 
-// E-commerce Pages
-import ProductsPage from './pages/ProductsPage';
+// Dashboard Pages - Lazy loading for performance
+const DashboardPage = lazy(() => import('./pages/DashboardPage'));
+const AdminDashboard = lazy(() => import('./components/Dashboard/AdminDashboard'));
+const ClientDashboard = lazy(() => import('./components/Dashboard/ClientDashboard'));
+const ClientsPage = lazy(() => import('./pages/ClientsPage'));
+const CasesPage = lazy(() => import('./pages/CasesPage'));
+const DocumentsPage = lazy(() => import('./pages/DocumentsPage'));
+const CalendarPage = lazy(() => import('./pages/CalendarPage'));
+const SettingsPage = lazy(() => import('./pages/SettingsPage'));
+const ProfilePage = lazy(() => import('./pages/ProfilePage'));
+const PromotionsManager = lazy(() => import('./components/Promotions/PromotionsManager'));
 import CatalogPage from './pages/CatalogPage';
 import CheckoutPage from './pages/CheckoutPage';
 import MyPurchasesPage from './pages/MyPurchasesPage';
@@ -52,7 +59,6 @@ import AnalyticsPage from './pages/AnalyticsPage';
 import SalesPage from './pages/SalesPage';
 import ProjectsPage from './pages/ProjectsPage';
 import UsersPage from './pages/UsersPage';
-import ForumPage from './pages/ForumPage';
 import ConsultationsPage from './pages/ConsultationsPage';
 import ServiceDetailPage from './pages/ServiceDetailPage';
 
@@ -90,7 +96,13 @@ function App() {
           <Route path="register" element={<RegisterPage />} />
           <Route path="contact" element={<ContactPage />} />
           <Route path="services" element={<ServicesPage />} />
+          <Route path="services/legal" element={<ServicesLegalPage />} />
           <Route path="services/:id" element={<ServiceDetailPage />} />
+          <Route path="consultations/penal" element={<PenalConsultationPage />} />
+          <Route path="consultations/civil" element={<CivilConsultationPage />} />
+          <Route path="consultations/empresarial" element={<EmpresarialConsultationPage />} />
+          <Route path="consultations/rapida" element={<QuickConsultationPage />} />
+          <Route path="consultations/digital" element={<DigitalConsultationPage />} />
           <Route path="plans" element={<PlansPage />} />
           <Route path="about" element={<AboutPage />} />
           <Route path="blog" element={<BlogPage />} />

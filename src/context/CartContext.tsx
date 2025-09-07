@@ -5,8 +5,15 @@ interface CartItem {
   name: string;
   price: number;
   quantity: number;
-  imageUrl: string;
-  type: 'digital' | 'physical';
+  imageUrl?: string;
+  image?: string;
+  type: 'digital' | 'physical' | 'consultation' | 'service';
+  category?: string;
+  duration?: string;
+  responseTime?: string;
+  modality?: string;
+  features?: string[];
+  originalPrice?: number;
 }
 
 interface CartState {
@@ -25,6 +32,7 @@ type CartAction =
 const CartContext = createContext<{
   state: CartState;
   addItem: (item: Omit<CartItem, 'quantity'>) => void;
+  addToCart: (item: any) => void;
   removeItem: (id: string) => void;
   updateQuantity: (id: string, quantity: number) => void;
   clearCart: () => void;
@@ -138,6 +146,24 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     dispatch({ type: 'ADD_ITEM', payload: { ...item, quantity: 1 } });
   };
 
+  const addToCart = (item: any) => {
+    const cartItem: CartItem = {
+      id: item.id,
+      name: item.name,
+      price: item.price,
+      quantity: 1,
+      imageUrl: item.imageUrl || item.image,
+      type: item.type || 'digital',
+      category: item.category,
+      duration: item.duration,
+      responseTime: item.responseTime,
+      modality: item.modality,
+      features: item.features,
+      originalPrice: item.originalPrice
+    };
+    dispatch({ type: 'ADD_ITEM', payload: cartItem });
+  };
+
   const removeItem = (id: string) => {
     dispatch({ type: 'REMOVE_ITEM', payload: id });
   };
@@ -159,6 +185,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     <CartContext.Provider value={{
       state,
       addItem,
+      addToCart,
       removeItem,
       updateQuantity,
       clearCart,

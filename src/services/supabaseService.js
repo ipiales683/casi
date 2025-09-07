@@ -22,7 +22,11 @@ let isInitializing = false;
 let initCallCount = 0;
 
 // Usar la configuración centralizada
-const globalConfig = import.meta.env;
+const envConfig = import.meta.env;
+
+// Configuración de Supabase
+const supabaseUrl = envConfig.VITE_SUPABASE_URL || globalConfig.supabaseUrl || 'https://your-project.supabase.co';
+const supabaseKey = envConfig.VITE_SUPABASE_ANON_KEY || globalConfig.supabaseKey || 'your-anon-key';
 
 // Determinar si estamos en un entorno con problemas CORS (Cloudflare Workers)
 const shouldUseProxyWorker = () => {
@@ -215,7 +219,7 @@ export const getSupabaseClient = () => {
   }
   
   // Generar un identificador único para esta instancia
-  const instanceId = globalConfig.VITE_SUPABASE_CLIENT_INSTANCE_ID || 
+  const instanceId = envConfig.VITE_SUPABASE_CLIENT_INSTANCE_ID || 
                     Date.now().toString(36) + Math.random().toString(36).substring(2);
   
   // Si ya hay un proceso de inicialización en curso, devolver cliente temporal para evitar bloqueo
@@ -238,7 +242,7 @@ export const getSupabaseClient = () => {
     
     // Utilizar clave de almacenamiento única para esta instancia
     // Esto evita conflictos con múltiples instancias de GoTrueClient
-    options.auth.storageKey = globalConfig.AUTH_STORAGE_KEY || 
+    options.auth.storageKey = envConfig.VITE_AUTH_STORAGE_KEY || 
                              `sb-auth-token-${instanceId}`;
     
     console.log(`Inicializando Supabase client único [ID: ${instanceId.substring(0,8)}]`);

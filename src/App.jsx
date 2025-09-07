@@ -72,6 +72,13 @@ import AppointmentScheduler from './components/Appointment/AppointmentScheduler'
 import AffiliateRegister from './components/Affiliates/AffiliateRegister';
 import AffiliateOverview from './components/Affiliates/AffiliateOverview';
 
+// Páginas de servicios individuales
+import ServicioPenalPage from './pages/ServicioPenalPage';
+import ServicioCivilPage from './pages/ServicioCivilPage';
+import ServicioTransitoPage from './pages/ServicioTransitoPage';
+import ServicioComercialPage from './pages/ServicioComercialPage';
+import ServicioAduaneroPage from './pages/ServicioAduaneroPage';
+
 // Páginas de error
 import NotFoundPage from './components/Common/NotFoundPage';
 import UnauthorizedPage from './components/Common/UnauthorizedPage';
@@ -105,11 +112,11 @@ function App() {
                   {/* Rutas públicas (visitantes) */}
             <Route path="/" element={<HomePage />} />
                   <Route path="/servicios" element={<Services />} />
-                  <Route path="/servicios/penal" element={<Services category="penal" />} />
-                  <Route path="/servicios/civil" element={<Services category="civil" />} />
-                  <Route path="/servicios/comercial" element={<Services category="comercial" />} />
-                  <Route path="/servicios/transito" element={<Services category="transito" />} />
-                  <Route path="/servicios/aduanero" element={<Services category="aduanero" />} />
+                  <Route path="/servicios/penal" element={<ServicioPenalPage />} />
+                  <Route path="/servicios/civil" element={<ServicioCivilPage />} />
+                  <Route path="/servicios/comercial" element={<ServicioComercialPage />} />
+                  <Route path="/servicios/transito" element={<ServicioTransitoPage />} />
+                  <Route path="/servicios/aduanero" element={<ServicioAduaneroPage />} />
                   <Route path="/sobre-nosotros" element={<AboutPage />} />
                   <Route path="/contacto" element={<Contact />} />
                   <Route path="/blog" element={<Blog />} />
