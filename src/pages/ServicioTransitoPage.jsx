@@ -203,12 +203,9 @@ const ServicioTransitoPage = () => {
   };
 
   const handlePayment = (service) => {
-    navigate('/checkout', { 
-      state: { 
-        service: service,
-        type: 'servicio-transito' 
-      } 
-    });
+    // Añadir al carrito antes de dirigir a checkout para evitar carrito vacío
+    handleAddToCart(service);
+    navigate('/checkout');
   };
 
   return (

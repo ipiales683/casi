@@ -148,12 +148,9 @@ const ServicioPenalPage = () => {
   };
 
   const handlePayment = (service) => {
-    navigate('/checkout', { 
-      state: { 
-        service: service,
-        type: 'servicio-penal' 
-      } 
-    });
+    // Asegurar que el carrito tenga el servicio antes de ir a checkout
+    handleAddToCart(service);
+    navigate('/checkout');
   };
 
   return (

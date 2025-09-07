@@ -28,7 +28,7 @@ const consultasSubmenu = [
   { name: 'Consulta General', href: '/consulta-general', current: false, icon: <FaFileAlt className="text-blue-500" /> },
   { name: 'Consultas Civiles', href: '/consultas/civiles', current: false, icon: <FaFileContract className="text-green-500" /> },
   { name: 'Consultas Penales', href: '/consultas/penales', current: false, icon: <FaGavel className="text-red-500" /> },
-  { name: 'Consultas de Tránsito', href: '/consultas/transito', current: false, icon: <FaFileAlt className="text-yellow-500" /> },
+  { name: 'Consultas de Tránsito', href: '/servicios/transito', current: false, icon: <FaFileAlt className="text-yellow-500" /> },
   { name: 'Consulta con IA', href: '/consulta-ia', current: false, icon: <FaUserTie className="text-purple-500" /> },
 ];
 
@@ -181,6 +181,7 @@ function Navbar() {
                                   <div className="relative grid gap-1 p-2">
                                     {(item.name === 'Servicios' ? serviceSubmenu : 
                                       item.name === 'Consultas' ? consultasSubmenu : 
+                                      item.name === 'Productos' ? productosSubmenu :
                                       item.name === 'Comunidad' ? comunidadSubmenu :
                                       item.name === 'Políticas' ? policySubmenu : []).map((subItem) => (
                                       <Link
@@ -449,6 +450,7 @@ function Navbar() {
                         <Disclosure.Panel className="mt-1 space-y-1">
                           {(item.name === 'Servicios' ? serviceSubmenu : 
                             item.name === 'Consultas' ? consultasSubmenu : 
+                            item.name === 'Productos' ? productosSubmenu :
                             item.name === 'Comunidad' ? comunidadSubmenu :
                             item.name === 'Políticas' ? policySubmenu : []).map((subItem) => (
                             <Link

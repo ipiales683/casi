@@ -207,12 +207,9 @@ const ServicioCivilPage = () => {
   };
 
   const handlePayment = (service) => {
-    navigate('/checkout', { 
-      state: { 
-        service: service,
-        type: 'servicio-civil' 
-      } 
-    });
+    // Primero agregamos al carrito para que el checkout tenga items
+    handleAddToCart(service);
+    navigate('/checkout');
   };
 
   return (
