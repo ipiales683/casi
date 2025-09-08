@@ -18,6 +18,9 @@ import { handleProductsRequest } from './workers-site/api/products';
 import { handleAuthRequest } from './workers-site/api/auth';
 import { handleEbooksRequest, handleTokensRequest } from './workers-site/api/ebooks';
 import { handleSubscriptions } from './workers-site/api/subscriptions';
+import { handleOrders } from './workers-site/api/orders';
+import { handleCertificates } from './workers-site/api/certificates';
+import { handlePayments } from './workers-site/api/payments';
 
 addEventListener('fetch', event => {
   event.respondWith(handleRequest(event.request));
@@ -84,6 +87,12 @@ async function handleRequest(request) {
         path === '/api/ai/consume'
       ) {
           return handleSubscriptions(request, env);
+      } else if (path.startsWith('/api/orders')) {
+          return handleOrders(request, env);
+      } else if (path.startsWith('/api/certificates')) {
+          return handleCertificates(request, env);
+      } else if (path.startsWith('/api/payments')) {
+          return handlePayments(request, env);
       }
 
       // Si ninguna API coincide, devolver 404

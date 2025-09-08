@@ -2,6 +2,7 @@ import React from 'react';
 import { FaCheck, FaCrown, FaStar, FaRocket } from 'react-icons/fa';
 import { useCart } from '../../context/CartContext';
 import { useNavigate } from 'react-router-dom';
+import api from '../../services/apiService';
 
 const plans = [
   {
@@ -71,6 +72,25 @@ const SubscriptionPlans = () => {
     navigate('/checkout');
   };
 
+  const handleStripeCheckout = async (plan) => {
+    try {
+      const successUrl = `${window.location.origin}/payment/success-stripe`;
+      const cancelUrl = `${window.location.origin}/payment/cancel-stripe`;
+      const { data } = await api.post('/payments/stripe/create-session', {
+        planId: plan.id,
+        successUrl,
+        cancelUrl
+      });
+      if (data?.url) {
+        window.location.href = data.url;
+      } else {
+        alert('No se pudo iniciar el pago con Stripe.');
+      }
+    } catch (e) {
+      alert('Error iniciando Stripe: ' + (e?.error?.message || 'Intente más tarde'));
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       <div className="max-w-7xl mx-auto px-4 py-12">
@@ -117,12 +137,20 @@ const SubscriptionPlans = () => {
                   ))}
                 </ul>
 
-                <button
-                  onClick={() => handleSubscribe(plan)}
-                  className="mt-6 w-full py-3 rounded-lg font-semibold text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:shadow-lg transition-all"
-                >
-                  Comenzar Ahora
-                </button>
+                <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <button
+                    onClick={() => handleSubscribe(plan)}
+                    className="w-full py-3 rounded-lg font-semibold text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:shadow-lg transition-all"
+                  >
+                    Agregar al Carrito
+                  </button>
+                  <button
+                    onClick={() => handleStripeCheckout(plan)}
+                    className="w-full py-3 rounded-lg font-semibold text-white bg-gradient-to-r from-pink-600 to-purple-600 hover:shadow-lg transition-all"
+                  >
+                    Pagar con Stripe
+                  </button>
+                </div>
               </div>
             </div>
           ))}

@@ -150,6 +150,29 @@ const CheckoutSystem = () => {
       // No bloquear el flujo si falla la activación; se puede reintentar desde el dashboard
       console.warn('No se pudo activar la suscripción automáticamente:', e);
     }
+
+    // Registrar orden en backend
+    try {
+      const payload = {
+        items: (cartItems || []).map(i => ({ id: i.id, name: i.name, price: i.price, quantity: i.quantity || 1, type: i.type })),
+        subtotal: calculateSubtotal(),
+        tax: calculateTax(),
+        discountPercent: discount,
+        total: calculateTotal(),
+        billing: {
+          fullName: billingInfo.fullName,
+          email: billingInfo.email,
+          phone: billingInfo.phone,
+          identification: billingInfo.identification,
+          city: billingInfo.city,
+          country: billingInfo.country
+        },
+        paymentMethod
+      };
+      await api.post('/orders', payload);
+    } catch (e) {
+      console.warn('No se pudo registrar la orden:', e);
+    }
     
     clearCart();
     

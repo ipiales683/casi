@@ -11,6 +11,7 @@ import {
 } from 'react-icons/fa';
 import { toast } from 'react-hot-toast';
 import { motion, AnimatePresence } from 'framer-motion';
+import api from '../../services/apiService';
 
 const AdminDashboardComplete = () => {
   const [activeTab, setActiveTab] = useState('overview');
@@ -67,8 +68,34 @@ const AdminDashboardComplete = () => {
     { id: 'blog', label: 'Blog', icon: FaNewspaper },
     { id: 'appointments', label: 'Citas', icon: FaCalendarAlt },
     { id: 'analytics', label: 'Analíticas', icon: FaChartPie },
+    { id: 'entitlements', label: 'Planes/Beneficios', icon: FaShieldAlt },
+    { id: 'orders', label: 'Órdenes', icon: FaCreditCard },
+    { id: 'certificates', label: 'Certificados', icon: FaFileAlt },
     { id: 'settings', label: 'Configuración', icon: FaCog }
   ];
+
+  // Admin data states
+  const [adminEntitlements, setAdminEntitlements] = useState(null);
+  const [adminOrders, setAdminOrders] = useState([]);
+  const [adminCerts, setAdminCerts] = useState([]);
+
+  useEffect(() => {
+    const fetchAdminData = async () => {
+      try {
+        const [ent, ord, cer] = await Promise.all([
+          api.get('/entitlements'),
+          api.get('/orders'),
+          api.get('/certificates')
+        ]);
+        setAdminEntitlements(ent?.data || null);
+        setAdminOrders(ord?.data?.orders || []);
+        setAdminCerts(cer?.data?.certificates || []);
+      } catch (e) {
+        // Silencioso para no romper UI admin
+      }
+    };
+    fetchAdminData();
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
@@ -358,6 +385,88 @@ const AdminDashboardComplete = () => {
             )}
 
             {/* Más tabs pueden agregarse aquí */}
+            {activeTab === 'entitlements' && (
+              <div className="bg-white/80 backdrop-blur-md rounded-2xl shadow-xl p-8 border border-gray-200/50">
+                <h3 className="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                  <FaShieldAlt className="mr-3 text-blue-500" /> Planes y Beneficios (Cliente actual)
+                </h3>
+                {!adminEntitlements ? (
+                  <div className="text-gray-500">Cargando...</div>
+                ) : (
+                  <div className="grid md:grid-cols-3 gap-6">
+                    <div className="p-4 rounded-xl border">
+                      <div className="text-sm text-gray-500">Plan</div>
+                      <div className="text-xl font-semibold">{(adminEntitlements.plan||'free').toUpperCase()}</div>
+                    </div>
+                    <div className="p-4 rounded-xl border">
+                      <div className="text-sm text-gray-500">IA gratis por día</div>
+                      <div className="text-xl font-semibold">{adminEntitlements?.benefits?.aiDailyFree ?? 1}</div>
+                    </div>
+                    <div className="p-4 rounded-xl border">
+                      <div className="text-sm text-gray-500">Blog Premium</div>
+                      <div className="text-xl font-semibold">{adminEntitlements?.benefits?.blogPremium ? 'Sí' : 'No'}</div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {activeTab === 'orders' && (
+              <div className="bg-white/80 backdrop-blur-md rounded-2xl shadow-xl p-8 border border-gray-200/50">
+                <h3 className="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                  <FaCreditCard className="mr-3 text-green-600" /> Órdenes del Cliente
+                </h3>
+                {adminOrders.length === 0 ? (
+                  <div className="text-gray-500">Sin órdenes registradas.</div>
+                ) : (
+                  <div className="overflow-x-auto">
+                    <table className="min-w-full text-sm">
+                      <thead>
+                        <tr className="text-left text-gray-500">
+                          <th className="py-2 pr-4">ID</th>
+                          <th className="py-2 pr-4">Fecha</th>
+                          <th className="py-2 pr-4">Items</th>
+                          <th className="py-2 pr-4">Total</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {adminOrders.map(o => (
+                          <tr key={o.id} className="border-t border-gray-100">
+                            <td className="py-2 pr-4 font-medium">{o.id}</td>
+                            <td className="py-2 pr-4">{new Date(o.createdAt).toLocaleString()}</td>
+                            <td className="py-2 pr-4">{o.items?.map(i=>i.name).join(', ')}</td>
+                            <td className="py-2 pr-4 font-semibold">${(o.total||0).toFixed(2)}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {activeTab === 'certificates' && (
+              <div className="bg-white/80 backdrop-blur-md rounded-2xl shadow-xl p-8 border border-gray-200/50">
+                <h3 className="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                  <FaFileAlt className="mr-3 text-purple-600" /> Certificados del Cliente
+                </h3>
+                {adminCerts.length === 0 ? (
+                  <div className="text-gray-500">Sin certificados creados.</div>
+                ) : (
+                  <ul className="divide-y divide-gray-100">
+                    {adminCerts.map(c => (
+                      <li key={c.id} className="py-3 flex items-center justify-between">
+                        <div>
+                          <div className="font-medium">{c.subject}</div>
+                          <div className="text-xs text-gray-500">{new Date(c.createdAt).toLocaleString()} · {c.id}</div>
+                        </div>
+                        <Link to="#" className="px-3 py-1.5 bg-gray-100 rounded hover:bg-gray-200">Ver</Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            )}
           </motion.div>
         </AnimatePresence>
       </div>
