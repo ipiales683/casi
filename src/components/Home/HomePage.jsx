@@ -14,6 +14,8 @@ import ProcessSearch from '../ProcessSearch';
 import SubscriptionPlans from '../Subscriptions/SubscriptionPlans';
 import SocialMediaIntegration from '../Social/SocialMediaIntegration';
 import IntelligentChatbot from '../Chat/IntelligentChatbot';
+import TypewriterBanner from '../Common/TypewriterBanner';
+import CursorSpotlight from '../Common/CursorSpotlight';
 
 // Usar nuestro HelmetWrapper seguro en lugar de Helmet directamente
 import HelmetWrapper from '../Common/HelmetWrapper';
@@ -49,15 +51,18 @@ const HomePage = () => {
       
       {/* Componentes principales */}
       <Hero />
-      <Services />
-      <Testimonials />
-      <ProcessSearch />
-      <JudicialNews />
+      <TypewriterBanner />
 
-      {/* Planes de Suscripción en la página principal */}
+      {/* Planes de Suscripción (sección independiente) - movida arriba para intercambiar orden */}
       <div className="mt-8">
         <SubscriptionPlans />
       </div>
+
+      <Services />
+      <CursorSpotlight />
+      <Testimonials />
+      <ProcessSearch />
+      <JudicialNews />
       
       {/* Integración social completa */}
       <div className="container mx-auto px-4 py-8">

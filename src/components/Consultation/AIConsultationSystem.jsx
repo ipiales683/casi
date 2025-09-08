@@ -1,8 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FaRobot, FaUser, FaPaperPlane, FaMicrophone, FaStop, FaDownload, FaCopy, FaShare } from 'react-icons/fa';
 import { toast } from 'react-hot-toast';
+import api from '../../services/apiService';
+import { useNavigate } from 'react-router-dom';
 
 const AIConsultationSystem = () => {
+  const navigate = useNavigate();
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -101,6 +104,19 @@ const AIConsultationSystem = () => {
 
   const handleSendMessage = async () => {
     if (!inputMessage.trim()) return;
+
+    // Verificar y consumir cuota de IA
+    try {
+      const { data } = await api.post('/ai/consume', {});
+      if (!data?.allowed) {
+        toast.error('Has alcanzado tu límite gratuito de consultas con IA. Suscríbete para continuar.');
+        navigate('/planes');
+        return;
+      }
+    } catch (e) {
+      // Si falla el endpoint, no bloqueamos pero avisamos
+      console.warn('No se pudo verificar la cuota de IA. Permitido por ahora.');
+    }
 
     const userMessage = {
       id: Date.now(),

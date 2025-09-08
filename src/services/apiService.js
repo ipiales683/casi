@@ -11,6 +11,21 @@ const getBaseUrl = () => {
   return 'http://localhost:8787';
 };
 
+// Crear/asegurar clientId persistente para identificar al cliente
+const ensureClientId = () => {
+  try {
+    let id = localStorage.getItem('clientId');
+    if (!id) {
+      // UUID v4 simple
+      id = 'cid-' + ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g,c=>(c^crypto.getRandomValues(new Uint8Array(1))[0]&15>>c/4).toString(16));
+      localStorage.setItem('clientId', id);
+    }
+    return id;
+  } catch {
+    return 'cid-anon';
+  }
+};
+
 // Crear instancia de axios con configuración base
 const api = axios.create({
   baseURL: `${getBaseUrl()}/api`,
@@ -97,6 +112,9 @@ api.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+    // Adjuntar identificador de cliente para suscripciones/uso
+    const clientId = ensureClientId();
+    config.headers['X-Client-ID'] = clientId;
     return config;
   },
   (error) => {

@@ -17,6 +17,7 @@ import { handleSearches } from './workers-site/api/searches';
 import { handleProductsRequest } from './workers-site/api/products';
 import { handleAuthRequest } from './workers-site/api/auth';
 import { handleEbooksRequest, handleTokensRequest } from './workers-site/api/ebooks';
+import { handleSubscriptions } from './workers-site/api/subscriptions';
 
 addEventListener('fetch', event => {
   event.respondWith(handleRequest(event.request));
@@ -76,6 +77,13 @@ async function handleRequest(request) {
           return handleProxyHandler(request);
       } else if (path.startsWith('/api/searches') || path.startsWith('/api/data/searches')) {
           return handleSearches(request);
+      } else if (
+        path === '/api/entitlements' ||
+        path === '/api/usage' ||
+        path.startsWith('/api/subscriptions/') ||
+        path === '/api/ai/consume'
+      ) {
+          return handleSubscriptions(request, env);
       }
 
       // Si ninguna API coincide, devolver 404

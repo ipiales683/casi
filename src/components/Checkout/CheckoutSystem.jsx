@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext';
 import confetti from 'canvas-confetti';
+import api from '../../services/apiService';
 
 const CheckoutSystem = () => {
   const navigate = useNavigate();
@@ -138,6 +139,18 @@ const CheckoutSystem = () => {
     // Éxito
     setOrderComplete(true);
     setCurrentStep(4);
+    
+    // Activar beneficios de suscripción si corresponde
+    try {
+      const subs = (cartItems || []).filter(i => i.type === 'subscription');
+      for (const sub of subs) {
+        await api.post('/subscriptions/activate', { planId: sub.id });
+      }
+    } catch (e) {
+      // No bloquear el flujo si falla la activación; se puede reintentar desde el dashboard
+      console.warn('No se pudo activar la suscripción automáticamente:', e);
+    }
+    
     clearCart();
     
     // Celebración
